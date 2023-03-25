@@ -10,8 +10,9 @@
 		"prepare": "svelte-kit sync"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-static": "^2.0.0",
+		"@sveltejs/adapter-vercel": "^2.4.1",
 		"@sveltejs/kit": "^1.2.6",
+		"@types/uuid": "^9.0.1",
 		"sass": "^1.57.1",
 		"svelte": "^3.55.1",
 		"svelte-preprocess": "^5.0.1",
@@ -19,7 +20,6 @@
 		"vite": "^4.0.4"
 	},
 	"dependencies": {
-		"@types/uuid": "^9.0.1",
 		"@voxelified/voxeliface": "^1.0.0",
 		"uuid": "^9.0.0"
 	}
