@@ -1,0 +1,13 @@
+{
+	"name": "roblox-sveltekit",
+	"version": "1.0",
+	"manifest_version": 3,
+	"background": {
+	  	"service_worker": "background.js"
+	},
+	"content_scripts": [{
+		"js": ["content.js"],
+		"matches": ["http://localhost:5173/*"]
+	}],
+	"host_permissions": ["https://*.roblox.com/*"]
+}
