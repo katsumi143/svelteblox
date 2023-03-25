@@ -7,7 +7,7 @@
 	},
 	"content_scripts": [{
 		"js": ["content.js"],
-		"matches": ["http://localhost:5173/*"]
+		"matches": ["http://localhost:5173/*", "http://localhost:4173/*", "https://svelteblox.vercel.app/*"]
 	}],
 	"host_permissions": ["https://*.roblox.com/*"]
 }

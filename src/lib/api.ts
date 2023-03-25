@@ -1,3 +1,4 @@
+import { building } from "$app/environment";
 import type { HttpMethod } from "@sveltejs/kit/types/private";
 
 export const THUMBNAILS_BASE = 'https://thumbnails.roblox.com/v1';
@@ -86,8 +87,7 @@ export function getUniverseThumbnails(id: number) {
 }
 
 export function request<T>(targetUrl: string, method: HttpMethod = 'GET', body?: any): Promise<T> {
-	//return fetch(url).then(response => response.json());
-	if (!globalThis.window)
+	if (building || !globalThis.window)
 		return null as any;
 	return new Promise(resolve => {
 		const listener = (event: MessageEvent<any>) => {
