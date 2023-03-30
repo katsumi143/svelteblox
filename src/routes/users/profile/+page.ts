@@ -1,4 +1,4 @@
-import { user } from '$lib/api';
+import { user } from '$lib/api/auth';
 import { redirect } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
 export const load = (() => {

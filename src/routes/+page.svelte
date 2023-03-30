@@ -2,22 +2,24 @@
 	import { t } from '$lib/localization';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
-	import { getGreeting } from '$lib/util';
+	import { user } from '$lib/api/auth';
 	import { joinUser } from '$lib/launch';
-	import { user, request, getUserIcon, getUserIcons, getUniverses, getUserFriends, getUserPresences, getUniverseIcons, getRecentExperiences } from '$lib/api';
+	import { getGreeting } from '$lib/util';
+	import { getExperiences, getExperienceIcons, getRecentExperiences } from '$lib/api/games';
+	import { getUserIcon, getUserIcons, getUserFriends, getUserPresences } from '$lib/api/users';
 
 	const friends = getUserFriends(user.id);
 	const friendAvatars = friends.then(f => getUserIcons(f.map(f => f.id)));
+	
 	const presences = friends.then(f => getUserPresences(f.filter(f => f.isOnline).map(f => f.id)));
-	const presenceExperiences = presences.then(p => getUniverses(p.filter(p => !!p.universeId).map(p => p.universeId)));
-	presences.then(console.log);
+	const presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
 
 	const recentExperiences = getRecentExperiences();
-	const experienceIcons = recentExperiences.then(data => getUniverseIcons(data.map(i => i.universeId)));
+	const experienceIcons = recentExperiences.then(data => getExperienceIcons(data.map(i => i.universeId)));
 </script>
 
 <div class="landing">
-	<Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)}/>
+	<a href={`/users/${user.id}`}><Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)} circle/></a>
 	<div class="greeting">
 		<h1>{$t(`home.greeting.${getGreeting()}`)}</h1>
 		<h2>{user.displayName}!</h2>
@@ -33,7 +35,7 @@
 		</div>
 		{#each friends.sort((a, b) => Number(b.isOnline) - Number(a.isOnline)) as friend}
 			<a href={`/users/${friend.id}`} class={`friend status-${friend.presenceType}`}>
-				<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md"/>
+				<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md" circle/>
 				<p>{friend.displayName}</p>
 				{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
 					{#if presence && presence.universeId}
@@ -59,10 +61,13 @@
 				<ExperienceItem data={{
 					id: item.universeId,
 					name: item.name,
+					voting: {
+						id: item.universeId,
+						upVotes: item.totalUpVotes,
+						downVotes: item.totalDownVotes
+					},
 					playing: item.playerCount,
-					rootPlaceId: item.placeId,
-					totalUpVotes: item.totalUpVotes,
-					totalDownVotes: item.totalDownVotes
+					rootPlaceId: item.placeId
 				}} icon={experienceIcons.then(i => i.find(i => i.targetId === item.universeId))}/>
 			{/each}
 		{/await}

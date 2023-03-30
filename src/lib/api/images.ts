@@ -1,0 +1,1 @@
+export const THUMBNAILS_BASE = 'https://thumbnails.roblox.com/v1';

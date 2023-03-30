@@ -1,15 +1,12 @@
 import { error } from '@sveltejs/kit';
 import type { PageLoad } from './$types';
-import { getUniverse, getUniverseId, getUniverseThumbnails } from '$lib/api';
+import { getExperience, getExperienceId } from '$lib/api/games';
 export const load = (async ({ params }) => {
-	console.log('fetching universe details');
-	const universeId = await getUniverseId(params.id);
-	if (universeId) {
-		const universe = await getUniverse(universeId);
-		if (universe) {
-			const thumbnails = await getUniverseThumbnails(universeId);
-			return { ...universe, thumbnails };
-		}
+	const id = await getExperienceId(params.id);
+	if (id) {
+		const experience = await getExperience(id);
+		if (experience)
+			return experience;
 	}
 	throw error(404);
 }) satisfies PageLoad

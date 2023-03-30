@@ -1,11 +1,8 @@
 import type { LayoutLoad } from './$types';
-import { getGroupIcons, getSelfGroupRoles } from '$lib/api';
+import { getSelfGroupRoles } from '$lib/api/groups';
 export const load = (async () => {
-	console.log('fetching groups');
 	const roles = await getSelfGroupRoles();
-	const groups = roles.map(role => role.group);
-	const icons = await getGroupIcons(groups.map(group => group.id));
-	return { icons, groups };
+	return { groups: roles.map(role => role.group) };
 }) satisfies LayoutLoad
 
 export interface PlaceData {

@@ -1,4 +1,5 @@
-import { csrfToken, fullRequest } from './api';
+import { csrfToken } from './api/auth';
+import { fullRequest } from './api';
 
 export async function getLaunchUri(type: 'RequestFollowUser', params: Record<string, string>) {
 	const url = new URL('https://assetgame.roblox.com/game/PlaceLauncher.ashx');

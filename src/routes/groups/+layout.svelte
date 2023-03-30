@@ -1,8 +1,12 @@
 <script lang="ts">
 	import { t } from '$lib/localization';
+	import Avatar from '$lib/components/Avatar.svelte';
+	import { getGroupIcons } from '$lib/api/groups';
 	import type { LayoutData } from './$types';
 
 	export let data: LayoutData;
+
+	const icons = getGroupIcons(data.groups.map(group => group.id));
 </script>
 
 <div class="main">
@@ -10,7 +14,7 @@
 		<p>Your Groups</p>
 		{#each data.groups as group}
 			<a class="group" href={`/groups/${group.id}`}>
-				<img src={data.icons.find(icon => icon.targetId === group.id)?.imageUrl} alt="group icon" width="40" height="40"/>
+				<Avatar src={icons.then(i => i.find(icon => icon.targetId === group.id)?.imageUrl)} size="sm"/>
 				<p>{group.name}</p>
 			</a>
 		{/each}
@@ -47,10 +51,6 @@
 				margin-bottom: 4px;
 				border-radius: 8px;
 				text-decoration: none;
-				img {
-					display: flex;
-					border-radius: 4px;
-				}
 				p {
 					margin: 0 0 0 12px;
 					font-size: 1.1em;

@@ -1,16 +1,21 @@
 <script lang="ts">
 	import { t } from '$lib/localization';
+	import Avatar from '$lib/components/Avatar.svelte';
+	import CreatorLink from '$lib/components/CreatorLink.svelte';
 	import type { PageData } from './$types';
+	import { getGroupIcons } from '$lib/api/groups';
 
 	export let data: PageData;
+
+	$: icon = getGroupIcons([data.id]).then(i => i[0]?.imageUrl);
 </script>
 
 <div class="main">
 	<div class="landing">
-		<img src={data.icon?.imageUrl} alt="group icon"/>
+		<Avatar src={icon}/>
 		<div class="details">
 			<h1>{data.name}</h1>
-			<p>by <a href={`/users/${data.owner.userId}`}>{data.owner.displayName}</a></p>
+			<p>by <CreatorLink id={data.owner.userId} name={data.owner.username} type="User" displayName={data.owner.displayName}/></p>
 			<div class="extra">
 				<p>{data.memberCount} members</p>
 			</div>
@@ -26,7 +31,9 @@
 
 <svelte:head>
 	<title>{data.name}</title>
-	<link rel="icon" type="image/png" href={data.icon?.imageUrl}>
+	{#await icon then icon}
+		<link rel="icon" type="image/png" href={icon}>
+	{/await}
 </svelte:head>
 
 <style lang="scss">
@@ -36,7 +43,6 @@
 		.landing {
 			display: flex;
 			align-items: center;
-			img { border-radius: 8px; }
 			.details {
 				margin-left: 32px;
 				h1 {
@@ -46,10 +52,6 @@
 				p {
 					color: var(--color-tertiary);
 					margin-top: 6px;
-					a {
-						color: var(--color-primary);
-						text-decoration: none;
-					}
 				}
 				.extra {
 					margin-top: 40px;

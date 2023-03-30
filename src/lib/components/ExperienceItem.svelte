@@ -1,32 +1,36 @@
 <script lang="ts">
 	import People from '$lib/icons/People.svelte';
-	import PlayIcon from './PlayIcon.svelte';
+	import Avatar from '$lib/components/Avatar.svelte';
+	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
-	import type { ImageData } from '$lib/api';
+	import type { ImageData, ExperienceVoting } from '$lib/api/types';
+	import { getExperienceIcons, getExperienceVotes } from '$lib/api/games';
 	export let data: {
 		id: number
 		name: string
 		playing: number
+		voting?: ExperienceVoting
 		rootPlaceId: number
-		totalUpVotes: number
-		totalDownVotes: number
 	};
-	export let icon: Promise<ImageData | undefined>;
+	export let icon: Promise<ImageData | undefined> | undefined = undefined;
 
-	const rating = Math.round(data.totalUpVotes / (data.totalUpVotes + data.totalDownVotes) * 100);
+	const voting = data.voting ? Promise.resolve(data.voting) :
+		getExperienceVotes([data.id]).then(v => v[0]);
+	const rating = voting.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
 	const quickLaunch = () =>
 		location.href = `roblox://placeId=${data.rootPlaceId}`;
 </script>
 
 <a class="experience" href={`/games/${data.rootPlaceId}`}>
-	{#await icon}
-		<img alt="experience icon"/>
-	{:then data}
-		<img src={data?.imageUrl} alt="experience icon" width="128" height="128"/>
-	{/await}
+	<Avatar src={icon ? icon.then(i => i?.imageUrl) : getExperienceIcons([data.id]).then(i => i[0]?.imageUrl)} size="lg2"/>
 	<p class="name">{data.name}</p>
 	<div class="details">
-		<p><ThumbsUp/>{isNaN(rating) ? 'Unrated' : `${rating}%`}</p>
+		<p>
+			<ThumbsUp/>
+			{#await rating then rating}
+				{isNaN(rating) ? 'Unrated' : `${rating}%`}
+			{/await}
+		</p>
 		<p><People/>{new Intl.NumberFormat().format(data.playing)}</p>
 	</div>
 	<button type="button" class="play" on:click|preventDefault={quickLaunch}>
@@ -43,7 +47,6 @@
 		position: relative;
 		flex-direction: column;
 		text-decoration: none;
-		img { border-radius: 8px; }
 		.name {
 			margin: 8px 0 0;
 			overflow: hidden;
