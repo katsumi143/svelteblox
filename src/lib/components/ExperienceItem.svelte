@@ -13,11 +13,9 @@
 	};
 	export let icon: Promise<ImageData | undefined>;
 
-	const rating = Math.round((data.totalUpVotes - data.totalDownVotes) / data.totalUpVotes * 100);
-	const quickLaunch = (event: Event) => {
-		event.preventDefault();
+	const rating = Math.round(data.totalUpVotes / (data.totalUpVotes + data.totalDownVotes) * 100);
+	const quickLaunch = () =>
 		location.href = `roblox://placeId=${data.rootPlaceId}`;
-	};
 </script>
 
 <a class="experience" href={`/games/${data.rootPlaceId}`}>
@@ -31,7 +29,7 @@
 		<p><ThumbsUp/>{isNaN(rating) ? 'Unrated' : `${rating}%`}</p>
 		<p><People/>{new Intl.NumberFormat().format(data.playing)}</p>
 	</div>
-	<button type="button" class="play" on:click={quickLaunch}>
+	<button type="button" class="play" on:click|preventDefault={quickLaunch}>
 		<PlayIcon size={20}/>
 	</button>
 </a>

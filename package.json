@@ -21,6 +21,7 @@
 	},
 	"dependencies": {
 		"@voxelified/voxeliface": "^1.0.0",
+		"svelte-contextmenu": "^1.0.2",
 		"uuid": "^9.0.0"
 	}
 }

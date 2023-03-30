@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { t } from '$lib/localization';
 	import PlayIcon from '$lib/components/PlayIcon.svelte';
+	import ContextMenu, { Item, Divider, Settings } from 'svelte-contextmenu';
 	import type { PageData } from './$types';
 	import { getCreatorLink } from '$lib/api';
 
@@ -13,6 +14,7 @@
 		});
 		console.log(response);*
 	};*/
+	let creatorMenu: ContextMenu;
 </script>
 
 <div class="main">
@@ -22,7 +24,9 @@
 		</div>
 		<div class="details">
 			<h1>{data.name}</h1>
-			<p>by <a href={getCreatorLink(data.creator)}>{data.creator.name}</a></p>
+			<p>by <a href={getCreatorLink(data.creator)} on:contextmenu={creatorMenu.createHandler()}>
+				{data.creator.name}
+			</a></p>
 
 			<p class="players">{data.playing} users are currently in-experience</p>
 			<button type="button" on:click={() => location.href = `roblox://placeId=${data.rootPlaceId}`}>
@@ -34,6 +38,11 @@
 		<p>{data.description}</p>
 	</div>
 </div>
+
+<ContextMenu bind:this={creatorMenu}>
+	<p>{data.creator.name}</p>
+	<Item>Copy Creator ID</Item>
+</ContextMenu>
 
 <svelte:head>
 	<title>{data.name}</title>

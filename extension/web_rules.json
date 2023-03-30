@@ -1,0 +1,20 @@
+[
+	{
+		"id": 1,
+		"priority": 1,
+		"action": {
+			"type": "modifyHeaders",
+			"requestHeaders": [
+				{
+					"value": "https://www.roblox.com",
+					"header": "Referer",
+					"operation": "set"
+				}
+			]
+		},
+		"condition": {
+			"urlFilter": "||auth.roblox.com",
+			"resourceTypes": ["xmlhttprequest"]
+		}
+	}
+]

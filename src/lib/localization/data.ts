@@ -7,6 +7,10 @@ export default {
 		'home.friends': 'Your Friends ({0})',
 		'home.recent': 'Recent Experiences',
 
+		'user.friends': 'friends',
+		'user.followers': 'followers',
+		'user.following': 'following',
+
 		'group.join': 'Join Group'
 	}
 } as Record<string, Record<string, string>>

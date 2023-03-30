@@ -22,10 +22,14 @@
 
 <style lang="scss">
 	.main {
+		height: 100%;
 		display: flex;
 		.groups {
-			margin: 16px 0 16px 16px;
+			width: 320px;
+			height: 100%;
 			display: flex;
+			padding: 16px 0 16px 16px;
+			overflow: hidden auto;
 			flex-direction: column;
 			p {
 				margin: 0 0 12px;
@@ -33,6 +37,7 @@
 				font-weight: 500;
 			}
 			.group {
+				width: auto;
 				color: var(--color-primary);
 				display: flex;
 				padding: 6px 8px;

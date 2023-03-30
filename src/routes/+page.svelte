@@ -3,28 +3,16 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	import { getGreeting } from '$lib/util';
-	import { user, request, getUserIcon, getUserIcons, getUserFriends, getUniverseIcons } from '$lib/api';
+	import { joinUser } from '$lib/launch';
+	import { user, request, getUserIcon, getUserIcons, getUniverses, getUserFriends, getUserPresences, getUniverseIcons, getRecentExperiences } from '$lib/api';
 
 	const friends = getUserFriends(user.id);
 	const friendAvatars = friends.then(f => getUserIcons(f.map(f => f.id)));
+	const presences = friends.then(f => getUserPresences(f.filter(f => f.isOnline).map(f => f.id)));
+	const presenceExperiences = presences.then(p => getUniverses(p.filter(p => !!p.universeId).map(p => p.universeId)));
+	presences.then(console.log);
 
-	const recentExperiences = request<{
-		sorts: {
-			name: string
-			token: string
-		}[]
-	}>('https://games.roblox.com/v1/games/sorts?GameSortsContext=2')
-		.then(data => request<{
-			games: {
-				name: string
-				placeId: number
-				universeId: number
-				playerCount: number
-				totalUpVotes: number
-				totalDownVotes: number
-			}[]
-		}>(`https://games.roblox.com/v1/games/list?SortToken=${data.sorts.find(s => s.name === 'MyRecent')?.token}`))
-		.then(data => data.games);
+	const recentExperiences = getRecentExperiences();
 	const experienceIcons = recentExperiences.then(data => getUniverseIcons(data.map(i => i.universeId)));
 </script>
 
@@ -39,17 +27,30 @@
 	{#await friends}
 		<p>loading friends</p>
 	{:then friends}
-		<p class="header">{$t('home.friends', [friends.length])}</p>
+		<div class="header">
+			<p>{$t('home.friends', [friends.length])}</p>
+			<a href="/">View All</a>
+		</div>
 		{#each friends.sort((a, b) => Number(b.isOnline) - Number(a.isOnline)) as friend}
 			<a href={`/users/${friend.id}`} class={`friend status-${friend.presenceType}`}>
 				<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md"/>
 				<p>{friend.displayName}</p>
+				{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
+					{#if presence && presence.universeId}
+						{#await presenceExperiences.then(e => e.find(e => e.id === presence.universeId)) then universe}
+							<p class="status" title={`Join ${friend.name}`} on:click|preventDefault={() => joinUser(friend.id)}>{universe?.name}</p>
+						{/await}
+					{/if}
+				{/await}
 			</a>
 		{/each}
 	{/await}
 </div>
 <div class="experiences">
-	<p class="header">{$t('home.recent')}</p>
+	<div class="header">
+		<p>{$t('home.recent')}</p>
+		<a href="/games/recent">View All</a>
+	</div>
 	<div class="items">
 		{#await recentExperiences}
 			<p>loading recent experiences</p>
@@ -93,16 +94,12 @@
 	}
 	.friends {
 		gap: 0 16px;
-		height: 140px;
 		margin: 0 64px;
 		display: flex;
 		overflow: hidden;
 		flex-wrap: wrap;
-		.header {
-			width: 100%;
-			margin: 0 0 12px;
-			font-weight: 500;
-		}
+		min-height: 148px;
+		max-height: 148px;
 		.friend {
 			width: 80px;
 			color: var(--color-primary);
@@ -111,14 +108,21 @@
 			margin-bottom: 100px;
 			text-decoration: none;
 			p {
-				margin: 2px 0 0;
+				margin: 4px 0 0;
 				overflow: hidden;
 				font-size: .85em;
 				line-height: 1.2;
 				white-space: nowrap;
 				text-overflow: ellipsis;
 			}
-			&.status-1, &.status-2 {
+			.status {
+				color: var(--color-secondary);
+				font-size: .75em;
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+			&.status-1, &.status-2, &.status-3 {
 				:before {
 					top: 58px;
 					right: 0;
@@ -137,21 +141,33 @@
 				&.status-2 {
 					--status-color: hsl(130, 60%, 60%);
 				}
+				&.status-3 {
+					--status-color: hsl(35, 80%, 60%);
+				}
 			}
 		}
 	}
 	.experiences {
 		margin: 16px 64px;
-		.header {
-			width: 100%;
-			margin: 0 0 12px;
-			font-weight: 500;
-		}
 		.items {
 			gap: 16px;
 			height: 200px;
 			display: flex;
 			overflow: hidden;
+		}
+	}
+
+	.header {
+		width: 100%;
+		margin: 0 0 12px;
+		display: flex;
+		font-weight: 500;
+		justify-content: space-between;
+		p { margin: 0; }
+		a {
+			color: var(--color-primary);
+			font-size: .9em;
+			text-decoration: none;
 		}
 	}
 </style>

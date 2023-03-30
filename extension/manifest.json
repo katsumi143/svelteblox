@@ -5,9 +5,17 @@
 	"background": {
 	  	"service_worker": "background.js"
 	},
+	"permissions": ["declarativeNetRequest", "declarativeNetRequestFeedback"],
 	"content_scripts": [{
 		"js": ["content.js"],
 		"matches": ["http://localhost:5173/*", "http://localhost:4173/*", "https://svelteblox.vercel.app/*"]
 	}],
-	"host_permissions": ["https://*.roblox.com/*"]
+	"host_permissions": ["https://*.roblox.com/*"],
+	"declarative_net_request": {
+		"rule_resources": [{
+		  	"id": "web_rules",
+			"path": "web_rules.json",
+		  	"enabled": true
+		}]
+	}
 }
