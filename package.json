@@ -13,11 +13,13 @@
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.14.0",
 		"@types/uuid": "^9.0.1",
+		"@vite-pwa/sveltekit": "^0.2.1",
 		"sass": "^1.60.0",
 		"svelte": "^3.57.0",
 		"svelte-preprocess": "^5.0.3",
 		"typescript": "^5.0.2",
-		"vite": "^4.2.1"
+		"vite": "^4.2.1",
+		"vite-plugin-pwa": "^0.14.7"
 	},
 	"dependencies": {
 		"@voxelified/voxeliface": "^1.0.0",

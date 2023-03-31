@@ -4,12 +4,33 @@
 	import { t } from '$lib/localization';
 	import { Header } from '@voxelified/voxeliface';
 	import PageLoader from '$lib/components/PageLoader.svelte';
+	import { onMount } from 'svelte';
+	import { pwaInfo } from 'virtual:pwa-info';
 	import { Settings, defaultSettings } from 'svelte-contextmenu';
+	onMount(async () => {
+		if (pwaInfo) {
+			const { registerSW } = await import('virtual:pwa-register');
+			registerSW({
+				immediate: true,
+				onRegistered(r) {
+					console.log(`SW Registered: ${r}`);
+				},
+				onRegisterError(error) {
+					console.log('SW registration error', error);
+				},
+				onOfflineReady() {
+					console.log('offline ready');
+				}
+			});
+		}
+	});
 
 	const menuSettings = new Settings();
 	menuSettings.Menu.Class.push('theme-dark');
 
 	defaultSettings.set(menuSettings);
+
+	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
 
 <div class="app theme-dark">
@@ -27,6 +48,10 @@
 </div>
 
 <PageLoader/>
+
+<svelte:head>
+	{@html webManifest}
+</svelte:head>
 
 <style lang="scss">
 	.app {
