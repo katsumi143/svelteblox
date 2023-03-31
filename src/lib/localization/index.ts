@@ -11,8 +11,8 @@ export function translate(locale: string, key: string, values: Values) {
 		return key;
 
 	text = text.replaceAll(/{(.*)}/g, (t: string, k: string) => {
-		const split = k.split('||');
-		return ((values as any)[split[0]] || split[1]) ?? t;
+		const split = k.split('??');
+		return ((values as any)[split[0]] ?? split[1]) ?? t;
 	});
 	text = text.replaceAll(/\$\((.*)\)/g, (_, p1) => {
 		const [key, values] = p1.split(', ');

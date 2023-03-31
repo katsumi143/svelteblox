@@ -22,7 +22,7 @@ export function getExperienceId(placeId: string | number) {
 	const string = placeId.toString();
 	const cached = placeToExperienceCache[string];
 	if (cached)
-		return cached;
+		return Promise.resolve(cached);
 	return request<ExperienceId>(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
 		.then(data => placeToExperienceCache[string] = data.universeId);
 }

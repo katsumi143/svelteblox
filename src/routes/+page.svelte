@@ -40,7 +40,7 @@
 				{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
 					{#if presence && presence.universeId}
 						{#await presenceExperiences.then(e => e.find(e => e.id === presence.universeId)) then universe}
-							<p class="status" title={`Join ${friend.name}`} on:click|preventDefault={() => joinUser(friend.id)}>{universe?.name}</p>
+							<p class="status" title={`Join ${friend.name} in ${universe?.name}`} on:click|preventDefault={() => joinUser(friend.id)}>{universe?.name}</p>
 						{/await}
 					{/if}
 				{/await}

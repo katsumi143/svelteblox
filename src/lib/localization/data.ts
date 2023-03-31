@@ -11,13 +11,14 @@ export default {
 		'user.followers': 'followers',
 		'user.following': 'following',
 		'user.favourites': 'Favourite Experiences',
-		'user.experience': 'Currently Playing',
+		'user.experience_2': 'Currently Playing',
+		'user.experience_3': 'Currently Editing',
 		'user.avatar': 'Currently Wearing',
 
 		'group.join': 'Join Group',
 
 		'experience.play': 'Quick Play',
-		'experience.join_user': 'Join {0||Friend}',
+		'experience.join_user': 'Join {0??Friend}',
 		'experience.playing': '{0} users are currently in-experience',
 		'experience.playing2': '{0} playing',
 		'experience.favourite_false': 'Favourite',

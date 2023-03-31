@@ -14,6 +14,7 @@
 		creator: ExperienceCreator
 		rootPlaceId: number
 	};
+	export let canPlay = true;
 	export let friendId: number | null;
 	export let friendName: string | null;
 	export let thumbnail: Promise<ImageData | undefined> | undefined = undefined;
@@ -41,10 +42,12 @@
 		</p>
 		<p><People/>{$t('experience.playing2', [new Intl.NumberFormat().format(data.playing)])}</p>
 	</div>
-	<button type="button" class="play" on:click|preventDefault={quickLaunch}>
-		{$t(`experience.${friendId ? 'join_user' : 'play'}`, [friendName])}
-		<PlayIcon size={32}/>
-	</button>
+	{#if canPlay}
+		<button type="button" class="play" on:click|preventDefault={quickLaunch}>
+			{$t(`experience.${friendId ? 'join_user' : 'play'}`, [friendName])}
+			<PlayIcon size={32}/>
+		</button>
+	{/if}
 </a>
 
 <style lang="scss">

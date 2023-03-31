@@ -4,7 +4,8 @@
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	import ExperienceCard from '$lib/components/ExperienceCard.svelte';
 	import type { PageData } from './$types';
-	import { getExperiences } from '$lib/api/games';
+	import { UserPresenceType } from '$lib/api/types';
+	import { getExperiences, getExperienceId } from '$lib/api/games';
 	import { getUserIcon, getUserPresences, getUserFullBodies, getUserFavourites, getUserFriendCount, getUserFollowerCount, getUserFollowingCount } from '$lib/api/users';
 
 	export let data: PageData;
@@ -12,7 +13,12 @@
 	$: icon = getUserIcon(data.id);
 	$: presence = getUserPresences([data.id]).then(data => data[0]);
 	$: fullBody = getUserFullBodies([data.id]);
-	$: currentExperience = presence.then(p => p ? getExperiences([p.universeId]).then(e => e[0]) : null);
+	$: currentExperience = presence.then(({ placeId, universeId }) => {
+		if (universeId)
+			return getExperiences([universeId]).then(e => e[0]);
+		if (placeId)
+			return getExperienceId(placeId).then(id => id ? getExperiences([id]).then(e => e[0]) : null);
+	});
 </script>
 
 <div class="main">
@@ -44,8 +50,10 @@
 	{#await currentExperience then experience}
 		{#if experience}
 			<div class="experience">
-				<p class="header">{$t('user.experience')}</p>
-				<ExperienceCard data={experience} friendId={data.id} friendName={data.displayName}/>
+				{#await presence then presence}
+					<p class="header">{$t(`user.experience_${presence.userPresenceType}`)}</p>
+					<ExperienceCard data={experience} canPlay={presence.userPresenceType === UserPresenceType.InExperience} friendId={data.id} friendName={data.displayName}/>
+				{/await}
 			</div>
 		{/if}
 	{/await}
