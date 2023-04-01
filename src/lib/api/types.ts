@@ -15,6 +15,11 @@ export interface User {
 	hasVerifiedBadge: boolean
 	externalAppDisplayName: string | null
 }
+export interface CurrentUser {
+	id: number
+	name: string
+	displayName: string
+}
 export interface UserPresence {
 	gameId: string
 	userId: number

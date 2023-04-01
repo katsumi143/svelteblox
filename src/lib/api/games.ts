@@ -1,3 +1,4 @@
+import Cache from '../cache';
 import { request } from '.';
 import { THUMBNAILS_BASE } from './images';
 import type { ImageData, ApiDataList, Experience, ExperienceId, GameListItem, ExperienceVoting } from './types';
@@ -5,8 +6,10 @@ export const GAMES_BASE = 'https://games.roblox.com/v';
 export const GAMES_BASE1 = GAMES_BASE + 1;
 export const GAMES_BASE2 = GAMES_BASE + 2;
 
+export const GAMES_CACHE = new Cache('experiences');
+
 export function getExperience(id: number): Promise<Experience | undefined> {
-	return getExperiences([id]).then(data => data[0]);
+	return GAMES_CACHE.use(`experience_${id}`, () => getExperiences([id]).then(data => data[0]), 600000);
 }
 export function getExperiences(ids: (string | number)[]) {
 	return request<ApiDataList<Experience>>(`https://games.roblox.com/v1/games?universeIds=${ids.join(',')}`)
@@ -17,14 +20,12 @@ export function getExperienceVotes(ids: (string | number)[]) {
 		.then(data => data.data);
 }
 
-const placeToExperienceCache: Record<string, number | null> = {};
 export function getExperienceId(placeId: string | number) {
-	const string = placeId.toString();
-	const cached = placeToExperienceCache[string];
-	if (cached)
-		return Promise.resolve(cached);
-	return request<ExperienceId>(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
-		.then(data => placeToExperienceCache[string] = data.universeId);
+	return GAMES_CACHE.use(`experience_id_${placeId}`, () =>
+		request<ExperienceId>(`https://apis.roblox.com/universes/v1/places/${placeId}/universe`)
+			.then(data => data.universeId),
+		-1
+	);
 }
 
 export function getExperienceIcons(ids: (string | number)[]) {
@@ -40,16 +41,18 @@ export function getExperienceThumbnails(id: number) {
 		.then(data => data.data[0].thumbnails);
 }
 
-let recentExperiences: GameListItem[];
 export function getRecentExperiences() {
-	return recentExperiences ? Promise.resolve(recentExperiences) : request<{
-		sorts: {
-			name: string
-			token: string
-		}[]
-	}>('https://games.roblox.com/v1/games/sorts?GameSortsContext=2')
-		.then(data => request<{
-			games: GameListItem[]
-		}>(`https://games.roblox.com/v1/games/list?SortToken=${data.sorts.find(s => s.name === 'MyRecent')?.token}`))
-		.then(data => recentExperiences = data.games);
+	return GAMES_CACHE.use('recent', () =>
+		request<{
+			sorts: {
+				name: string
+				token: string
+			}[]
+		}>('https://games.roblox.com/v1/games/sorts?GameSortsContext=2')
+			.then(data => request<{
+				games: GameListItem[]
+			}>(`https://games.roblox.com/v1/games/list?SortToken=${data.sorts.find(s => s.name === 'MyRecent')?.token}`))
+			.then(data => data.games),
+		60000
+	);
 }
