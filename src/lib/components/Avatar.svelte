@@ -41,6 +41,7 @@
 		&.lg {
 			width: 120px;
 			height: 120px;
+			box-shadow: 0 8px 16px 2px #00000040;
 			border-radius: 8px;
 		}
 		&.lg2 {
