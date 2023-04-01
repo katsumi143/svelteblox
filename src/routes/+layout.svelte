@@ -37,6 +37,7 @@
 	<Header>
 		<a href="/" class="logo"><Logo/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
+		<a href="/groups" class="nav-link">{$t('groups')}</a>
 	</Header>
 	<main class="app-content">
 		<slot/>

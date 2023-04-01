@@ -15,6 +15,8 @@ export default {
 		'user.experience_3': 'Currently Editing',
 		'user.avatar': 'Currently Wearing',
 
+		'groups': 'Groups',
+
 		'group.join': 'Join Group',
 
 		'experience.play': 'Quick Play',
