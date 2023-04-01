@@ -12,7 +12,7 @@
 	$: formatted = `${!displayName && type === 'User' ? '@' : ''}${displayName || name}`;
 </script>
 
-<a href={link} on:contextmenu={creatorMenu.createHandler()}>
+<a href={link} title={`${displayName} (@${name})`} on:contextmenu={creatorMenu.createHandler()}>
 	{formatted}
 </a>
 
@@ -21,10 +21,3 @@
 	<Item href={`https://roblox.com${link}`} target="_blank">View on Roblox</Item>
 	<Item on:click={() => navigator.clipboard.writeText(id.toString())}><ClipboardPlus/>Copy ID</Item>
 </ContextMenu>
-
-<style>
-	a {
-		color: var(--color-primary);
-		text-decoration: none;
-	}
-</style>

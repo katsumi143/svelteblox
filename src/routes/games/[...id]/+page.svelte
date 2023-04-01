@@ -54,11 +54,11 @@
 			<button type="button" on:click={() => location.href = `roblox://placeId=${data.rootPlaceId}`}>
 				<PlayIcon/>
 			</button>
-			<p class="players">{$t('experience.playing', [data.playing])}</p>
+			<p class="players">{$t('experience.playing', [data])}</p>
 		</div>
 	</div>
 	<div class="description">
-		<p>{data.description}</p>
+		<p>{@html $t('description', [data.description])}</p>
 	</div>
 </div>
 

@@ -17,23 +17,28 @@ export default {
 
 		'groups': 'Groups',
 
+		'group.members': '{0.memberCount|number} members',
 		'group.join': 'Join Group',
 
 		'experience.play': 'Quick Play',
+		'experience.play2': 'Play {0.name}',
 		'experience.join_user': 'Join {0??Friend}',
-		'experience.playing': '{0} users are currently in-experience',
-		'experience.playing2': '{0} playing',
+		'experience.playing': '{0.playing|number} users are currently in-experience',
+		'experience.playing2': '{0.playing|number} playing',
 		'experience.favourite_false': 'Favourite',
 		'experience.favourite_true': 'Favourited',
 		'experience.rating': '{0}% of players liked this experience',
 		'experience.rating2': '{0}% liked this',
 		'experience.unrated': 'Unrated',
+		'experience.hover': '{0.name}\n{0.playing|number} Playing',
 
 		'creator': 'by {0}',
 
 		'user_status.0': 'Offline',
 		'user_status.1': 'Online',
 		'user_status.2': 'In-experience',
-		'user_status.3': 'In-studio'
+		'user_status.3': 'In-studio',
+
+		'description': '{0|description}'
 	}
 } as Record<string, Record<string, string>>

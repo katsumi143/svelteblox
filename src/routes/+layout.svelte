@@ -85,6 +85,13 @@
 		text-decoration: none;
 	}
 
+	:global(a) {
+		color: var(--color-primary);
+		text-decoration: none;
+
+		&:hover { text-decoration: underline; }
+	}
+
 	:global(.context-menu) {
 		display: none;
 		min-width: 220px;

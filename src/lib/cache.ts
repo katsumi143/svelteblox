@@ -40,7 +40,8 @@ export default class Cache {
 	}
 
 	private save() {
-		localStorage.setItem(this.storageName, JSON.stringify(this.cache));
+		if (!building && globalThis.localStorage)
+			localStorage.setItem(this.storageName, JSON.stringify(this.cache));
 	}
 
 	private get storageName() {

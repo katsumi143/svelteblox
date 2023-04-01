@@ -45,7 +45,7 @@
 			<a href={`/users/${data.id}/friends`}>{count}</a> <p>{$t('user.following')}</p>
 		{/await}
 	</div>
-	<p class="description">{data.description}</p>
+	<p class="description">{@html $t('description', [data.description])}</p>
 
 	{#await currentExperience then experience}
 		{#if experience}

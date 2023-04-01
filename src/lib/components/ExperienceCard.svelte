@@ -40,7 +40,7 @@
 				{$t(`experience.${rating ? 'rating2' : 'unrated'}`, [rating])}
 			{/await}
 		</p>
-		<p><People/>{$t('experience.playing2', [new Intl.NumberFormat().format(data.playing)])}</p>
+		<p><People/>{$t('experience.playing2', [data])}</p>
 	</div>
 	{#if canPlay}
 		<button type="button" class="play" on:click|preventDefault={quickLaunch}>

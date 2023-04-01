@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { t } from '$lib/localization';
 	import People from '$lib/icons/People.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
@@ -21,7 +22,7 @@
 		location.href = `roblox://placeId=${data.rootPlaceId}`;
 </script>
 
-<a class="experience" href={`/games/${data.rootPlaceId}`}>
+<a class="experience" href={`/games/${data.rootPlaceId}`} title={$t('experience.hover', [data])}>
 	<Avatar src={icon ? icon.then(i => i?.imageUrl) : getExperienceIcons([data.id]).then(i => i[0]?.imageUrl)} size="lg2"/>
 	<p class="name">{data.name}</p>
 	<div class="details">
@@ -33,7 +34,7 @@
 		</p>
 		<p><People/>{new Intl.NumberFormat().format(data.playing)}</p>
 	</div>
-	<button type="button" class="play" on:click|preventDefault={quickLaunch}>
+	<button type="button" class="play" title={$t('experience.play2', [data])} on:click|preventDefault={quickLaunch}>
 		<PlayIcon size={20}/>
 	</button>
 </a>

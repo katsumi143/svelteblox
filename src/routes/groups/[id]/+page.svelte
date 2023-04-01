@@ -17,7 +17,7 @@
 			<h1>{data.name}</h1>
 			<p>by <CreatorLink id={data.owner.userId} name={data.owner.username} type="User" displayName={data.owner.displayName}/></p>
 			<div class="extra">
-				<p>{data.memberCount} members</p>
+				<p>{$t('group.members', [data])}</p>
 			</div>
 		</div>
 		{#if !data.groups.some(group => group.id === data.id)}
@@ -26,7 +26,7 @@
 			</button>
 		{/if}
 	</div>
-	<p class="description">{data.description}</p>
+	<p class="description">{@html $t('description', [data.description])}</p>
 </div>
 
 <svelte:head>
