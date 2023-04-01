@@ -31,7 +31,7 @@
 	{:then friends}
 		<div class="header">
 			<p>{$t('home.friends', [friends.length])}</p>
-			<a href="/">View All</a>
+			<a href={`/users/${user.id}/friends`}>View All</a>
 		</div>
 		{#each friends.sort((a, b) => Number(b.isOnline) - Number(a.isOnline)) as friend}
 			<a href={`/users/${friend.id}`} class={`friend status-${friend.presenceType}`}>
