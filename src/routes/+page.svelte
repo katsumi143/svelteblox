@@ -5,6 +5,7 @@
 	import { user } from '$lib/api/auth';
 	import { joinUser } from '$lib/launch';
 	import { getGreeting } from '$lib/util';
+	import { UserPresenceType } from '$lib/api/types';
 	import { getExperiences, getExperienceIcons, getRecentExperiences } from '$lib/api/games';
 	import { getUserIcon, getUserIcons, getUserFriends, getUserPresences } from '$lib/api/users';
 
@@ -13,6 +14,13 @@
 	
 	const presences = friends.then(f => getUserPresences(f.filter(f => f.isOnline).map(f => f.id)));
 	const presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
+
+	const sortedFriends = friends.then(friends => {
+		const sorted = friends.sort((a, b) => a.displayName.localeCompare(b.displayName));
+		const online = sorted.filter(f => f.isOnline);
+		const offline = sorted.filter(f => !f.isOnline);
+		return [...online, ...offline];
+	});
 
 	const recentExperiences = getRecentExperiences();
 	const experienceIcons = recentExperiences.then(data => getExperienceIcons(data.map(i => i.universeId)));
@@ -26,14 +34,14 @@
 	</div>
 </div>
 <div class="friends">
-	{#await friends}
+	{#await sortedFriends}
 		<p>loading friends</p>
 	{:then friends}
 		<div class="header">
 			<p>{$t('home.friends', [friends.length])}</p>
 			<a href={`/users/${user.id}/friends`}>View All</a>
 		</div>
-		{#each friends.sort((a, b) => Number(b.isOnline) - Number(a.isOnline)) as friend}
+		{#each friends as friend}
 			<a href={`/users/${friend.id}`} class={`friend status-${friend.presenceType}`}>
 				<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md" circle/>
 				<p>{friend.displayName}</p>
