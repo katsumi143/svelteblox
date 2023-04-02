@@ -6,6 +6,7 @@ export const locales = Object.keys(data);
 
 export type Values = Iterable<any> | Record<string, any>
 
+const ta = (id: number, val: number) => `time_ago.${id}_${val === 1 ? 1 : 0}`;
 const numFormatter = new Intl.NumberFormat();
 export function translate(locale: string, key: string, values: Values) {
 	let text = data[locale][key];
@@ -29,6 +30,31 @@ export function translate(locale: string, key: string, values: Values) {
 				const replaced = url.replace(/(?:http(s)?:\/\/)(www\.)?roblox\.com/g, '');
 				return `<a href="${replaced}" target="${replaced === url ? '_blank' : '_self'}">${url}</a>`
 			});
+		else if (formatType === 'time_ago') {
+			const diff = Date.now() - new Date(finalValue).getTime();
+			const year = Math.floor(diff / 31536000000);
+			if (year > 0)
+				return translate(locale, ta(5, year), [year]);
+
+			const month = Math.floor(diff / 2628000000);
+			if (month > 0)
+				return translate(locale, ta(4, month), [month]);
+
+			const day = Math.floor(diff / 86400000);
+			if (day > 0)
+				return translate(locale, ta(3, day), [day]);
+
+			const hour = Math.floor(diff / 3600000);
+			if (hour > 0)
+				return translate(locale, ta(2, hour), [hour]);
+
+			const minute = Math.floor(diff / 60000);
+			if (minute > 0)
+				return translate(locale, ta(1, minute), [minute]);
+
+			const second = Math.floor(diff / 1000);
+			return translate(locale, ta(0, second), [second]);
+		}
 
 		return finalValue;
 	});

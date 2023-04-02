@@ -19,21 +19,21 @@
 			</a>
 		{/each}
 	</div>
-	<div class="group">
+	<div class="group-page">
 		<slot/>
 	</div>
 </div>
 
 <style lang="scss">
 	.main {
-		height: 100%;
 		display: flex;
 		.groups {
 			width: 320px;
 			height: 100%;
+			margin: 16px 0 0 16px;
 			display: flex;
-			padding: 16px 0 16px 16px;
-			overflow: hidden auto;
+			overflow: auto;
+			padding-bottom: 12px;
 			flex-direction: column;
 			p {
 				margin: 0 0 12px;
@@ -58,7 +58,7 @@
 				}
 			}
 		}
-		.group {
+		.group-page {
 			width: 100%;
 		}
 	}
