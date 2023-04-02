@@ -71,7 +71,7 @@
 		<div class="items">
 			{#await getUserFavourites(data.id).then(f => getExperiences(f.map(e => e.id))) then items}
 				{#each items as item}
-					<ExperienceItem data={item}/>
+					<ExperienceItem id={item.id} name={item.name} playing={item.playing} rootPlaceId={item.rootPlaceId}/>
 				{/each}
 			{/await}
 		</div>

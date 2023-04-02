@@ -2,14 +2,16 @@
 	import { t } from '$lib/localization';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
+	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	import { getUserIcon } from '$lib/api/users';
 	import type { PageData } from './$types';
-	import { getGroupIcons } from '$lib/api/groups';
+	import { getGroupIcons, getGroupExperiences } from '$lib/api/groups';
 
 	export let data: PageData;
 
 	$: icon = getGroupIcons([data.id]).then(i => i[0]?.imageUrl);
 	$: shoutIcon = data.shout ? getUserIcon(data.shout.poster.userId).then(i => i?.imageUrl) : null;
+	$: experiences = getGroupExperiences(data.id, 2);
 </script>
 
 <div class="main">
@@ -40,6 +42,21 @@
 			</div>
 		</div>
 	{/if}
+	{#await experiences then items}
+		{#if items.length > 0}
+			<div class="experiences">
+				<div class="header">
+					<p>{$t('group.experiences')}</p>
+					<a href={`/groups/${data.id}/games`}>View All</a>
+				</div>
+				<div class="items">
+					{#each items as item}
+						<ExperienceItem id={item.id} name={item.name} rootPlaceId={item.rootPlace.id}/>
+					{/each}
+				</div>
+			</div>
+		{/if}
+	{/await}
 </div>
 
 <svelte:head>
@@ -48,7 +65,7 @@
 
 <style lang="scss">
 	.main {
-		margin: 32px 96px;
+		margin: 32px 64px;
 
 		.landing {
 			display: flex;
@@ -92,7 +109,8 @@
 			white-space: pre-wrap;
 		}
 		h3.shout {
-			margin: 48px 0 8px;
+			margin: 48px 0 12px;
+			font-size: 1em;
 			font-weight: 500;
 		}
 		div.shout {
@@ -112,6 +130,30 @@
 					font-size: .8em;
 					margin-top: 24px;
 				}
+			}
+		}
+		.experiences {
+			width: 100%;
+			margin-top: 48px;
+			.header {
+				width: 100%;
+				margin: 0 0 12px;
+				display: flex;
+				font-weight: 500;
+				justify-content: space-between;
+				p { margin: 0; }
+				a {
+					color: var(--color-primary);
+					font-size: .9em;
+					text-decoration: none;
+				}
+			}
+			.items {
+				gap: 16px;
+				width: 100%;
+				height: 200px;
+				display: flex;
+				overflow: hidden;
 			}
 		}
 	}

@@ -148,12 +148,18 @@ export interface ExperienceV2 {
 	updated: string
 	creator: Partial
 	rootPlace: Partial
-	description: string
 	placeVisits: number
+	description: string | null
 }
 
 export interface Partial {
-
+	id: number
+	type: PartialType
+}
+export enum PartialType {
+	User = 'User',
+	Group = 'Group',
+	Place = 'Place'
 }
 
 export interface ImageData {

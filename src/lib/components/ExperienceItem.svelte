@@ -2,33 +2,30 @@
 	import { t } from '$lib/localization';
 	import People from '$lib/icons/People.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import { page } from '$app/stores';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
 	import ContextMenu, { Item } from 'svelte-contextmenu';
 	import type { ImageData, ExperienceVoting } from '$lib/api/types';
 	import { getExperienceIcons, getExperienceVotes } from '$lib/api/games';
-	export let data: {
-		id: number
-		name: string
-		playing: number
-		voting?: ExperienceVoting
-		rootPlaceId: number
-	};
-	export let icon: Promise<ImageData | undefined> | undefined = undefined;
+	export let id: number;
+	export let name: string
+	export let icon: Promise<ImageData | undefined> | null = null;
+	export let voting: ExperienceVoting | null = null;
+	export let playing: number | null = null;
+	export let rootPlaceId: number;
 	let contextMenu: ContextMenu;
 
-	const voting = data.voting ? Promise.resolve(data.voting) :
-		getExperienceVotes([data.id]).then(v => v[0]);
-	const rating = voting.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
+	const voting2 = voting ? Promise.resolve(voting) :
+		getExperienceVotes([id]).then(v => v[0]);
+	const rating = voting2.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
 	const quickLaunch = () =>
-		location.href = `roblox://placeId=${data.rootPlaceId}`;
+		location.href = `roblox://placeId=${rootPlaceId}`;
 </script>
 
-<a class="experience" href={`/games/${data.rootPlaceId}`} title={$t('experience.hover', [data])} on:contextmenu={contextMenu.createHandler()}>
-	<Avatar src={icon ? icon.then(i => i?.imageUrl) : getExperienceIcons([data.id]).then(i => i[0]?.imageUrl)} size="lg2"/>
-	<p class="name">{data.name}</p>
+<a class="experience" href={`/games/${rootPlaceId}`} title={$t('experience.hover', [name, playing])} on:contextmenu={contextMenu.createHandler()}>
+	<Avatar src={icon ? icon.then(i => i?.imageUrl) : getExperienceIcons([id]).then(i => i[0]?.imageUrl)} size="lg2"/>
+	<p class="name">{name}</p>
 	<div class="details">
 		<p>
 			<ThumbsUp/>
@@ -36,18 +33,20 @@
 				{isNaN(rating) ? 'Unrated' : `${rating}%`}
 			{/await}
 		</p>
-		<p><People/>{new Intl.NumberFormat().format(data.playing)}</p>
+		{#if typeof playing === 'number'}
+			<p><People/>{$t('number', [playing])}</p>
+		{/if}
 	</div>
-	<button type="button" class="play" title={$t('experience.play2', [data])} on:click|preventDefault={quickLaunch}>
+	<button type="button" class="play" title={$t('experience.play2', [name])} on:click|preventDefault={quickLaunch}>
 		<PlayIcon size={20}/>
 	</button>
 </a>
 
 <ContextMenu bind:this={contextMenu}>
-	<p>{data.name}</p>
-	<Item href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">View on Roblox</Item>
-	<Item on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}><ClipboardPlus/>Copy Place ID</Item>
-	<Item on:click={() => navigator.clipboard.writeText(data.id.toString())}><ClipboardPlus/>Copy Universe ID</Item>
+	<p>{name}</p>
+	<Item href={`https://roblox.com/games/${rootPlaceId}`} target="_blank">View on Roblox</Item>
+	<Item on:click={() => navigator.clipboard.writeText(rootPlaceId.toString())}><ClipboardPlus/>Copy Place ID</Item>
+	<Item on:click={() => navigator.clipboard.writeText(id.toString())}><ClipboardPlus/>Copy Universe ID</Item>
 </ContextMenu>
 
 <style lang="scss">

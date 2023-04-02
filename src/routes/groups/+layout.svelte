@@ -28,11 +28,11 @@
 	.main {
 		display: flex;
 		.groups {
-			width: 320px;
 			height: 100%;
 			margin: 16px 0 0 16px;
 			display: flex;
 			overflow: auto;
+			min-width: 20%;
 			padding-bottom: 12px;
 			flex-direction: column;
 			p {
@@ -60,6 +60,7 @@
 		}
 		.group-page {
 			width: 100%;
+			overflow: hidden;
 		}
 	}
 </style>

@@ -19,11 +19,12 @@ export default {
 
 		'group.members': '{0.memberCount|number} members',
 		'group.join': 'Join Group',
+		'group.experiences': 'Group Experiences',
 		'group.shout': 'Group Shout',
 		'group.shout.time': 'Posted {0|time_ago}',
 
 		'experience.play': 'Quick Play',
-		'experience.play2': 'Play {0.name}',
+		'experience.play2': 'Play {0}',
 		'experience.join_user': 'Join {0??Friend}',
 		'experience.playing': '{0.playing|number} users are currently in-experience',
 		'experience.playing2': '{0.playing|number} playing',
@@ -32,7 +33,7 @@ export default {
 		'experience.rating': '{0}% of players liked this experience',
 		'experience.rating2': '{0}% liked this',
 		'experience.unrated': 'Unrated',
-		'experience.hover': '{0.name}\n{0.playing|number} Playing',
+		'experience.hover': '{0}\n{1|number} Playing',
 
 		'creator': 'by {0}',
 
@@ -41,6 +42,7 @@ export default {
 		'user_status.2': 'In-experience',
 		'user_status.3': 'In-studio',
 
+		'number': '{0|number}',
 		'time_ago': '{0|time_ago}',
 		'time_ago.0_0': '{0} seconds ago',
 		'time_ago.0_1': 'now',

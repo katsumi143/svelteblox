@@ -67,17 +67,18 @@
 			<p>loading recent experiences</p>
 		{:then experiences}
 			{#each experiences as item}
-				<ExperienceItem data={{
-					id: item.universeId,
-					name: item.name,
-					voting: {
+				<ExperienceItem
+					id={item.universeId}
+					name={item.name}
+					icon={experienceIcons.then(i => i.find(i => i.targetId === item.universeId))}
+					voting={{
 						id: item.universeId,
 						upVotes: item.totalUpVotes,
 						downVotes: item.totalDownVotes
-					},
-					playing: item.playerCount,
-					rootPlaceId: item.placeId
-				}} icon={experienceIcons.then(i => i.find(i => i.targetId === item.universeId))}/>
+					}}
+					playing={item.playerCount}
+					rootPlaceId={item.placeId}
+				/>
 			{/each}
 		{/await}
 	</div>
