@@ -11,7 +11,7 @@
 	{#await src}
 		<div class={className}><Blocked/></div>
 	{:then image}
-		{#if !image || image.includes('b48637b2a6266bd379a09afb5a8d5131')}
+		{#if !image || image.includes('b48637b2a6266bd379a09afb5a8d5131') || image.includes('d5ffea87836a253a362647b6c8985786')}
 			<div class={className}><Blocked/></div>
 		{:else}
 			<img src={image} alt="avatar" class={className}/>

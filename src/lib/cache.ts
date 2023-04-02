@@ -24,14 +24,30 @@ export default class Cache {
 		
 		console.log(`${id} not cached, calling function`);
 		const result = await func();
+		this.set(id, result, age, now);
+
+		return result;
+	}
+
+	public get<T>(id: string): T | undefined {
+		return this.cache[id]?.[0];
+	}
+
+	public set<T>(id: string, value: T, age: number = 0, now?: number) {
 		const cantExpire = age === -1;
 		if (age > 0 || cantExpire) {
 			console.log(`caching ${id}`);
-			this.cache[id] = [result, cantExpire ? -1 : now + age];
+			this.cache[id] = [value, cantExpire ? -1 : (now ?? Date.now()) + age];
 			this.save();
 		}
+		return value;
+	}
 
-		return result;
+	public isValid(id: string) {
+		const obj = this.cache[id];
+		if (!obj)
+			return false;
+		return obj[1] > Date.now();
 	}
 
 	public invalidate(id: string) {

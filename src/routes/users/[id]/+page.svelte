@@ -80,9 +80,6 @@
 
 <svelte:head>
 	<title>{data.displayName}</title>
-	{#await icon then icon}
-		<link rel="icon" type="image/png" href={icon?.imageUrl}>
-	{/await}
 </svelte:head>
 
 <style lang="scss">

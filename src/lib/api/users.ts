@@ -1,7 +1,7 @@
 import Cache from '../cache';
 import { request } from '.';
 import { GAMES_BASE2 } from './games';
-import { THUMBNAILS_BASE } from './images';
+import { getThumbnails, THUMBNAILS_BASE } from './images';
 import type { User, Friend, ImageData, ApiDataList, CurrentUser, ExperienceV2, UserPresence } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
 export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
@@ -44,8 +44,7 @@ export function getUserIcon(id: string | number): Promise<ImageData | undefined>
 	return USERS_CACHE.use(`user_icon_${id}`, () => getUserIcons([id]).then(data => data[0]), 3600000);
 }
 export function getUserIcons(ids: (string | number)[]) {
-	return request<ApiDataList<ImageData>>(`${THUMBNAILS_BASE}/users/avatar-headshot?userIds=${ids.join(',')}&format=Png&size=150x150`)
-		.then(data => data.data);
+	return getThumbnails(ids, 'users/avatar-headshot?userIds=%IDS%&format=Png&size=150x150');
 }
 
 export function getUserFullBodies(ids: (string | number)[]) {

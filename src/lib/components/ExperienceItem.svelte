@@ -2,8 +2,11 @@
 	import { t } from '$lib/localization';
 	import People from '$lib/icons/People.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import { page } from '$app/stores';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
+	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
+	import ContextMenu, { Item } from 'svelte-contextmenu';
 	import type { ImageData, ExperienceVoting } from '$lib/api/types';
 	import { getExperienceIcons, getExperienceVotes } from '$lib/api/games';
 	export let data: {
@@ -14,6 +17,7 @@
 		rootPlaceId: number
 	};
 	export let icon: Promise<ImageData | undefined> | undefined = undefined;
+	let contextMenu: ContextMenu;
 
 	const voting = data.voting ? Promise.resolve(data.voting) :
 		getExperienceVotes([data.id]).then(v => v[0]);
@@ -22,7 +26,7 @@
 		location.href = `roblox://placeId=${data.rootPlaceId}`;
 </script>
 
-<a class="experience" href={`/games/${data.rootPlaceId}`} title={$t('experience.hover', [data])}>
+<a class="experience" href={`/games/${data.rootPlaceId}`} title={$t('experience.hover', [data])} on:contextmenu={contextMenu.createHandler()}>
 	<Avatar src={icon ? icon.then(i => i?.imageUrl) : getExperienceIcons([data.id]).then(i => i[0]?.imageUrl)} size="lg2"/>
 	<p class="name">{data.name}</p>
 	<div class="details">
@@ -38,6 +42,13 @@
 		<PlayIcon size={20}/>
 	</button>
 </a>
+
+<ContextMenu bind:this={contextMenu}>
+	<p>{data.name}</p>
+	<Item href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">View on Roblox</Item>
+	<Item on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}><ClipboardPlus/>Copy Place ID</Item>
+	<Item on:click={() => navigator.clipboard.writeText(data.id.toString())}><ClipboardPlus/>Copy Universe ID</Item>
+</ContextMenu>
 
 <style lang="scss">
 	.experience {

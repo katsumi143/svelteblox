@@ -1,6 +1,6 @@
 import Cache from '../cache';
 import { request } from '.';
-import { THUMBNAILS_BASE } from './images';
+import { getThumbnails, THUMBNAILS_BASE } from './images';
 import type { ImageData, ApiDataList, Experience, ExperienceId, GameListItem, ExperienceVoting } from './types';
 export const GAMES_BASE = 'https://games.roblox.com/v';
 export const GAMES_BASE1 = GAMES_BASE + 1;
@@ -29,8 +29,7 @@ export function getExperienceId(placeId: string | number) {
 }
 
 export function getExperienceIcons(ids: (string | number)[]) {
-	return request<ApiDataList<ImageData>>(`${THUMBNAILS_BASE}/games/icons?universeIds=${ids.join(',')}&format=Png&size=128x128`)
-		.then(data => data.data);
+	return getThumbnails(ids, 'games/icons?universeIds=%IDS%&format=Png&size=128x128');
 }
 export function getExperienceThumbnails(id: number) {
 	return request<ApiDataList<{

@@ -1,7 +1,7 @@
 import Cache from '../cache';
 import { user } from './auth';
 import { request } from '.';
-import { THUMBNAILS_BASE } from './images';
+import { getThumbnails } from './images';
 import type { Group, ImageData, ApiDataList } from './types';
 export const GROUPS_BASE = 'https://groups.roblox.com/v1';
 
@@ -14,8 +14,7 @@ export function getGroupIcon(id: string | number): Promise<ImageData | undefined
 	return GROUPS_CACHE.use(`group_icon_${id}`, () => getGroupIcons([id]).then(data => data[0]), 600000);
 }
 export function getGroupIcons(ids: (string | number)[]) {
-	return request<ApiDataList<ImageData>>(`${THUMBNAILS_BASE}/groups/icons?groupIds=${ids.join(',')}&format=Png&size=150x150`)
-		.then(data => data.data);
+	return getThumbnails(ids, 'groups/icons?groupIds=%IDS%&format=Png&size=150x150');
 }
 
 export function getSelfGroupRoles() {

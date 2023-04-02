@@ -31,9 +31,6 @@
 
 <svelte:head>
 	<title>{data.name}</title>
-	{#await icon then icon}
-		<link rel="icon" type="image/png" href={icon}>
-	{/await}
 </svelte:head>
 
 <style lang="scss">
