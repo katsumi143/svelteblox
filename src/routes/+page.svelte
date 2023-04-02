@@ -15,11 +15,12 @@
 	const presences = friends.then(f => getUserPresences(f.filter(f => f.isOnline).map(f => f.id)));
 	const presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
 
+	const typeSort = [0, 1, 3, 2];
 	const sortedFriends = friends.then(friends => {
 		const sorted = friends.sort((a, b) => a.displayName.localeCompare(b.displayName));
 		const online = sorted.filter(f => f.isOnline);
 		const offline = sorted.filter(f => !f.isOnline);
-		return [...online, ...offline];
+		return [...online.sort((a, b) => typeSort[b.presenceType ?? 0] - typeSort[a.presenceType ?? 0]), ...offline];
 	});
 
 	const recentExperiences = getRecentExperiences();
@@ -42,7 +43,7 @@
 			<a href={`/users/${user.id}/friends`}>View All</a>
 		</div>
 		{#each friends as friend}
-			<a href={`/users/${friend.id}`} class={`friend status-${friend.presenceType}`}>
+			<a href={`/users/${friend.id}`} class={`friend status-${friend.presenceType}`} title={`${friend.displayName} (@${friend.name}) • ${$t(`user_status.${friend.presenceType ?? 0}`)}`}>
 				<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md" circle/>
 				<p>{friend.displayName}</p>
 				{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
