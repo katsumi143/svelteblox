@@ -1,7 +1,7 @@
 import Cache from '../cache';
 import { request } from '.';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { ImageData, ApiDataList, Experience, ExperienceId, GameListItem, ExperienceVoting } from './types';
+import type { ImageData, ApiDataList, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PrivateExperienceServer } from './types';
 export const GAMES_BASE = 'https://games.roblox.com/v';
 export const GAMES_BASE1 = GAMES_BASE + 1;
 export const GAMES_BASE2 = GAMES_BASE + 2;
@@ -38,6 +38,21 @@ export function getExperienceThumbnails(id: number) {
 		thumbnails: ImageData[]
 	}>>(`${THUMBNAILS_BASE}/games/multiget/thumbnails?universeIds=${id}&format=Png&size=768x432`)
 		.then(data => data.data[0].thumbnails);
+}
+
+export function getExperienceServers(placeId: number) {
+	return request<ServerListResponse>(`${GAMES_BASE1}/games/${placeId}/servers/0`)
+		.then(data => data.data);
+}
+export function getExperiencePrivateServers(placeId: number) {
+	return request<ServerListResponse<PrivateExperienceServer>>(`${GAMES_BASE1}/games/${placeId}/private-servers`)
+		.then(data => data.data);
+}
+
+export interface ServerListResponse<T = ExperienceServer> {
+	data: T[]
+	nextPageCursor: string | null
+	previousPageCursor: string | null
 }
 
 export function getRecentExperiences() {

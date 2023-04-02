@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Blocked from '$lib/icons/Blocked.svelte';
 	export let src: Promise<string | undefined> | null = null;
-	export let size: 'sm' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
+	export let size: 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let circle = false;
 
 	$: className = `avatar ${size}${circle ? ' circle' : ''}`;
@@ -31,6 +31,11 @@
 		&.sm {
 			width: 40px;
 			height: 40px;
+			border-radius: 4px;
+		}
+		&.sm2 {
+			width: 50px;
+			height: 50px;
 			border-radius: 4px;
 		}
 		&.md {

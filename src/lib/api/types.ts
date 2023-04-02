@@ -76,6 +76,12 @@ export interface PartialUser {
 	displayName: string
 	hasVerifiedBadge: boolean
 }
+export interface PartialUser2 {
+	id: number
+	name: string
+	displayName: string
+	hasVerifiedBadge: boolean
+}
 
 export interface Experience {
 	id: number
@@ -102,6 +108,21 @@ export interface Experience {
 	allowedGearCategories: string[]
 	createVipServersAllowed: boolean
 	studioAccessToApisAllowed: boolean
+}
+export interface ExperienceServer {
+	id: string
+	fps: number
+	ping: number
+	players: []
+	playing: number
+	maxPlayers: number
+	playerTokens: string[]
+}
+export interface PrivateExperienceServer extends ExperienceServer {
+	name: string
+	owner: PartialUser2
+	accessCode: string
+	vipServerId: number
 }
 export interface ExperienceVoting {
 	id: number

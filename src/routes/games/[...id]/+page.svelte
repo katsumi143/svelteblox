@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { t } from '$lib/localization';
+	import { getUserIcons } from '$lib/api/users';
 	import type { PageData } from './$types';
-	import { getExperienceVotes, getExperienceThumbnails } from '$lib/api/games';
+	import { joinPrivateServer } from '$lib/launch';
+	import { getExperienceVotes, getExperienceThumbnails, getExperiencePrivateServers } from '$lib/api/games';
 
 	import Star from '$lib/icons/Star.svelte';
+	import Avatar from '$lib/components/Avatar.svelte';
 	import StarFill from '$lib/icons/StarFill.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
@@ -15,6 +18,8 @@
 	$: votes = getExperienceVotes([data.id]);
 	$: rating = votes.then(([v]) => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
 	$: thumbnails = getExperienceThumbnails(data.id);
+	$: privateServers = getExperiencePrivateServers(data.rootPlaceId);
+	$: privateIcons = privateServers.then(servers => getUserIcons(servers.map(s => s.owner.id)));
 	const formatter = new Intl.NumberFormat();
 </script>
 
@@ -60,6 +65,28 @@
 	<div class="description">
 		<p>{@html $t('description', [data.description])}</p>
 	</div>
+	<div class="servers">
+		<h2>Private Servers</h2>
+		{#await privateServers then servers}
+			{#each servers as server}
+				<div class="server">
+					<div class="owner">
+						<Avatar src={privateIcons.then(i => i.find(i => i.targetId === server.owner.id)?.imageUrl)} size="sm2" circle/>
+						<div class="name">
+							<h1>{server.name}</h1>
+							<p>Created by {server.owner.displayName}</p>
+						</div>
+						<button type="button" on:click={() => joinPrivateServer(data.rootPlaceId, server.accessCode)}>
+							<PlayIcon size={32}/>
+						</button>
+					</div>
+					<div class="details">
+						<div>{server.playing ?? server.playerTokens.length}/{server.maxPlayers}</div><p>playing</p>
+					</div>
+				</div>
+			{/each}
+		{/await}
+	</div>
 </div>
 
 <svelte:head>
@@ -101,9 +128,11 @@
 					color: #fff;
 					border: none;
 					cursor: pointer;
+					display: flex;
 					padding: 4px 0;
 					background: #00b06f;
 					border-radius: 8px;
+					justify-content: center;
 				}
 
 				.share {
@@ -157,6 +186,61 @@
 				word-break: break-word;
 				line-height: 1.25;
 				white-space: pre-wrap;
+			}
+		}
+		.servers {
+			gap: 16px;
+			display: flex;
+			flex-direction: column;
+			.server {
+				padding: 16px;
+				background: var(--background-tertiary);
+				border-radius: 16px;
+				.owner {
+					display: flex;
+					.name {
+						margin-top: 8px;
+						margin-left: 12px;
+						h1 {
+							margin: 0;
+							font-size: 1.2em;
+						}
+						p {
+							color: var(--color-secondary);
+							margin: 0;
+							font-size: .8em;
+							margin-top: .2em;
+							font-weight: 500;
+						}
+					}
+					button {
+						color: #fff;
+						border: none;
+						cursor: pointer;
+						height: fit-content;
+						padding: 4px;
+						display: flex;
+						background: #00b06f;
+						margin-left: auto;
+						border-radius: 8px;
+						justify-content: center;
+					}
+				}
+				.details {
+					display: flex;
+					margin-top: 16px;
+					align-items: end;
+					div {
+						font-weight: 400;
+						margin-right: 4px;
+					}
+					p {
+						color: var(--color-secondary);
+						margin: 0 16px 0 0;
+						font-size: .9em;
+						line-height: 1.25;
+					}
+				}
 			}
 		}
 	}
