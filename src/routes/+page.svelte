@@ -43,17 +43,17 @@
 			<a href={`/users/${user.id}/friends`}>View All</a>
 		</div>
 		{#each friends as friend}
-			<a href={`/users/${friend.id}`} class={`friend status-${friend.presenceType}`} title={`${friend.displayName} (@${friend.name}) • ${$t(`user_status.${friend.presenceType ?? 0}`)}`}>
-				<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md" circle/>
-				<p>{friend.displayName}</p>
-				{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
+			{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
+				<a href={`/users/${friend.id}`} class={`friend status-${presence?.userPresenceType ?? friend.presenceType}`} title={`${friend.displayName} (@${friend.name}) • ${$t(`user_status.${presence?.userPresenceType ?? friend.presenceType ?? 0}`)}`}>
+					<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md" circle/>
+					<p>{friend.displayName}</p>
 					{#if presence && presence.universeId}
 						{#await presenceExperiences.then(e => e.find(e => e.id === presence.universeId)) then universe}
 							<p class="status" title={`Join ${friend.name} in ${universe?.name}`} on:click|preventDefault={() => joinUser(friend.id)}>{universe?.name}</p>
 						{/await}
 					{/if}
-				{/await}
-			</a>
+				</a>
+			{/await}
 		{/each}
 	{/await}
 </div>
