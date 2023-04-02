@@ -56,8 +56,8 @@
 
 <style lang="scss">
 	.app {
-		height: 100vh;
 		display: flex;
+		min-height: 100vh;
 		background: var(--background-primary);
 		flex-direction: column;
 		.app-content {
