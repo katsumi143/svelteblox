@@ -28,7 +28,7 @@
 </script>
 
 <div class="landing">
-	<a href={`/users/${user.id}`}><Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)} circle/></a>
+	<a href={`/users/${user.id}/profile`}><Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)} circle/></a>
 	<div class="greeting">
 		<h1>{$t(`home.greeting.${getGreeting()}`)}</h1>
 		<h2>{user.displayName}!</h2>
