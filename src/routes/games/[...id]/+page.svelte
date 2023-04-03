@@ -3,7 +3,9 @@
 	import { onMount } from 'svelte';
 	import { getUserIcons } from '$lib/api/users';
 	import type { PageData } from './$types';
-	import { joinPrivateServer } from '$lib/launch';
+	import ContextMenu, { Item } from 'svelte-contextmenu';
+	import { getExperiencePermissions } from '$lib/api/develop';
+	import { editExperience, joinPrivateServer } from '$lib/launch';
 	import { getExperienceVotes, getExperienceThumbnails, getExperiencePrivateServers } from '$lib/api/games';
 
 	import Star from '$lib/icons/Star.svelte';
@@ -11,20 +13,25 @@
 	import StarFill from '$lib/icons/StarFill.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
+	import ThreeDots from '$lib/icons/ThreeDots.svelte';
 	import CaretLeft from '$lib/icons/CaretLeft.svelte';
 	import CaretRight from '$lib/icons/CaretRight.svelte';
 	import ThumbsDown from '$lib/icons/ThumbsDown.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
+	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
 
 	export let data: PageData;
 
 	$: votes = getExperienceVotes([data.id]);
 	$: rating = votes.then(([v]) => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
 	$: thumbnails = getExperienceThumbnails(data.id);
+	$: permissions = getExperiencePermissions(data.id);
 	$: privateServers = getExperiencePrivateServers(data.rootPlaceId);
 	$: privateIcons = privateServers.then(servers => getUserIcons(servers.map(s => s.owner.id)));
 
 	let thumbnail = 0;
+	let contextMenu: ContextMenu;
+	const CREATE_BASE = `https://create.roblox.com/dashboard/creations/experiences/${data.id}`;
 	onMount(async () => {
 		const images = await thumbnails;
 		const interval = setInterval(() => thumbnail = (thumbnail + 1) % images.length, 5000);
@@ -44,7 +51,7 @@
 			{/await}
 		</div>
 		<div class="details">
-			<h1>{data.name}</h1>
+			<h1>{data.name} <button type="button" on:click={contextMenu.createHandler()}><ThreeDots/></button></h1>
 			<p>by <CreatorLink {...data.creator}/></p>
 
 			<div class="share">
@@ -102,6 +109,22 @@
 	</div>
 </div>
 
+<ContextMenu bind:this={contextMenu}>
+	<p>{data.name}</p>
+	{#await permissions then permissions}
+		{#if permissions.canCloudEdit}
+			<Item on:click={() => editExperience(data.rootPlaceId, data.id)}>Edit in Studio</Item>
+		{/if}
+		{#if permissions.canManage}
+			<Item href={`${CREATE_BASE}/places/${data.rootPlaceId}/configure`} target="_blank">Configure Place</Item>
+			<Item href={`${CREATE_BASE}/configure`} target="_blank">Configure Experience</Item>
+		{/if}
+	{/await}
+	<Item href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">View on Roblox</Item>
+	<Item on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}><ClipboardPlus/>Copy Place ID</Item>
+	<Item on:click={() => navigator.clipboard.writeText(data.id.toString())}><ClipboardPlus/>Copy Universe ID</Item>
+</ContextMenu>
+
 <svelte:head>
 	<title>{data.name}</title>
 </svelte:head>
@@ -155,7 +178,20 @@
 				flex-direction: column;
 				h1 {
 					margin: 16px 8px 8px 0;
+					display: flex;
 					font-size: 2.5em;
+					button {
+						width: fit-content;
+						color: var(--color-tertiary);
+						border: none;
+						height: fit-content;
+						margin: 8px 8px 0 auto;
+						padding: 0;
+						background: none;
+						&:hover {
+							color: var(--color-primary);
+						}
+					}
 				}
 				p {
 					color: var(--color-tertiary);

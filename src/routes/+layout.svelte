@@ -137,6 +137,7 @@
 		&:hover {
 			box-shadow: var(--button-shadow);
 			background: var(--button-background);
+			text-decoration: none;
 		}
 	}
 	:global(.context-menu-divider) {

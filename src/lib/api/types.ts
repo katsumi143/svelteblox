@@ -136,6 +136,10 @@ export interface ExperienceCreator {
 	isRNVAccount: boolean
 	hasVerifiedBadge: boolean
 }
+export interface ExperiencePermissions {
+	canManage: boolean
+	canCloudEdit: boolean
+}
 
 export interface ExperienceId {
 	universeId: number | null
