@@ -1,13 +1,16 @@
 <script lang="ts">
 	import { t } from '$lib/localization';
+	import { joinExperience } from '$lib/launch';
+	import ContextMenu, { Item } from 'svelte-contextmenu';
+	import type { ImageData, ExperienceVoting } from '$lib/api/types';
+	import { getExperienceIcons, getExperienceVotes } from '$lib/api/games';
+
 	import People from '$lib/icons/People.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
-	import ContextMenu, { Item } from 'svelte-contextmenu';
-	import type { ImageData, ExperienceVoting } from '$lib/api/types';
-	import { getExperienceIcons, getExperienceVotes } from '$lib/api/games';
+
 	export let id: number;
 	export let name: string
 	export let icon: Promise<ImageData | undefined> | null = null;
@@ -19,8 +22,6 @@
 	const voting2 = voting ? Promise.resolve(voting) :
 		getExperienceVotes([id]).then(v => v[0]);
 	const rating = voting2.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
-	const quickLaunch = () =>
-		location.href = `roblox://placeId=${rootPlaceId}`;
 </script>
 
 <a class="experience" href={`/games/${rootPlaceId}`} title={$t('experience.hover', [name, playing])} on:contextmenu={contextMenu.createHandler()}>
@@ -37,7 +38,7 @@
 			<p><People/>{$t('number', [playing])}</p>
 		{/if}
 	</div>
-	<button type="button" class="play" title={$t('experience.play2', [name])} on:click|preventDefault={quickLaunch}>
+	<button type="button" class="play" title={$t('experience.play2', [name])} on:click|preventDefault={() => joinExperience(rootPlaceId)}>
 		<PlayIcon size={20}/>
 	</button>
 </a>

@@ -3,7 +3,7 @@
 	import People from '$lib/icons/People.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
-	import { joinUser } from '$lib/launch';
+	import { joinUser, joinExperience } from '$lib/launch';
 	import type { ImageData, ExperienceVoting, ExperienceCreator } from '$lib/api/types';
 	import { getExperienceVotes, getExperienceThumbnails } from '$lib/api/games';
 	export let data: {
@@ -14,7 +14,6 @@
 		creator: ExperienceCreator
 		rootPlaceId: number
 	};
-	export let canPlay = true;
 	export let friendId: number | null;
 	export let friendName: string | null;
 	export let thumbnail: Promise<ImageData | undefined> | undefined = undefined;
@@ -23,7 +22,7 @@
 		getExperienceVotes([data.id]).then(v => v[0]);
 	const rating = voting.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
 	const quickLaunch = () =>
-		friendId ? joinUser(friendId) : location.href = `roblox://placeId=${data.rootPlaceId}`;
+		friendId ? joinUser(friendId) : joinExperience(data.rootPlaceId);
 </script>
 
 <a class="experience" href={`/games/${data.rootPlaceId}`}>
@@ -42,12 +41,10 @@
 		</p>
 		<p><People/>{$t('experience.playing2', [data])}</p>
 	</div>
-	{#if canPlay}
-		<button type="button" class="play" on:click|preventDefault={quickLaunch}>
-			{$t(`experience.${friendId ? 'join_user' : 'play'}`, [friendName])}
-			<PlayIcon size={32}/>
-		</button>
-	{/if}
+	<button type="button" class="play" on:click|preventDefault={quickLaunch}>
+		{$t(`experience.${friendId ? 'join_user' : 'play'}`, [friendName])}
+		<PlayIcon size={32}/>
+	</button>
 </a>
 
 <style lang="scss">

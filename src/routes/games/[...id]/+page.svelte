@@ -5,7 +5,7 @@
 	import type { PageData } from './$types';
 	import ContextMenu, { Item } from 'svelte-contextmenu';
 	import { getExperiencePermissions } from '$lib/api/develop';
-	import { editExperience, joinPrivateServer } from '$lib/launch';
+	import { joinExperience, editExperience, joinPrivateServer } from '$lib/launch';
 	import { getExperienceVotes, getExperienceThumbnails, getExperiencePrivateServers } from '$lib/api/games';
 
 	import Star from '$lib/icons/Star.svelte';
@@ -76,7 +76,7 @@
 					</div>
 				{/await}
 			</div>
-			<button type="button" on:click={() => location.href = `roblox://placeId=${data.rootPlaceId}`}>
+			<button type="button" on:click={() => joinExperience(data.rootPlaceId)}>
 				<PlayIcon/>
 			</button>
 			<p class="players">{$t('experience.playing', [data])}</p>

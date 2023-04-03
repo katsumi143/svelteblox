@@ -52,7 +52,7 @@
 			<div class="experience">
 				{#await presence then presence}
 					<p class="header">{$t(`user.experience_${presence.userPresenceType}`)}</p>
-					<ExperienceCard data={experience} canPlay={presence.userPresenceType === UserPresenceType.InExperience} friendId={data.id} friendName={data.displayName}/>
+					<ExperienceCard data={experience} friendId={presence.userPresenceType === UserPresenceType.InExperience ? data.id : null} friendName={data.displayName}/>
 				{/await}
 			</div>
 		{/if}

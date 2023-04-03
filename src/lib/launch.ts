@@ -26,6 +26,10 @@ export function launchStudio(placeId: number, universeId: number, task: string) 
 	location.href = `roblox-studio:1+launchmode:edit+task:${task}+placeId:${placeId}+universeId:${universeId}`;
 }
 
+export function joinExperience(placeId: number) {
+	location.href = `roblox://placeId=${placeId}`;
+}
+
 export async function joinUser(userId: number) {
 	const ticket = await getTicket();
 	const launchUri = await getLaunchUri('RequestFollowUser', { userId: userId.toString() });
