@@ -36,7 +36,7 @@ export function getExperienceThumbnails(id: number) {
 		error: any
 		universeId: number
 		thumbnails: ImageData[]
-	}>>(`${THUMBNAILS_BASE}/games/multiget/thumbnails?universeIds=${id}&format=Png&size=768x432`)
+	}>>(`${THUMBNAILS_BASE}/games/multiget/thumbnails?countPerUniverse=10&universeIds=${id}&format=Png&size=768x432`)
 		.then(data => data.data[0].thumbnails);
 }
 

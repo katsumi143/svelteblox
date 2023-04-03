@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { t } from '$lib/localization';
+	import { onMount } from 'svelte';
 	import { getUserIcons } from '$lib/api/users';
 	import type { PageData } from './$types';
 	import { joinPrivateServer } from '$lib/launch';
@@ -10,6 +11,8 @@
 	import StarFill from '$lib/icons/StarFill.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
+	import CaretLeft from '$lib/icons/CaretLeft.svelte';
+	import CaretRight from '$lib/icons/CaretRight.svelte';
 	import ThumbsDown from '$lib/icons/ThumbsDown.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
 
@@ -20,14 +23,24 @@
 	$: thumbnails = getExperienceThumbnails(data.id);
 	$: privateServers = getExperiencePrivateServers(data.rootPlaceId);
 	$: privateIcons = privateServers.then(servers => getUserIcons(servers.map(s => s.owner.id)));
-	const formatter = new Intl.NumberFormat();
+
+	let thumbnail = 0;
+	onMount(async () => {
+		const images = await thumbnails;
+		const interval = setInterval(() => thumbnail = (thumbnail + 1) % images.length, 5000);
+		return () => clearInterval(interval);
+	});
 </script>
 
 <div class="main">
 	<div class="landing">
-		<div class="thumbnails">
+		<div class="thumbnail">
 			{#await thumbnails then thumbnails}
-				<img src={thumbnails[0].imageUrl} alt="thumbnail">
+				{#each thumbnails as data, key}
+					<img src={data.imageUrl} alt="thumbnail" class:show={key === thumbnail}>
+				{/each}
+				<button type="button" title="Previous Thumbnail" on:click={() => thumbnail === 0 ? thumbnail = thumbnails.length - 1 : thumbnail--}><CaretLeft/></button>
+				<button type="button" title="Next Thumbnail" on:click={() => thumbnail = (thumbnail + 1) % thumbnails.length}><CaretRight/></button>
 			{/await}
 		</div>
 		<div class="details">
@@ -47,8 +60,8 @@
 					<div class="rating" style={`--rating: ${rating}%;`}>
 						<div class="buttons">
 							{#await votes.then(v => v[0]) then votes}
-								<p><ThumbsUp size={24}/>{formatter.format(votes.upVotes)}</p>
-								<p>{formatter.format(votes.downVotes)}<ThumbsDown size={24}/></p>
+								<p><ThumbsUp size={24}/>{$t('number', [votes.upVotes])}</p>
+								<p>{$t('number', [votes.downVotes])}<ThumbsDown size={24}/></p>
 							{/await}
 						</div>
 						<div class="ratio"/>
@@ -99,12 +112,40 @@
 
 		.landing {
 			display: flex;
-			.thumbnails {
-				width: 768px;
+			.thumbnail {
 				height: 432px;
+				position: relative;
+				min-width: 768px;
 				img {
+					opacity: 0;
 					display: flex;
+					position: absolute;
+					transition: opacity .5s;
 					border-radius: 8px;
+				}
+				img.show {
+					opacity: 1;
+				}
+				button {
+					top: 50%;
+					left: 8px;
+					color: #fff;
+					border: none;
+					cursor: pointer;
+					opacity: 0;
+					padding: 24px 2px;
+					position: absolute;
+					transform: translateY(-50%);
+					background: #0000004d;
+					transition: opacity .25s;
+					border-radius: 6px;
+				}
+				button:last-child {
+					left: unset;
+					right: 8px;
+				}
+				&:hover button {
+					opacity: 1;
 				}
 			}
 			.details {
