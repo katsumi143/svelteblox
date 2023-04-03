@@ -35,6 +35,8 @@ export default {
 		'experience.unrated': 'Unrated',
 		'experience.hover': '{0}\n{1|number} Playing',
 
+		'create': 'Create',
+
 		'creator': 'by {0}',
 
 		'user_status.0': 'Offline',

@@ -38,6 +38,7 @@
 		<a href="/" class="logo"><Logo/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
 		<a href="/groups" class="nav-link">{$t('groups')}</a>
+		<a href="https://create.roblox.com" class="nav-link">{$t('create')}</a>
 	</Header>
 	<main class="app-content">
 		<slot/>
