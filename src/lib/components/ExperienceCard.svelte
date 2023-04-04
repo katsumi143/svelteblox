@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
+	import { t } from '$lib/localisation';
 	import People from '$lib/icons/People.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';

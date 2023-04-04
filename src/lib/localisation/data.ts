@@ -1,5 +1,14 @@
 export default {
 	'en-AU': {
+		'action.copy_id': 'Copy ID',
+		'action.view_all': 'View all',
+		'action.view_roblox': 'View on Roblox',
+		'action.edit_studio': 'Edit in Studio',
+		'action.copy_place_id': 'Copy Place ID',
+		'action.configure_place': 'Configure Place',
+		'action.copy_universe_id': 'Copy Experience ID',
+		'action.configure_universe': 'Configure Experience',
+
 		'home': 'Home',
 		'home.greeting.0': 'Good morning,',
     	'home.greeting.1': 'Good afternoon,',
@@ -16,6 +25,7 @@ export default {
 		'user.avatar': 'Currently Wearing',
 
 		'groups': 'Groups',
+		'groups.list': 'Your Groups',
 
 		'group.members': '{0.memberCount|number} members',
 		'group.join': 'Join Group',
@@ -34,6 +44,12 @@ export default {
 		'experience.rating2': '{0}% liked this',
 		'experience.unrated': 'Unrated',
 		'experience.hover': '{0}\n{1|number} Playing',
+		'experience.private_servers': 'Private Servers',
+
+		'server.owner': 'Created by {0}',
+
+		'carousel.prev': 'Previous Thumbnail',
+		'carousel.next': 'Next Thumbnail',
 
 		'create': 'Create',
 

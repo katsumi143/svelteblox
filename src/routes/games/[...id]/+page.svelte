@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
+	import { t } from '$lib/localisation';
 	import { onMount } from 'svelte';
 	import { getUserIcons } from '$lib/api/users';
 	import type { PageData } from './$types';
@@ -46,8 +46,8 @@
 				{#each thumbnails as data, key}
 					<img src={data.imageUrl} alt="thumbnail" class:show={key === thumbnail}>
 				{/each}
-				<button type="button" title="Previous Thumbnail" on:click={() => thumbnail === 0 ? thumbnail = thumbnails.length - 1 : thumbnail--}><CaretLeft/></button>
-				<button type="button" title="Next Thumbnail" on:click={() => thumbnail = (thumbnail + 1) % thumbnails.length}><CaretRight/></button>
+				<button type="button" title={$t('carousel.prev')} on:click={() => thumbnail === 0 ? thumbnail = thumbnails.length - 1 : thumbnail--}><CaretLeft/></button>
+				<button type="button" title={$t('carousel.next')} on:click={() => thumbnail = (thumbnail + 1) % thumbnails.length}><CaretRight/></button>
 			{/await}
 		</div>
 		<div class="details">
@@ -85,44 +85,46 @@
 	<div class="description">
 		<p>{@html $t('description', [data.description])}</p>
 	</div>
-	<div class="servers">
-		<h2>Private Servers</h2>
-		{#await privateServers then servers}
-			{#each servers as server}
-				<div class="server">
-					<div class="owner">
-						<Avatar src={privateIcons.then(i => i.find(i => i.targetId === server.owner.id)?.imageUrl)} size="sm2" circle/>
-						<div class="name">
-							<h1>{server.name}</h1>
-							<p>Created by {server.owner.displayName}</p>
+	{#await privateServers then servers}
+		{#if servers.length > 0}
+			<div class="servers">
+				<div class="list-header">{$t('experience.private_servers')}</div>
+				{#each servers as server}
+					<div class="server">
+						<div class="owner">
+							<Avatar src={privateIcons.then(i => i.find(i => i.targetId === server.owner.id)?.imageUrl)} size="sm2" circle/>
+							<div class="name">
+								<h1>{server.name}</h1>
+								<p>{$t('server.owner', [server.owner.displayName])}</p>
+							</div>
+							<button type="button" on:click={() => joinPrivateServer(data.rootPlaceId, server.accessCode)}>
+								<PlayIcon size={32}/>
+							</button>
 						</div>
-						<button type="button" on:click={() => joinPrivateServer(data.rootPlaceId, server.accessCode)}>
-							<PlayIcon size={32}/>
-						</button>
+						<div class="details">
+							<div>{server.playing ?? server.playerTokens.length}/{server.maxPlayers}</div><p>playing</p>
+						</div>
 					</div>
-					<div class="details">
-						<div>{server.playing ?? server.playerTokens.length}/{server.maxPlayers}</div><p>playing</p>
-					</div>
-				</div>
-			{/each}
-		{/await}
-	</div>
+				{/each}
+			</div>
+		{/if}
+	{/await}
 </div>
 
 <ContextMenu bind:this={contextMenu}>
 	<p>{data.name}</p>
 	{#await permissions then permissions}
 		{#if permissions.canCloudEdit}
-			<Item on:click={() => editExperience(data.rootPlaceId, data.id)}>Edit in Studio</Item>
+			<Item on:click={() => editExperience(data.rootPlaceId, data.id)}>{$t('action.edit_studio')}</Item>
 		{/if}
 		{#if permissions.canManage}
-			<Item href={`${CREATE_BASE}/places/${data.rootPlaceId}/configure`} target="_blank">Configure Place</Item>
-			<Item href={`${CREATE_BASE}/configure`} target="_blank">Configure Experience</Item>
+			<Item href={`${CREATE_BASE}/places/${data.rootPlaceId}/configure`} target="_blank">{$t('action.configure_place')}</Item>
+			<Item href={`${CREATE_BASE}/configure`} target="_blank">{$t('action.configure_universe')}</Item>
 		{/if}
 	{/await}
-	<Item href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">View on Roblox</Item>
-	<Item on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}><ClipboardPlus/>Copy Place ID</Item>
-	<Item on:click={() => navigator.clipboard.writeText(data.id.toString())}><ClipboardPlus/>Copy Universe ID</Item>
+	<Item href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">{$t('action.view_roblox')}</Item>
+	<Item on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}><ClipboardPlus/>{$t('action.copy_place_id')}</Item>
+	<Item on:click={() => navigator.clipboard.writeText(data.id.toString())}><ClipboardPlus/>{$t('action.copy_universe_id')}</Item>
 </ContextMenu>
 
 <svelte:head>
@@ -266,13 +268,13 @@
 			}
 		}
 		.servers {
-			gap: 16px;
 			display: flex;
 			flex-direction: column;
 			.server {
 				padding: 16px;
 				background: var(--background-tertiary);
 				border-radius: 16px;
+				margin-bottom: 16px;
 				.owner {
 					display: flex;
 					.name {

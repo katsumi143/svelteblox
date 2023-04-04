@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
-	import Avatar from '$lib/components/Avatar.svelte';
-	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
+	import { t } from '$lib/localisation';
 	import { user } from '$lib/api/auth';
 	import { joinUser } from '$lib/launch';
 	import { getGreeting } from '$lib/util';
-	import { UserPresenceType } from '$lib/api/types';
 	import { getExperiences, getExperienceIcons, getRecentExperiences } from '$lib/api/games';
 	import { getUserIcon, getUserIcons, getUserFriends, getUserPresences } from '$lib/api/users';
+
+	import Avatar from '$lib/components/Avatar.svelte';
+	import ArrowRight from '$lib/icons/ArrowRight.svelte';
+	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 
 	const friends = getUserFriends(user.id);
 	const friendAvatars = friends.then(f => getUserIcons(f.map(f => f.id)));
@@ -38,9 +39,9 @@
 	{#await sortedFriends}
 		<p>loading friends</p>
 	{:then friends}
-		<div class="header">
+		<div class="list-header">
 			<p>{$t('home.friends', [friends.length])}</p>
-			<a href={`/users/${user.id}/friends`}>View All</a>
+			<a href={`/users/${user.id}/friends`}>{$t('action.view_all')}<ArrowRight/></a>
 		</div>
 		{#each friends as friend}
 			{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
@@ -58,9 +59,9 @@
 	{/await}
 </div>
 <div class="experiences">
-	<div class="header">
+	<div class="list-header">
 		<p>{$t('home.recent')}</p>
-		<a href="/games/recent">View All</a>
+		<a href="/games/recent">{$t('action.view_all')}<ArrowRight/></a>
 	</div>
 	<div class="items">
 		{#await recentExperiences}
@@ -163,26 +164,12 @@
 		}
 	}
 	.experiences {
-		margin: 16px 64px;
+		margin: 32px 64px;
 		.items {
 			gap: 16px;
 			height: 200px;
 			display: flex;
 			overflow: hidden;
-		}
-	}
-
-	.header {
-		width: 100%;
-		margin: 0 0 12px;
-		display: flex;
-		font-weight: 500;
-		justify-content: space-between;
-		p { margin: 0; }
-		a {
-			color: var(--color-primary);
-			font-size: .9em;
-			text-decoration: none;
 		}
 	}
 </style>

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
+	import { t } from '$lib/localisation';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	import { getExperienceIcons, getRecentExperiences } from '$lib/api/games';
 

@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
-	import Avatar from '$lib/components/Avatar.svelte';
-	import CreatorLink from '$lib/components/CreatorLink.svelte';
-	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
+	import { t } from '$lib/localisation';
 	import { getUserIcon } from '$lib/api/users';
 	import type { PageData } from './$types';
 	import { getGroupIcons, getGroupExperiences } from '$lib/api/groups';
 
+	import Avatar from '$lib/components/Avatar.svelte';
+	import ArrowRight from '$lib/icons/ArrowRight.svelte';
+	import CreatorLink from '$lib/components/CreatorLink.svelte';
+	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	export let data: PageData;
 
 	$: icon = getGroupIcons([data.id]).then(i => i[0]?.imageUrl);
@@ -32,7 +33,7 @@
 	</div>
 	<p class="description">{@html $t('description', [data.description])}</p>
 	{#if data.shout}
-		<h3 class="shout">{$t('group.shout')}</h3>
+		<p class="shout">{$t('group.shout')}</p>
 		<div class="shout">
 			<Avatar src={shoutIcon} size="sm2" circle/>
 			<div class="text">
@@ -45,9 +46,9 @@
 	{#await experiences then items}
 		{#if items.length > 0}
 			<div class="experiences">
-				<div class="header">
+				<div class="list-header">
 					<p>{$t('group.experiences')}</p>
-					<a href={`/groups/${data.id}/games`}>View All</a>
+					<a href={`/groups/${data.id}/games`}>{$t('action.view_all')}<ArrowRight/></a>
 				</div>
 				<div class="items">
 					{#each items as item}
@@ -108,9 +109,8 @@
 			line-height: 1.25;
 			white-space: pre-wrap;
 		}
-		h3.shout {
+		p.shout {
 			margin: 48px 0 12px;
-			font-size: 1em;
 			font-weight: 500;
 		}
 		div.shout {
@@ -135,19 +135,6 @@
 		.experiences {
 			width: 100%;
 			margin-top: 48px;
-			.header {
-				width: 100%;
-				margin: 0 0 12px;
-				display: flex;
-				font-weight: 500;
-				justify-content: space-between;
-				p { margin: 0; }
-				a {
-					color: var(--color-primary);
-					font-size: .9em;
-					text-decoration: none;
-				}
-			}
 			.items {
 				gap: 16px;
 				width: 100%;

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
+	import { t } from '$lib/localisation';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import { getGroupIcons } from '$lib/api/groups';
 	import type { LayoutData } from './$types';
@@ -11,7 +11,7 @@
 
 <div class="main">
 	<div class="groups">
-		<p>Your Groups</p>
+		<p>{$t('groups.list')}</p>
 		{#each data.groups as group}
 			<a class="group" href={`/groups/${group.id}`}>
 				<Avatar src={icons.then(i => i.find(icon => icon.targetId === group.id)?.imageUrl)} size="sm"/>

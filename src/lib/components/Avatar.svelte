@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
+	import { t } from '$lib/localisation';
 	import Blocked from '$lib/icons/Blocked.svelte';
 	import Question from '$lib/icons/Question.svelte';
 	import Hourglass from '$lib/icons/Hourglass.svelte';

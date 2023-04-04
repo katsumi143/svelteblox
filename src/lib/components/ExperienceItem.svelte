@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
+	import { t } from '$lib/localisation';
 	import { joinExperience } from '$lib/launch';
 	import ContextMenu, { Item } from 'svelte-contextmenu';
 	import type { ImageData, ExperienceVoting } from '$lib/api/types';
@@ -45,9 +45,9 @@
 
 <ContextMenu bind:this={contextMenu}>
 	<p>{name}</p>
-	<Item href={`https://roblox.com/games/${rootPlaceId}`} target="_blank">View on Roblox</Item>
-	<Item on:click={() => navigator.clipboard.writeText(rootPlaceId.toString())}><ClipboardPlus/>Copy Place ID</Item>
-	<Item on:click={() => navigator.clipboard.writeText(id.toString())}><ClipboardPlus/>Copy Universe ID</Item>
+	<Item href={`https://roblox.com/games/${rootPlaceId}`} target="_blank">{$t('action.view_roblox')}</Item>
+	<Item on:click={() => navigator.clipboard.writeText(rootPlaceId.toString())}><ClipboardPlus/>{$t('action.copy_place_id')}</Item>
+	<Item on:click={() => navigator.clipboard.writeText(id.toString())}><ClipboardPlus/>{$t('action.copy_universe_id')}</Item>
 </ContextMenu>
 
 <style lang="scss">

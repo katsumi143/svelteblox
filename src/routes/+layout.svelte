@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '@voxelified/voxeliface/styles.scss';
 	import Logo from '$lib/components/TextLogo.svelte';
-	import { t } from '$lib/localization';
+	import { t } from '$lib/localisation';
 	import { Header } from '@voxelified/voxeliface';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 	import { onMount } from 'svelte';
@@ -91,6 +91,26 @@
 		text-decoration: none;
 
 		&:hover { text-decoration: underline; }
+	}
+
+	:global(.list-header) {
+		width: 100%;
+		margin: 0 0 12px;
+		display: flex;
+		font-weight: 500;
+		justify-content: space-between;
+		:global(p) { margin: 0; }
+		:global(a) {
+			gap: 8px;
+			color: var(--color-primary);
+			display: flex;
+			font-size: .9em;
+			align-items: center;
+			text-decoration: none;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 
 	:global(.context-menu) {

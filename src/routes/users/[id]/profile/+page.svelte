@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { t } from '$lib/localization';
-	import Avatar from '$lib/components/Avatar.svelte';
-	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
-	import ExperienceCard from '$lib/components/ExperienceCard.svelte';
+	import { t } from '$lib/localisation';
 	import type { PageData } from './$types';
 	import { UserPresenceType } from '$lib/api/types';
 	import { getExperiences, getExperienceId } from '$lib/api/games';
 	import { getUserIcon, getUserPresences, getUserFullBodies, getUserFavourites, getUserFriendCount, getUserFollowerCount, getUserFollowingCount } from '$lib/api/users';
 
+	import Avatar from '$lib/components/Avatar.svelte';
+	import ArrowRight from '$lib/icons/ArrowRight.svelte';
+	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
+	import ExperienceCard from '$lib/components/ExperienceCard.svelte';
 	export let data: PageData;
 
 	$: icon = getUserIcon(data.id);
@@ -59,14 +60,14 @@
 	{/await}
 
 	<div class="avatar">
-		<p class="header">{$t('user.avatar')}</p>
+		<div class="list-header">{$t('user.avatar')}</div>
 		<Avatar src={fullBody.then(f => f[0]?.imageUrl)} size="xl"/>
 	</div>
 	
 	<div class="favourites">
-		<div class="header">
+		<div class="list-header">
 			<p>{$t('user.favourites')}</p>
-			<a href="/">View All</a>
+			<a href="/">{$t('action.view_all')}<ArrowRight/></a>
 		</div>
 		<div class="items">
 			{#await getUserFavourites(data.id).then(f => getExperiences(f.map(e => e.id))) then items}
@@ -149,19 +150,6 @@
 				display: flex;
 				overflow: hidden;
 			}
-		}
-	}
-	.header {
-		width: 100%;
-		margin: 0 0 12px;
-		display: flex;
-		font-weight: 500;
-		justify-content: space-between;
-		p { margin: 0; }
-		a {
-			color: var(--color-primary);
-			font-size: .9em;
-			text-decoration: none;
 		}
 	}
 </style>
