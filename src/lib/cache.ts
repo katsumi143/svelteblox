@@ -16,13 +16,10 @@ export default class Cache {
 		const cached = this.cache[id];
 		if (cached) {
 			const expire = cached[1];
-			if (expire === -1 || expire > now) {
-				console.log(`using cached ${id}`);
+			if (expire === -1 || expire > now)
 				return Promise.resolve(cached[0]);
-			}
 		}
 		
-		console.log(`${id} not cached, calling function`);
 		const result = await func();
 		this.set(id, result, age, now);
 
@@ -36,7 +33,6 @@ export default class Cache {
 	public set<T>(id: string, value: T, age: number = 0, now?: number) {
 		const cantExpire = age === -1;
 		if (age > 0 || cantExpire) {
-			console.log(`caching ${id}`);
 			this.cache[id] = [value, cantExpire ? -1 : (now ?? Date.now()) + age];
 			this.save();
 		}
