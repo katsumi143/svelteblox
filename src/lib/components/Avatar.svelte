@@ -1,24 +1,34 @@
 <script lang="ts">
+	import { t } from '$lib/localization';
 	import Blocked from '$lib/icons/Blocked.svelte';
+	import Question from '$lib/icons/Question.svelte';
+	import Hourglass from '$lib/icons/Hourglass.svelte';
 	export let src: Promise<string | undefined> | null = null;
 	export let size: 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let circle = false;
 
 	$: className = `avatar ${size}${circle ? ' circle' : ''}`;
+	const deleted = /(9fc30fe577bf95e045c9a3d4abaca05d)$/g;
+	const pending = /(;)$/g;
+	const unavailable = /(bf5841143a43ff8b754b7026159a2a18)$/g;
 </script>
 
 {#if src}
 	{#await src}
-		<div class={className}><Blocked/></div>
+		<div class={className} title={$t('image_status.0')}><Hourglass/></div>
 	{:then image}
-		{#if !image || image.includes('b48637b2a6266bd379a09afb5a8d5131') || image.includes('d5ffea87836a253a362647b6c8985786')}
-			<div class={className}><Blocked/></div>
+		{#if !image || image.match(deleted)}
+			<div class={className} title={$t('image_status.2')}><Blocked/></div>
+		{:else if image.match(pending)}
+			<div class={className} title={$t('image_status.1')}><Hourglass/></div>
+		{:else if image.match(unavailable)}
+			<div class={className} title={$t('image_status.3')}><Question/></div>
 		{:else}
 			<img src={image} alt="avatar" class={className}/>
 		{/if}
 	{/await}
 {:else}
-	<div class={className}><Blocked/></div>
+	<div class={className} title={$t('image_status.3')}><Question/></div>
 {/if}
 
 <style lang="scss">

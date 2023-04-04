@@ -44,6 +44,11 @@ export default {
 		'user_status.2': 'In-experience',
 		'user_status.3': 'In-studio',
 
+		'image_status.0': 'Loading',
+		'image_status.1': 'This image is currently pending review',
+		'image_status.2': 'This image has been removed',
+		'image_status.3': 'This image is currently unavailable',
+
 		'number': '{0|number}',
 		'time_ago': '{0|time_ago}',
 		'time_ago.0_0': '{0} seconds ago',
