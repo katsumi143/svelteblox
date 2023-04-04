@@ -36,9 +36,7 @@
 	</div>
 </div>
 <div class="friends">
-	{#await sortedFriends}
-		<p>loading friends</p>
-	{:then friends}
+	{#await sortedFriends then friends}
 		<div class="list-header">
 			<p>{$t('home.friends', [friends.length])}</p>
 			<a href={`/users/${user.id}/friends`}>{$t('action.view_all')}<ArrowRight/></a>
@@ -50,7 +48,7 @@
 					<p>{friend.displayName}</p>
 					{#if presence && presence.universeId}
 						{#await presenceExperiences.then(e => e.find(e => e.id === presence.universeId)) then universe}
-							<p class="status" title={`Join ${friend.name} in ${universe?.name}`} on:click|preventDefault={() => joinUser(friend.id)}>{universe?.name}</p>
+							<button class="status" type="button" title={`Join ${friend.name} in ${universe?.name}`} on:click|preventDefault={() => joinUser(friend.id)}>{universe?.name}</button>
 						{/await}
 					{/if}
 				</a>
@@ -64,10 +62,8 @@
 		<a href="/games/recent">{$t('action.view_all')}<ArrowRight/></a>
 	</div>
 	<div class="items">
-		{#await recentExperiences}
-			<p>loading recent experiences</p>
-		{:then experiences}
-			{#each experiences as item}
+		{#await recentExperiences then items}
+			{#each items as item}
 				<ExperienceItem
 					id={item.universeId}
 					name={item.name}
@@ -133,7 +129,12 @@
 			}
 			.status {
 				color: var(--color-secondary);
+				border: none;
+				cursor: pointer;
+				padding: 0;
 				font-size: .75em;
+				background: none;
+				font-family: var(--font-primary);
 				&:hover {
 					text-decoration: underline;
 				}
