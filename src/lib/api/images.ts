@@ -4,7 +4,7 @@ import type { ImageData, ApiDataList } from './types';
 export const IMAGES_CACHE = new Cache('images');
 export const THUMBNAILS_BASE = 'https://thumbnails.roblox.com/v1';
 
-export function getThumbnails(ids: (string | number)[], path: string, age: number = 3600000) {
+export function getThumbnails(ids: (string | number)[], path: string, age: number = 1800000) {
 	const ids2 = ids.filter(id => !IMAGES_CACHE.isValid(`image_${id}`));
 	if (ids2.length > 0)
 		return request<ApiDataList<ImageData>>(`${THUMBNAILS_BASE}/${path.replace('%IDS%', ids2.join(','))}`)

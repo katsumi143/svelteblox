@@ -15,7 +15,7 @@ export function getUserFriends(id: string | number) {
 	return USERS_CACHE.use(`friends_${id}`, () =>
 		request<ApiDataList<Friend>>(`${FRIENDS_BASE}/users/${id}/friends`)
 			.then(data => data.data),
-		600000
+		60000
 	);
 }
 export function getUserFriendCount(id: string | number) {
@@ -41,7 +41,7 @@ export function getUserFavourites(id: string | number) {
 }
 
 export function getUserIcon(id: string | number): Promise<ImageData | undefined> {
-	return USERS_CACHE.use(`user_icon_${id}`, () => getUserIcons([id]).then(data => data[0]), 3600000);
+	return USERS_CACHE.use(`user_icon_${id}`, () => getUserIcons([id]).then(data => data[0]), 600000);
 }
 export function getUserIcons(ids: (string | number)[]) {
 	return getThumbnails(ids, 'users/avatar-headshot?userIds=%IDS%&format=Png&size=150x150');

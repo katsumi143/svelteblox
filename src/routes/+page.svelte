@@ -19,8 +19,8 @@
 	const typeSort = [0, 1, 3, 2];
 	const sortedFriends = friends.then(friends => {
 		const sorted = friends.sort((a, b) => a.displayName.localeCompare(b.displayName));
-		const online = sorted.filter(f => f.isOnline);
-		const offline = sorted.filter(f => !f.isOnline);
+		const online = sorted.filter(f => f.presenceType ?? 0 > 0);
+		const offline = sorted.filter(f => !online.includes(f));
 		return [...online.sort((a, b) => typeSort[b.presenceType ?? 0] - typeSort[a.presenceType ?? 0]), ...offline];
 	});
 
