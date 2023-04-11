@@ -2,6 +2,7 @@ import Cache from '../cache';
 import { user } from './auth';
 import { request } from '.';
 import { getThumbnails } from './images';
+import { getExperiences } from './games';
 import type { Group, ImageData, ApiDataList, ExperienceV2 } from './types';
 export const GROUPS_BASE = 'https://groups.roblox.com/v1';
 
@@ -19,6 +20,10 @@ export function getGroupIcons(ids: (string | number)[]) {
 export function getGroupExperiences(id: string | number, access?: number) {
 	return request<ApiDataList<ExperienceV2>>(`https://games.roblox.com/v2/groups/${id}/games?accessFilter=${access}`)
 		.then(data => data.data);
+}
+export function getGroupExperiences2(id: string | number, access?: number) {
+	return getGroupExperiences(id, access)
+		.then(data => getExperiences(data.map(e => e.id)));
 }
 
 export function getSelfGroupRoles() {

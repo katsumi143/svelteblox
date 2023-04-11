@@ -3,9 +3,9 @@
 	import { page } from '$app/stores';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	import { getExperienceIcons } from '$lib/api/games';
-	import { getGroupExperiences } from '$lib/api/groups';
+	import { getGroupExperiences2 } from '$lib/api/groups';
 
-	$: experiences = getGroupExperiences($page.params.id, 2);
+	$: experiences = getGroupExperiences2($page.params.id, 2);
 	$: experienceIcons = experiences.then(data => getExperienceIcons(data.map(i => i.id)));
 </script>
 
@@ -18,7 +18,8 @@
 					id={item.id}
 					name={item.name}
 					icon={experienceIcons.then(i => i.find(i => i.targetId === item.id))}
-					rootPlaceId={item.rootPlace.id}
+					playing={item.playing}
+					rootPlaceId={item.rootPlaceId}
 				/>
 			{/each}
 		{/await}

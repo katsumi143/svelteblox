@@ -2,7 +2,7 @@
 	import { t } from '$lib/localisation';
 	import { getUserIcon } from '$lib/api/users';
 	import type { PageData } from './$types';
-	import { getGroupIcons, getGroupExperiences } from '$lib/api/groups';
+	import { getGroupIcons, getGroupExperiences2 } from '$lib/api/groups';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
@@ -12,7 +12,7 @@
 
 	$: icon = getGroupIcons([data.id]).then(i => i[0]?.imageUrl);
 	$: shoutIcon = data.shout ? getUserIcon(data.shout.poster.userId).then(i => i?.imageUrl) : null;
-	$: experiences = getGroupExperiences(data.id, 2);
+	$: experiences = getGroupExperiences2(data.id, 2);
 </script>
 
 <div class="main">
@@ -52,7 +52,7 @@
 				</div>
 				<div class="items">
 					{#each items as item}
-						<ExperienceItem id={item.id} name={item.name} rootPlaceId={item.rootPlace.id}/>
+						<ExperienceItem id={item.id} name={item.name} playing={item.playing} rootPlaceId={item.rootPlaceId}/>
 					{/each}
 				</div>
 			</div>
