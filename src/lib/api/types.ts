@@ -49,7 +49,7 @@ export interface Friend {
 	isDeleted: boolean
 	description: null
 	displayName: string
-	presenceType?: UserPresenceType
+	presenceType: UserPresenceType
 	friendFrequentRank: number
 	friendFrequentScore: number
 	externalAppDisplayName: string | null

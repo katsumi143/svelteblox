@@ -14,7 +14,10 @@ export function getUser(id: string | number) {
 export function getUserFriends(id: string | number) {
 	return USERS_CACHE.use(`friends_${id}`, () =>
 		request<ApiDataList<Friend>>(`${FRIENDS_BASE}/users/${id}/friends`)
-			.then(data => data.data),
+			.then(data => data.data.map(friend => {
+				friend.presenceType ??= 0;
+				return friend;
+			})),
 		60000
 	);
 }

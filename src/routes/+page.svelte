@@ -13,16 +13,19 @@
 	const friends = getUserFriends(user.id);
 	const friendAvatars = friends.then(f => getUserIcons(f.map(f => f.id)));
 	
-	const presences = friends.then(f => getUserPresences(f.filter(f => f.isOnline).map(f => f.id)));
+	const presences = friends.then(f => getUserPresences(f.map(f => f.id)));
 	const presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
 
 	const typeSort = [0, 1, 3, 2];
-	const sortedFriends = friends.then(friends => {
-		const sorted = friends.sort((a, b) => a.displayName.localeCompare(b.displayName));
-		const online = sorted.filter(f => f.presenceType ?? 0 > 0);
+	const sortedFriends = friends.then(friends => presences.then(presences => {
+		const sorted = friends.map((friend, index) => {
+			friend.presenceType = presences[index]?.userPresenceType ?? 0;
+			return friend;
+		}).sort((a, b) => a.displayName.localeCompare(b.displayName));
+		const online = sorted.filter(friend => friend.presenceType > 0);
 		const offline = sorted.filter(f => !online.includes(f));
-		return [...online.sort((a, b) => typeSort[b.presenceType ?? 0] - typeSort[a.presenceType ?? 0]), ...offline];
-	});
+		return [...online.sort((a, b) => typeSort[b.presenceType] - typeSort[a.presenceType]), ...offline];
+	}));
 
 	const recentExperiences = getRecentExperiences();
 	const experienceIcons = recentExperiences.then(data => getExperienceIcons(data.map(i => i.universeId)));
@@ -46,7 +49,7 @@
 				<a href={`/users/${friend.id}`} class={`friend status-${presence?.userPresenceType ?? friend.presenceType}`} title={`${friend.displayName} (@${friend.name}) • ${$t(`user_status.${presence?.userPresenceType ?? friend.presenceType ?? 0}`)}`}>
 					<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md" circle/>
 					<p>{friend.displayName}</p>
-					{#if presence && presence.universeId}
+					{#if presence && presence.universeId && presence.userPresenceType > 0}
 						{#await presenceExperiences.then(e => e.find(e => e.id === presence.universeId)) then universe}
 							<button class="status" type="button" title={`Join ${friend.name} in ${universe?.name}`} on:click|preventDefault={() => joinUser(friend.id)}>{universe?.name}</button>
 						{/await}
