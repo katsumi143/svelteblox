@@ -2,6 +2,7 @@ export default {
 	'en-AU': {
 		'action.copy_id': 'Copy ID',
 		'action.view_all': 'View all',
+		'action.show_all': 'Show all',
 		'action.view_roblox': 'View on Roblox',
 		'action.edit_studio': 'Edit in Studio',
 		'action.copy_place_id': 'Copy Place ID',
@@ -53,7 +54,7 @@ export default {
 		'experience.rating2': '{0}% liked this',
 		'experience.unrated': 'Unrated',
 		'experience.hover': '{0}\n{1|number} Playing',
-		'experience.private_servers': 'Private Servers',
+		'experience.private_servers': 'Private Servers ({0})',
 
 		'server.owner': 'Created by {0}',
 
@@ -96,4 +97,4 @@ export default {
 		'toast.friend_request': 'You have sent a friend request to <b>{0}</b>.',
 		'toast.friend_removed': 'You have ended your friendship with <b>{0}</b>.'
 	}
-} as Record<string, Record<string, string>>
+}

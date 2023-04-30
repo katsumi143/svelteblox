@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import { onMount } from 'svelte';
+	import { Button } from '@voxelified/voxeliface';
 	import { getUserIcons } from '$lib/api/users';
 	import type { PageData } from './$types';
 	import ContextMenu, { Item } from 'svelte-contextmenu';
@@ -31,6 +32,7 @@
 
 	let thumbnail = 0;
 	let contextMenu: ContextMenu;
+	let showAllPrivateServers = false;
 	const CREATE_BASE = `https://create.roblox.com/dashboard/creations/experiences/${data.id}`;
 	onMount(async () => {
 		const images = await thumbnails;
@@ -88,8 +90,15 @@
 	{#await privateServers then servers}
 		{#if servers.length > 0}
 			<div class="servers">
-				<div class="list-header">{$t('experience.private_servers')}</div>
-				{#each servers as server}
+				<div class="list-header">
+					{$t('experience.private_servers', [servers.length])}
+					{#if !showAllPrivateServers && servers.length > 2}
+						<button type="button" class="show-all" on:click={() => showAllPrivateServers = true}>
+							{$t('action.show_all')}
+						</button>
+					{/if}
+				</div>
+				{#each showAllPrivateServers ? servers : servers.slice(0, 2) as server}
 					<div class="server">
 						<div class="owner">
 							<Avatar src={privateIcons.then(i => i.find(i => i.targetId === server.owner.id)?.imageUrl)} size="sm2" circle/>
@@ -270,6 +279,11 @@
 		.servers {
 			display: flex;
 			flex-direction: column;
+			.list-header {
+				gap: 8px;
+				align-items: end;
+				justify-content: unset;
+			}
 			.server {
 				padding: 16px;
 				background: var(--background-tertiary);
@@ -319,6 +333,17 @@
 						font-size: .9em;
 						line-height: 1.25;
 					}
+				}
+			}
+			.show-all {
+				width: fit-content;
+				color: var(--color-primary);
+				border: none;
+				cursor: pointer;
+				background: none;
+				font-family: var(--font-primary);
+				&:hover {
+					text-decoration: underline;
 				}
 			}
 		}

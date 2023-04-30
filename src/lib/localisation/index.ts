@@ -1,15 +1,17 @@
 import data from './data';
 import { derived, writable } from 'svelte/store';
 
-export const locale = writable('en-AU');
+export const locale = writable('en-AU' as Locale);
 export const locales = Object.keys(data);
 
+export type Key = keyof typeof data['en-AU']
+export type Locale = keyof typeof data
 export type Values = Iterable<any> | Record<string, any>
 
 const ta = (id: number, val: number) => `time_ago.${id}_${val === 1 ? 1 : 0}`;
 const numFormatter = new Intl.NumberFormat();
-export function translate(locale: string, key: string, values: Values) {
-	let text = data[locale][key];
+export function translate(locale: Locale, key: Key | string, values: Values) {
+	let text: string = (data as any)[locale][key];
 	if (typeof text !== 'string')
 		return key;
 
@@ -66,6 +68,6 @@ export function translate(locale: string, key: string, values: Values) {
 	return text;
 }
 
-export const t = derived(locale, ($locale) => (key: string, vars: Values = []) =>
+export const t = derived(locale, ($locale) => (key: Key, vars: Values = []) =>
 	translate($locale, key, vars)
 );
