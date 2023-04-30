@@ -15,20 +15,20 @@
 
 {#if src}
 	{#await src}
-		<div class={className} title={$t('image_status.0')}><Hourglass/></div>
+		<div class={className} title={$t('image_status.0')} on:contextmenu><Hourglass/></div>
 	{:then image}
 		{#if !image || image.match(deleted)}
-			<div class={className} title={$t('image_status.2')}><Blocked/></div>
+			<div class={className} title={$t('image_status.2')} on:contextmenu><Blocked/></div>
 		{:else if image.match(pending)}
-			<div class={className} title={$t('image_status.1')}><Hourglass/></div>
+			<div class={className} title={$t('image_status.1')} on:contextmenu><Hourglass/></div>
 		{:else if image.match(unavailable)}
-			<div class={className} title={$t('image_status.3')}><Question/></div>
+			<div class={className} title={$t('image_status.3')} on:contextmenu><Question/></div>
 		{:else}
-			<img src={image} alt="avatar" class={className}/>
+			<img src={image} alt="avatar" class={className} on:contextmenu/>
 		{/if}
 	{/await}
 {:else}
-	<div class={className} title={$t('image_status.3')}><Question/></div>
+	<div class={className} title={$t('image_status.3')} on:contextmenu><Question/></div>
 {/if}
 
 <style lang="scss">

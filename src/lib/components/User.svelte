@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import { joinUser } from '$lib/launch';
-	import ContextMenu, { Item } from 'svelte-contextmenu';
+	import type ContextMenu from 'svelte-contextmenu';
 	import type { ImageData, Experience, UserPresence } from '$lib/api/types';
 
-	import Avatar from '$lib/components/Avatar.svelte';
-	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
+	import Avatar from './Avatar.svelte';
+	import UserMenu from './UserMenu.svelte';
 
 	export let user: { id: number, name: string, displayName: string };
 	export let avatar: Promise<ImageData | undefined> | null = null;
@@ -29,11 +29,7 @@
 	{/if}
 </a>
 
-<ContextMenu bind:this={contextMenu}>
-	<p>{user.displayName} (@{user.name})</p>
-	<Item href={`https://roblox.com/users/${user.id}/profile`} target="_blank">{$t('action.view_roblox')}</Item>
-	<Item on:click={() => navigator.clipboard.writeText(user.id.toString())}><ClipboardPlus/>{$t('action.copy_id')}</Item>
-</ContextMenu>
+<UserMenu {...user} bind:contextMenu={contextMenu}/>
 
 <style lang="scss">
 	.friend {

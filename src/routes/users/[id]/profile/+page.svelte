@@ -3,6 +3,7 @@
 	import { user } from '$lib/api/users';
 	import * as toast from '$lib/toast';
 	import { Button } from '@voxelified/voxeliface';
+	import type ContextMenu from 'svelte-contextmenu';
 	import type { PageData } from './$types';
 	import type { Friendship } from '$lib/api/types';
 	import { getExperiences, getExperienceId } from '$lib/api/games';
@@ -12,6 +13,7 @@
 	import XIcon from '$lib/icons/X.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Friend from '$lib/components/User.svelte';
+	import UserMenu from '$lib/components/UserMenu.svelte';
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
 	import PersonPlus from '$lib/icons/PersonPlus.svelte';
 	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
@@ -43,6 +45,7 @@
 	$: friendCount = getUserFriendCount(data.id);
 
 	let friending = false;
+	let contextMenu: ContextMenu;
 	const friend = async (current: Friendship, decline: boolean) => {
 		friending = true;
 		let newStatus = current.status;
@@ -72,7 +75,8 @@
 
 <div class="main">
 	<div class="landing">
-		<Avatar src={icon.then(i => i?.imageUrl)} circle/>
+		<Avatar src={icon.then(i => i?.imageUrl)} circle on:contextmenu={contextMenu.createHandler()}/>
+		<UserMenu {...data} bind:contextMenu={contextMenu}/>
 		<div class="name">
 			<h1>
 				{data.displayName}

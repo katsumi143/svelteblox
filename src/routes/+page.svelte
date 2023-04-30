@@ -2,11 +2,13 @@
 	import { t } from '$lib/localisation';
 	import { user } from '$lib/api/users';
 	import { getGreeting } from '$lib/util';
+	import type ContextMenu from 'svelte-contextmenu';
 	import { getExperiences, getExperienceIcons, getRecentExperiences } from '$lib/api/games';
 	import { sortFriends, getUserIcon, getUserIcons, getUserFriends, getUserPresences } from '$lib/api/users';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Friend from '$lib/components/User.svelte';
+	import UserMenu from '$lib/components/UserMenu.svelte';
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 
@@ -20,10 +22,15 @@
 
 	const recentExperiences = getRecentExperiences();
 	const experienceIcons = recentExperiences.then(data => getExperienceIcons(data.map(i => i.universeId)));
+
+	let contextMenu: ContextMenu;
 </script>
 
 <div class="landing">
-	<a href={`/users/${user.id}/profile`}><Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)} circle/></a>
+	<a href={`/users/${user.id}/profile`} on:contextmenu={contextMenu.createHandler()}>
+		<Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)} circle/>
+		<UserMenu {...user} bind:contextMenu={contextMenu}/>
+	</a>
 	<div class="greeting">
 		<h1>{$t(`home.greeting.${getGreeting()}`)}</h1>
 		<h2>{user.displayName}!</h2>
