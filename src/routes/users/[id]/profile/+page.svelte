@@ -128,43 +128,46 @@
 		{/if}
 	{/await}
 
-	<div class="friends">
-		{#await sortedFriends then friends}
-			<div class="list-header">
-				<p>{$t('user.friends', [friends.length])}</p>
-				<a href={`/users/${data.id}/friends`}>{$t('action.view_all')}<ArrowRight/></a>
+	{#await sortedFriends then friends}
+		{#if friends.length > 0}
+			<div class="friends">
+				<div class="list-header">
+					<p>{$t('user.friends', [friends.length])}</p>
+					<a href={`/users/${data.id}/friends`}>{$t('action.view_all')}<ArrowRight/></a>
+				</div>
+				{#each friends.slice(0, 20) as friend}
+					{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
+						<Friend
+							user={friend}
+							avatar={friendAvatars.then(f => f.find(i => i.targetId === friend.id))}
+							presence={presence}
+							experience={presenceExperiences.then(e => e.find(e => e.id === presence?.universeId))}
+						/>
+					{/await}
+				{/each}
 			</div>
-			{#each friends.slice(0, 20) as friend}
-				{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
-					<Friend
-						user={friend}
-						avatar={friendAvatars.then(f => f.find(i => i.targetId === friend.id))}
-						presence={presence}
-						experience={presenceExperiences.then(e => e.find(e => e.id === presence?.universeId))}
-					/>
-				{/await}
-			{/each}
-		{/await}
-	</div>
+		{/if}
+	{/await}
 
 	<div class="avatar">
 		<div class="list-header">{$t('user.avatar')}</div>
 		<Avatar src={fullBody.then(f => f[0]?.imageUrl)} size="xl"/>
 	</div>
-	
-	<div class="favourites">
-		<div class="list-header">
-			<p>{$t('user.favourites')}</p>
-			<a href="/">{$t('action.view_all')}<ArrowRight/></a>
-		</div>
-		<div class="items">
-			{#await getUserFavourites(data.id).then(f => getExperiences(f.map(e => e.id))) then items}
-				{#each items as item}
-					<ExperienceItem id={item.id} name={item.name} playing={item.playing} rootPlaceId={item.rootPlaceId}/>
-				{/each}
-			{/await}
-		</div>
-	</div>
+	{#await getUserFavourites(data.id).then(f => getExperiences(f.map(e => e.id))) then items}
+		{#if items.length > 0}
+			<div class="favourites">
+				<div class="list-header">
+					<p>{$t('user.favourites')}</p>
+					<a href="/">{$t('action.view_all')}<ArrowRight/></a>
+				</div>
+				<div class="items">
+					{#each items as item}
+						<ExperienceItem id={item.id} name={item.name} playing={item.playing} rootPlaceId={item.rootPlaceId}/>
+					{/each}
+				</div>
+			</div>
+		{/if}
+	{/await}
 </div>
 
 <svelte:head>

@@ -28,6 +28,8 @@ export default {
 		'user.followers': 'followers',
 		'user.following': 'following',
 		'user.favourites': 'Favourite Experiences',
+		'user.experience_0': 'Unknown Status',
+		'user.experience_1': 'Unknown Status',
 		'user.experience_2': 'Currently Playing',
 		'user.experience_3': 'Currently Editing',
 		'user.avatar': 'Currently Wearing',
