@@ -8,7 +8,7 @@
 	import type { Friendship } from '$lib/api/types';
 	import { getExperiences, getExperienceId } from '$lib/api/games';
 	import { UserPresenceType, FriendshipStatus } from '$lib/api/types';
-	import { sortFriends, getUserIcon, getUserIcons, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses } from '$lib/api/users';
+	import { sortFriends, getUserIcon, getUserIcons, getSelfRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses } from '$lib/api/users';
 
 	import XIcon from '$lib/icons/X.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -40,6 +40,7 @@
 	$: presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
 
 	$: isSelf = data.id === user.id;
+	$: roles = isSelf ? getSelfRoles() : Promise.resolve([]);
 	$: friendship = isSelf ? null : getFriendshipStatuses(user.id, [data.id]).then(s => s[0]);
 
 	$: friendCount = getUserFriendCount(data.id);
@@ -83,6 +84,11 @@
 				{#if data.hasVerifiedBadge}
 					<VerifiedBadge size={24}/>
 				{/if}
+				{#await roles then roles}
+					{#each roles as role}
+						<p class="role">{$t(`user.role.${role}`)}</p>
+					{/each}
+				{/await}
 				{#await presence then presence}
 					<p class="status">{$t(`user_status.${presence.userPresenceType}`)}</p>
 				{/await}
@@ -193,6 +199,14 @@
 				p {
 					color: var(--color-tertiary);
 					margin: 8px 0 0;
+				}
+				.role {
+					margin: 0;
+					border: 1px solid var(--color-tertiary);
+					padding: 5px 8px;
+					font-size: .33333333333em;
+					font-weight: 400;
+					border-radius: 4px;
 				}
 				.status {
 					margin: 0;

@@ -2,6 +2,7 @@ import Cache from '../cache';
 import { request } from '.';
 import { GAMES_BASE2 } from './games';
 import { getCsrfToken } from './auth';
+import type { UserRole } from './enums';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
 import type { User, Friend, ImageData, Friendship, ApiDataList, CurrentUser, ExperienceV2, UserPresence, FriendshipStatus } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
@@ -17,6 +18,14 @@ export function getUsername(id: string | number) {
 }
 export function getDisplayName(id: string | number) {
 	return USERS_CACHE.use(`display_name_${id}`, () => getUser(id).then(u => u.displayName), 86400000);
+}
+
+export function getSelfRoles() {
+	return USERS_CACHE.use('roles_self', () =>
+		request<{ roles: UserRole[] }>(`${USERS_BASE}/users/authenticated/roles`)
+			.then(r => r.roles),
+		3600000
+	);
 }
 
 export function getUserFriends(id: string | number) {

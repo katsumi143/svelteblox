@@ -33,6 +33,7 @@ export default {
 		'user.experience_2': 'Currently Playing',
 		'user.experience_3': 'Currently Editing',
 		'user.avatar': 'Currently Wearing',
+		'user.role.BetaTester': 'BETA TESTER',
 
 		'friends': '{0}\'s friends',
 
