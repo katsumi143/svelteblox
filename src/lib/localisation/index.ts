@@ -28,7 +28,7 @@ export function translate(locale: string, key: string, values: Values) {
 		else if (formatType === 'description')
 			finalValue = finalValue.replace(/(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/g, url => {
 				const replaced = url.replace(/(?:http(s)?:\/\/)(www\.)?roblox\.com/g, '');
-				return `<a href="${replaced}" target="${replaced === url ? '_blank' : '_self'}">${url}</a>`
+				return `<a href="${replaced}" ${replaced === url ? 'target="_blank" ' : ''}data-sveltekit-preload-data="tap">${url}</a>`
 			});
 		else if (formatType === 'time_ago') {
 			const diff = Date.now() - new Date(finalValue).getTime();
