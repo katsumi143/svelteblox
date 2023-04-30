@@ -54,6 +54,7 @@ export default {
 		'experience.rating2': '{0}% liked this',
 		'experience.unrated': 'Unrated',
 		'experience.hover': '{0}\n{1|number} Playing',
+		'experience.friend_servers': 'Friend Servers ({0})',
 		'experience.private_servers': 'Private Servers ({0})',
 
 		'server.owner': 'Created by {0}',

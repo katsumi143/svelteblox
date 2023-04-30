@@ -1,6 +1,6 @@
 import { fullRequest } from './api';
 import { getCsrfToken } from './api/auth';
-export async function getLaunchUri(type: 'RequestFollowUser' | 'RequestPrivateGame', params: Record<string, string>) {
+export async function getLaunchUri(type: 'RequestFollowUser' | 'RequestPrivateGame' | 'RequestGameJob', params: Record<string, string>) {
 	const url = new URL('https://assetgame.roblox.com/game/PlaceLauncher.ashx');
 	for (const [key, value] of Object.entries({ request: type, ...params }))
 		url.searchParams.set(key, value);
@@ -32,6 +32,12 @@ export function joinExperience(placeId: number) {
 export async function joinUser(userId: number) {
 	const ticket = await getTicket();
 	const launchUri = await getLaunchUri('RequestFollowUser', { userId: userId.toString() });
+	launchClient(ticket, launchUri);
+}
+
+export async function joinServer(placeId: number, serverId: string) {
+	const ticket = await getTicket();
+	const launchUri = await getLaunchUri('RequestGameJob', { placeId: placeId.toString(), joinAttemptId: serverId });
 	launchClient(ticket, launchUri);
 }
 

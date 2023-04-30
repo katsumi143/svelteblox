@@ -51,6 +51,11 @@ export function getExperiencePrivateServers(placeId: number) {
 		.then(data => data.data);
 }
 
+export function getExperienceFriendServers(placeId: number) {
+	return request<ServerListResponse>(`${GAMES_BASE1}/games/${placeId}/servers/Friend`)
+		.then(data => data.data);
+}
+
 export interface ServerListResponse<T = ExperienceServer> {
 	data: T[]
 	nextPageCursor: string | null

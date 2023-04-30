@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import { onMount } from 'svelte';
-	import { Button } from '@voxelified/voxeliface';
+	import { request } from '$lib/api';
 	import { getUserIcons } from '$lib/api/users';
 	import type { PageData } from './$types';
+	import { THUMBNAILS_BASE } from '$lib/api/images';
+	import type { ApiDataList } from '$lib/api/types';
 	import ContextMenu, { Item } from 'svelte-contextmenu';
 	import { getExperiencePermissions } from '$lib/api/develop';
-	import { joinExperience, editExperience, joinPrivateServer } from '$lib/launch';
-	import { getExperienceVotes, getExperienceThumbnails, getExperiencePrivateServers } from '$lib/api/games';
+	import { joinServer, joinExperience, editExperience, joinPrivateServer } from '$lib/launch';
+	import { getExperienceVotes, getExperienceThumbnails, getExperienceFriendServers, getExperiencePrivateServers } from '$lib/api/games';
 
 	import Star from '$lib/icons/Star.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -27,8 +29,22 @@
 	$: rating = votes.then(([v]) => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
 	$: thumbnails = getExperienceThumbnails(data.id);
 	$: permissions = getExperiencePermissions(data.id);
+	$: friendServers = getExperienceFriendServers(data.rootPlaceId);
 	$: privateServers = getExperiencePrivateServers(data.rootPlaceId);
 	$: privateIcons = privateServers.then(servers => getUserIcons(servers.map(s => s.owner.id)));
+
+	$: friendIcons = friendServers.then(servers => {
+		if (servers.length === 0)
+			return [];
+		return request<ApiDataList<any>>(`${THUMBNAILS_BASE}/batch`, 'POST', servers.flatMap(s => s.playerTokens.map(token => ({
+			size: '150x150',
+			type: 'AvatarHeadShot',
+			token,
+			format: 'png',
+			targetId: 0,
+			requestId: `0:${token}:AvatarHeadshot:150x150:png:regular`
+		})))).then(d => d.data);
+	});
 
 	let thumbnail = 0;
 	let contextMenu: ContextMenu;
@@ -87,6 +103,34 @@
 	<div class="description">
 		<p>{@html $t('description', [data.description])}</p>
 	</div>
+	{#await friendServers then servers}
+		{#if servers.length > 0}
+			<div class="servers">
+				<div class="list-header">
+					{$t('experience.friend_servers', [servers.length])}
+				</div>
+				{#each servers as server}
+					<div class="server">
+						<div class="header">
+							<div class="users">
+								{#await friendIcons then icons}
+									{#each icons as image}
+										<Avatar src={image.imageUrl} size="sm" circle/>
+									{/each}
+								{/await}
+							</div>
+							<button type="button" on:click={() => joinServer(data.rootPlaceId, server.id)}>
+								<PlayIcon size={32}/>
+							</button>
+						</div>
+						<div class="details">
+							<div>{server.playing ?? server.playerTokens.length}/{server.maxPlayers}</div><p>playing</p>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{/if}
+	{/await}
 	{#await privateServers then servers}
 		{#if servers.length > 0}
 			<div class="servers">
@@ -100,7 +144,7 @@
 				</div>
 				{#each showAllPrivateServers ? servers : servers.slice(0, 2) as server}
 					<div class="server">
-						<div class="owner">
+						<div class="header">
 							<Avatar src={privateIcons.then(i => i.find(i => i.targetId === server.owner.id)?.imageUrl)} size="sm2" circle/>
 							<div class="name">
 								<h1>{server.name}</h1>
@@ -289,7 +333,7 @@
 				background: var(--background-tertiary);
 				border-radius: 16px;
 				margin-bottom: 16px;
-				.owner {
+				.header {
 					display: flex;
 					.name {
 						margin-top: 8px;
@@ -305,6 +349,10 @@
 							margin-top: .2em;
 							font-weight: 500;
 						}
+					}
+					.users {
+						gap: 8px;
+						display: flex;
 					}
 					button {
 						color: #fff;
