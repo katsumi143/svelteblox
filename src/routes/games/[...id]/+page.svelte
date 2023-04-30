@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
-	import { onMount } from 'svelte';
 	import { request } from '$lib/api';
 	import { getUserIcons } from '$lib/api/users';
 	import type { PageData } from './$types';
@@ -17,8 +16,7 @@
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThreeDots from '$lib/icons/ThreeDots.svelte';
-	import CaretLeft from '$lib/icons/CaretLeft.svelte';
-	import CaretRight from '$lib/icons/CaretRight.svelte';
+	import Carousel from '$lib/components/Carousel.svelte';
 	import ThumbsDown from '$lib/icons/ThumbsDown.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
@@ -50,24 +48,17 @@
 	let contextMenu: ContextMenu;
 	let showAllPrivateServers = false;
 	const CREATE_BASE = `https://create.roblox.com/dashboard/creations/experiences/${data.id}`;
-	onMount(async () => {
-		const images = await thumbnails;
-		const interval = setInterval(() => thumbnail = (thumbnail + 1) % images.length, 5000);
-		return () => clearInterval(interval);
-	});
 </script>
 
 <div class="main">
 	<div class="landing">
-		<div class="thumbnail">
-			{#await thumbnails then thumbnails}
-				{#each thumbnails as data, key}
-					<img src={data.imageUrl} alt="thumbnail" class:show={key === thumbnail}>
+		<Carousel length={thumbnails.then(t => t.length)} bind:index={thumbnail}>
+			{#await thumbnails then items}
+				{#each items as image, key}
+					<img src={image.imageUrl} alt="thumbnail" class="thumbnail" class:show={key === thumbnail}>
 				{/each}
-				<button type="button" title={$t('carousel.prev')} on:click={() => thumbnail === 0 ? thumbnail = thumbnails.length - 1 : thumbnail--}><CaretLeft/></button>
-				<button type="button" title={$t('carousel.next')} on:click={() => thumbnail = (thumbnail + 1) % thumbnails.length}><CaretRight/></button>
 			{/await}
-		</div>
+		</Carousel>
 		<div class="details">
 			<h1>{data.name} <button type="button" on:click={contextMenu.createHandler()}><ThreeDots/></button></h1>
 			<p>by <CreatorLink {...data.creator}/></p>
@@ -191,38 +182,12 @@
 		.landing {
 			display: flex;
 			.thumbnail {
-				height: 432px;
-				position: relative;
-				min-width: 768px;
-				img {
-					opacity: 0;
-					display: flex;
-					position: absolute;
-					transition: opacity .5s;
-					border-radius: 8px;
-				}
-				img.show {
-					opacity: 1;
-				}
-				button {
-					top: 50%;
-					left: 8px;
-					color: #fff;
-					border: none;
-					cursor: pointer;
-					opacity: 0;
-					padding: 24px 2px;
-					position: absolute;
-					transform: translateY(-50%);
-					background: #0000004d;
-					transition: opacity .25s;
-					border-radius: 6px;
-				}
-				button:last-child {
-					left: unset;
-					right: 8px;
-				}
-				&:hover button {
+				opacity: 0;
+				display: flex;
+				position: absolute;
+				transition: opacity .5s;
+				border-radius: 8px;
+				&.show {
 					opacity: 1;
 				}
 			}
