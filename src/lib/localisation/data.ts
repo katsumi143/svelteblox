@@ -33,7 +33,8 @@ export default {
 		'user.experience_2': 'Currently Playing',
 		'user.experience_3': 'Currently Editing',
 		'user.avatar': 'Currently Wearing',
-		'user.role.BetaTester': 'BETA TESTER',
+		'user.role.0': 'ROBLOX STAFF',
+		'user.role.1': 'BETA TESTER',
 
 		'friends': '{0}\'s friends',
 

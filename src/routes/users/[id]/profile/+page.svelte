@@ -8,7 +8,7 @@
 	import type { Friendship } from '$lib/api/types';
 	import { getExperiences, getExperienceId } from '$lib/api/games';
 	import { UserPresenceType, FriendshipStatus } from '$lib/api/types';
-	import { sortFriends, getUserIcon, getUserIcons, getSelfRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses } from '$lib/api/users';
+	import { sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses } from '$lib/api/users';
 
 	import XIcon from '$lib/icons/X.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -40,7 +40,7 @@
 	$: presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
 
 	$: isSelf = data.id === user.id;
-	$: roles = isSelf ? getSelfRoles() : Promise.resolve([]);
+	$: roles = getUserRoles(data.id);
 	$: friendship = isSelf ? null : getFriendshipStatuses(user.id, [data.id]).then(s => s[0]);
 
 	$: friendCount = getUserFriendCount(data.id);

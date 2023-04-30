@@ -1,10 +1,10 @@
 import Cache from '../cache';
 import { request } from '.';
+import { UserRole } from './enums';
 import { GAMES_BASE2 } from './games';
 import { getCsrfToken } from './auth';
-import type { UserRole } from './enums';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { User, Friend, ImageData, Friendship, ApiDataList, CurrentUser, ExperienceV2, UserPresence, FriendshipStatus } from './types';
+import type { User, Friend, ImageData, Friendship, RobloxBadge, ApiDataList, CurrentUser, ExperienceV2, UserPresence, FriendshipStatus } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
 export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
 
@@ -20,12 +20,26 @@ export function getDisplayName(id: string | number) {
 	return USERS_CACHE.use(`display_name_${id}`, () => getUser(id).then(u => u.displayName), 86400000);
 }
 
-export function getSelfRoles() {
-	return USERS_CACHE.use('roles_self', () =>
-		request<{ roles: UserRole[] }>(`${USERS_BASE}/users/authenticated/roles`)
-			.then(r => r.roles),
+export function getRobloxBadges(id: string | number) {
+	return USERS_CACHE.use(`roblox_badges_${id}`, () =>
+		request<RobloxBadge[]>(`https://accountinformation.roblox.com/v1/users/${id}/roblox-badges`),
 		3600000
 	);
+}
+
+export function getUserRoles(id: string | number): Promise<UserRole[]> {
+	return USERS_CACHE.use(`roles_${id}`, async () => {
+		const roles = [];
+		if (id === user.id)
+			for (const role of await request<{ roles: string[] }>(`${USERS_BASE}/users/authenticated/roles`).then(d => d.roles)) {
+				if (role === 'BetaTester')
+					roles.push(UserRole.BetaTester);
+			}
+
+		if ((await getRobloxBadges(id)).some(badge => badge.id === 1))
+			roles.push(UserRole.Staff);
+		return roles;
+	}, 3600000);
 }
 
 export function getUserFriends(id: string | number) {

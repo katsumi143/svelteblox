@@ -184,3 +184,10 @@ export interface ImageData {
 export interface ApiDataList<T> {
 	data: T[]
 }
+
+export interface RobloxBadge {
+	id: number
+	name: string
+	imageUrl: string
+	description: string
+}

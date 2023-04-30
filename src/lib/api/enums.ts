@@ -1,3 +1,4 @@
 export enum UserRole {
-	BetaTester = 'BetaTester'
+	Staff,
+	BetaTester
 }
