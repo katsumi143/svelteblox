@@ -42,6 +42,13 @@ export function getUserRoles(id: string | number): Promise<UserRole[]> {
 	}, 3600000);
 }
 
+export function hasPremium(id: string | number) {
+	return USERS_CACHE.use(`premium_${id}`, () =>
+		request<boolean>(`https://premiumfeatures.roblox.com/v1/users/${id}/validate-membership`),
+		3600000
+	);
+}
+
 export function getUserFriends(id: string | number) {
 	return USERS_CACHE.use(`friends_${id}`, () =>
 		request<ApiDataList<Friend>>(`${FRIENDS_BASE}/users/${id}/friends`)

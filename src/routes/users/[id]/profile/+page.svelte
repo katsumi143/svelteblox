@@ -8,7 +8,7 @@
 	import type { Friendship } from '$lib/api/types';
 	import { getExperiences, getExperienceId } from '$lib/api/games';
 	import { UserPresenceType, FriendshipStatus } from '$lib/api/types';
-	import { sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses } from '$lib/api/users';
+	import { hasPremium, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses } from '$lib/api/users';
 
 	import XIcon from '$lib/icons/X.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -16,6 +16,7 @@
 	import UserMenu from '$lib/components/UserMenu.svelte';
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
 	import PersonPlus from '$lib/icons/PersonPlus.svelte';
+	import PremiumBadge from '$lib/components/PremiumBadge.svelte';
 	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	import ExperienceCard from '$lib/components/ExperienceCard.svelte';
@@ -41,6 +42,7 @@
 
 	$: isSelf = data.id === user.id;
 	$: roles = getUserRoles(data.id);
+	$: premium = hasPremium(data.id);
 	$: friendship = isSelf ? null : getFriendshipStatuses(user.id, [data.id]).then(s => s[0]);
 
 	$: friendCount = getUserFriendCount(data.id);
@@ -81,6 +83,11 @@
 		<div class="name">
 			<h1>
 				{data.displayName}
+				{#await premium then premium}
+					{#if premium}
+						<PremiumBadge size={24}/>
+					{/if}
+				{/await}
 				{#if data.hasVerifiedBadge}
 					<VerifiedBadge size={24}/>
 				{/if}
