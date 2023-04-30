@@ -4,7 +4,7 @@ import { UserRole } from './enums';
 import { GAMES_BASE2 } from './games';
 import { getCsrfToken } from './auth';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { User, Friend, ImageData, Friendship, RobloxBadge, ApiDataList, CurrentUser, ExperienceV2, UserPresence, FriendshipStatus } from './types';
+import type { User, Friend, ImageData, Friendship, RobloxBadge, ApiDataList, CurrentUser, ExperienceV2, UserPresence, FriendshipStatus, ProfileExperience } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
 export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
 
@@ -137,6 +137,13 @@ export function getUserPresences(userIds: (string | number)[]) {
 		userPresences: UserPresence[]
 	}>(`https://presence.roblox.com/v1/presence/users`, 'POST', { userIds })
 		.then(data => data.userPresences);
+}
+
+export function getUserProfileExperiences(id: string | number) {
+	return request<{
+		Games: ProfileExperience[]
+	}>(`https://www.roblox.com/users/profile/playergames-json?userId=${id}`)
+		.then(data => data.Games);
 }
 
 export function getCurrentUser() {

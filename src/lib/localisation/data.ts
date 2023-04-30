@@ -50,8 +50,8 @@ export default {
 		'experience.play': 'Quick Play',
 		'experience.play2': 'Play {0}',
 		'experience.join_user': 'Join {0??Friend}',
-		'experience.playing': '{0.playing|number} users are currently in-experience',
-		'experience.playing2': '{0.playing|number} playing',
+		'experience.playing': '{0|number} users are currently in-experience',
+		'experience.playing2': '{0|number} playing',
 		'experience.favourite_false': 'Favourite',
 		'experience.favourite_true': 'Favourited',
 		'experience.rating': '{0}% of players liked this experience',
@@ -112,6 +112,13 @@ export default {
 		'toast.friend_accept': 'You are now friends with <b>{0}</b>.', 
 		'toast.friend_decline': 'You have declined <b>{0}</b>\'s friend request.', 
 		'toast.friend_request': 'You have sent a friend request to <b>{0}</b>.',
-		'toast.friend_removed': 'You have ended your friendship with <b>{0}</b>.'
+		'toast.friend_removed': 'You have ended your friendship with <b>{0}</b>.',
+		'toast.client_join': 'Joining Friend...',
+		'toast.client_join2': 'Joining Private Server...',
+		'toast.client_play': 'Joining Experience...',
+		'toast.client_play2': 'Joining Server...',
+		'toast.client_launched': 'The Roblox Player should open in a few seconds.',
+		'toast.studio_edit': 'Starting Edit Session...',
+		'toast.studio_launched': 'Roblox Studio should open in a few seconds.'
 	}
 }

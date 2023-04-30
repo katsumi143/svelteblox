@@ -24,9 +24,7 @@
 
 <style lang="scss">
 	.carousel {
-		height: 432px;
 		position: relative;
-		min-width: 768px;
 		button {
 			top: 50%;
 			left: 8px;

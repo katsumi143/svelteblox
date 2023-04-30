@@ -1,5 +1,5 @@
 import data from './data';
-import { derived, writable } from 'svelte/store';
+import { get, derived, writable } from 'svelte/store';
 
 export const locale = writable('en-AU' as Locale);
 export const locales = Object.keys(data);
@@ -71,3 +71,4 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 export const t = derived(locale, ($locale) => (key: Key, vars: Values = []) =>
 	translate($locale, key, vars)
 );
+export const trans = (key: Key, vars: Values = []) => translate(get(locale), key, vars);

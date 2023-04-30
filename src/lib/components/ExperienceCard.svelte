@@ -39,7 +39,7 @@
 				{$t(`experience.${rating ? 'rating2' : 'unrated'}`, [rating])}
 			{/await}
 		</p>
-		<p><People/>{$t('experience.playing2', [data])}</p>
+		<p><People/>{$t('experience.playing2', [data.playing])}</p>
 	</div>
 	<button type="button" class="play" on:click|preventDefault={quickLaunch}>
 		{$t(`experience.${friendId ? 'join_user' : 'play'}`, [friendName])}

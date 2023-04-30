@@ -1,4 +1,6 @@
 import { get } from 'svelte/store';
+import { trans } from './localisation';
+import * as toast from './toast';
 import { fullRequest } from './api';
 import { getCsrfToken } from './api/auth';
 import { clientChannel } from './settings';
@@ -32,26 +34,35 @@ export async function joinExperience(placeId: number) {
 	const ticket = await getTicket();
 	const launchUri = await getLaunchUri('RequestGameJob', { placeId: placeId.toString() });
 	launchClient(ticket, launchUri);
+
+	toast.success(trans('toast.client_play'), trans('toast.client_launched'));
 }
 
 export async function joinUser(userId: number) {
 	const ticket = await getTicket();
 	const launchUri = await getLaunchUri('RequestFollowUser', { userId: userId.toString() });
 	launchClient(ticket, launchUri);
+
+	toast.success(trans('toast.client_join'), trans('toast.client_launched'));
 }
 
 export async function joinServer(placeId: number, serverId: string) {
 	const ticket = await getTicket();
 	const launchUri = await getLaunchUri('RequestGameJob', { placeId: placeId.toString(), joinAttemptId: serverId });
 	launchClient(ticket, launchUri);
+
+	toast.success(trans('toast.client_play'), trans('toast.client_launched'));
 }
 
 export async function joinPrivateServer(placeId: number, accessCode: string) {
 	const ticket = await getTicket();
 	const launchUri = await getLaunchUri('RequestPrivateGame', { placeId: placeId.toString(), accessCode });
 	launchClient(ticket, launchUri);
+
+	toast.success(trans('toast.client_join2'), trans('toast.client_launched'));
 }
 
 export async function editExperience(placeId: number, universeId: number) {
 	launchStudio(placeId, universeId, 'EditPlace');
+	toast.success(trans('toast.studio_edit'), trans('toast.studio_launched'));
 }

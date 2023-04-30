@@ -191,3 +191,36 @@ export interface RobloxBadge {
 	imageUrl: string
 	description: string
 }
+
+export interface ProfileExperience {
+	Name: string
+	Plays: number
+	Price: number
+	ImageId: 0
+	PlaceID: number
+	IsOwned: boolean
+	Favorites: number
+	CreatorID: number
+	Thumbnail: {
+		Url: string
+		Final: boolean
+		UserId: number
+		RetryUrl: string
+		EndpointType: 'Avatar'
+	}
+	UseDataSrc: false
+	UniverseID: number
+	CreatorName: null
+	Description: string
+	TotalBought: number
+	PlayerCount: number
+	TotalUpVotes: number
+	TotalDownVotes: number
+	IsVotingEnabled: boolean
+	HasErrorOcurred: boolean
+	HideGameCardInfo: false
+	GamePageResources: null
+	CreatorAbsoluteUrl: null
+	GameDetailReferralUrl: string
+	IsAsyncThumbnailEnabled: false
+}

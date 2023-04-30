@@ -88,7 +88,7 @@
 			<button type="button" on:click={() => joinExperience(data.rootPlaceId)}>
 				<PlayIcon/>
 			</button>
-			<p class="players">{$t('experience.playing', [data])}</p>
+			<p class="players">{$t('experience.playing', [data.playing])}</p>
 		</div>
 	</div>
 	<div class="description">
@@ -181,6 +181,10 @@
 
 		.landing {
 			display: flex;
+			:global(.carousel) {
+				height: 432px;
+				min-width: 768px;
+			}
 			.thumbnail {
 				opacity: 0;
 				display: flex;

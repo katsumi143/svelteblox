@@ -5,14 +5,18 @@
 	import { Button } from '@voxelified/voxeliface';
 	import type ContextMenu from 'svelte-contextmenu';
 	import type { PageData } from './$types';
+	import { joinExperience } from '$lib/launch';
 	import type { Friendship } from '$lib/api/types';
-	import { getExperiences, getExperienceId } from '$lib/api/games';
 	import { UserPresenceType, FriendshipStatus } from '$lib/api/types';
-	import { hasPremium, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses } from '$lib/api/users';
+	import { getExperiences, getExperienceId, getExperienceThumbnails } from '$lib/api/games';
+	import { hasPremium, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
 	import XIcon from '$lib/icons/X.svelte';
-	import Avatar from '$lib/components/Avatar.svelte';
+	import People from '$lib/icons/People.svelte';
 	import Friend from '$lib/components/User.svelte';
+	import Avatar from '$lib/components/Avatar.svelte';
+	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
+	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import UserMenu from '$lib/components/UserMenu.svelte';
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
 	import PersonPlus from '$lib/icons/PersonPlus.svelte';
@@ -44,6 +48,15 @@
 	$: roles = getUserRoles(data.id);
 	$: premium = hasPremium(data.id);
 	$: friendship = isSelf ? null : getFriendshipStatuses(user.id, [data.id]).then(s => s[0]);
+	$: experiences = getUserProfileExperiences(data.id);
+	$: experienceThumbnails = experiences.then(async items => {
+		if (items.length === 0)
+			return [];
+		const images = [];
+		for (const item of items)
+			images.push((await getExperienceThumbnails(item.UniverseID))[0]);
+		return images;
+	});
 
 	$: friendCount = getUserFriendCount(data.id);
 
@@ -162,6 +175,33 @@
 		{/if}
 	{/await}
 
+	<div class="experiences">
+		<div class="list-header">Pinned Experiences</div>
+		<div class="list">
+			{#await experiences then items}
+				{#each items as item, key}
+					<a class="experience" href={`/games/${item.PlaceID}`}>
+						{#await experienceThumbnails then thumbnails}
+							<img src={thumbnails[key].imageUrl} alt="thumbnail"/>
+						{/await}
+						<p class="name">{item.Name}</p>
+						<div class="details">
+							<p>
+								<ThumbsUp/>
+								{$t(`experience.rating2`, [Math.round(item.TotalUpVotes / (item.TotalUpVotes + item.TotalDownVotes) * 100)])}
+							</p>
+							<p><People/>{$t('experience.playing2', [item.PlayerCount])}</p>
+						</div>
+						<button type="button" class="play" on:click|preventDefault={() => joinExperience(item.PlaceID)}>
+							{$t('experience.play')}
+							<PlayIcon size={32}/>
+						</button>
+					</a>
+				{/each}
+			{/await}
+		</div>
+	</div>
+
 	<div class="avatar">
 		<div class="list-header">{$t('user.avatar')}</div>
 		<Avatar src={fullBody.then(f => f[0]?.imageUrl)} size="xl"/>
@@ -270,6 +310,91 @@
 			max-height: 148px;
 			:global(.friend) {
 				margin-bottom: 100px;
+			}
+		}
+
+		:global(.carousel) {
+			width: 576px;
+			height: 324px;
+		}
+		.experiences {
+			margin-top: 64px;
+			.list {
+				gap: 16px;
+				display: flex;
+				flex-wrap: wrap;
+				.experience {
+					flex: 1 0 30%;
+					height: 216px;
+					display: flex;
+					overflow: hidden;
+					position: relative;
+					max-width: 50%;
+					margin-top: 0;
+					transition: opacity .5s;
+					border-radius: 8px;
+					flex-direction: column;
+					justify-content: end;
+					text-decoration: none;
+					img {
+						width: 100%;
+						height: 100%;
+						position: absolute;
+						object-fit: cover;
+						mask-image: linear-gradient(#000, transparent);
+						pointer-events: none;
+						-webkit-mask-image: -webkit-linear-gradient(#000, transparent);
+					}
+					.name {
+						margin: 8px 16px 0;
+						z-index: 1;
+						overflow: hidden;
+						font-size: 1.5em;
+						max-height: 2.4em;
+						font-weight: 700;
+						line-height: 1.2em;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+					}
+					.details {
+						gap: 24px;
+						margin: 0 16px 16px;
+						z-index: 1;
+						display: flex;
+						p {
+							gap: 4px;
+							color: var(--color-secondary);
+							margin: 0;
+							display: flex;
+							font-size: .8em;
+							line-height: 1.25;
+						}
+					}
+					.play {
+						gap: 6px;
+						right: 8px;
+						color: #fff;
+						bottom: 8px;
+						border: none;
+						cursor: pointer;
+						opacity: 0;
+						z-index: 1;
+						padding: 2px 4px 2px 16px;
+						display: flex;
+						position: absolute;
+						font-size: .9em;
+						background: #00b06f;
+						transition: opacity .2s;
+						line-height: 1.5;
+						font-weight: 500;
+						align-items: center;
+						font-family: var(--font-primary);
+						border-radius: 4px;
+					}
+					&:hover .play {
+						opacity: 1;
+					}
+				}
 			}
 		}
 
