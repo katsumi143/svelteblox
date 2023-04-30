@@ -37,7 +37,8 @@
 	$: presences = friends.then(f => getUserPresences(f.map(f => f.id)));
 	$: presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
 
-	$: friendship = getFriendshipStatuses(user.id, [data.id]).then(s => s[0]);
+	$: isSelf = data.id === user.id;
+	$: friendship = isSelf ? null : getFriendshipStatuses(user.id, [data.id]).then(s => s[0]);
 
 	$: friendCount = getUserFriendCount(data.id);
 
@@ -86,13 +87,15 @@
 		</div>
 		<div class="buttons">
 			{#await friendship then friendship}
-				<Button on:click={() => friend(friendship, false)} disabled={friending || friendship.status === FriendshipStatus.RequestSent}>
-					<PersonPlus/>{$t(`action.friend.${friendship.status}`)}
-				</Button>
-				{#if friendship.status === FriendshipStatus.RequestReceived}
-					<Button on:click={() => friend(friendship, true)} disabled={friending}>
-						<XIcon/> Decline Friend Request
+				{#if friendship}
+					<Button on:click={() => friend(friendship, false)} disabled={friending || friendship.status === FriendshipStatus.RequestSent}>
+						<PersonPlus/>{$t(`action.friend.${friendship.status}`)}
 					</Button>
+					{#if friendship.status === FriendshipStatus.RequestReceived}
+						<Button on:click={() => friend(friendship, true)} disabled={friending}>
+							<XIcon/> Decline Friend Request
+						</Button>
+					{/if}
 				{/if}
 			{/await}
 		</div>
