@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
 	import { getGroupIcons } from '$lib/api/groups';
 	import type { LayoutData } from './$types';
 
@@ -15,7 +16,15 @@
 		{#each data.groups as group}
 			<a class="group" href={`/groups/${group.id}`}>
 				<Avatar src={icons.then(i => i.find(icon => icon.targetId === group.id)?.imageUrl)} size="sm"/>
-				<p>{group.name}</p>
+				<div>
+					<p>
+						{group.name}
+						{#if group.hasVerifiedBadge}
+							<VerifiedBadge size={12}/>
+						{/if}
+					</p>
+					<p class="owner">by {group.owner.displayName}</p>
+				</div>
 			</a>
 		{/each}
 	</div>
@@ -51,10 +60,21 @@
 				margin-bottom: 4px;
 				border-radius: 8px;
 				text-decoration: none;
-				p {
-					margin: 0 0 0 12px;
-					font-size: 1.1em;
-					font-weight: 450;
+				div {
+					overflow: hidden;
+					p {
+						margin: 0 0 0 12px;
+						overflow: hidden;
+						font-size: 1.1em;
+						font-weight: 450;
+						white-space: nowrap;
+						text-overflow: ellipsis;
+					}
+					.owner {
+						color: var(--color-secondary);
+						font-size: .85em;
+						margin-top: .2em;
+					}
 				}
 			}
 		}

@@ -14,6 +14,7 @@
 	import Friend from '$lib/components/User.svelte';
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
 	import PersonPlus from '$lib/icons/PersonPlus.svelte';
+	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	import ExperienceCard from '$lib/components/ExperienceCard.svelte';
 	export let data: PageData;
@@ -74,6 +75,9 @@
 		<div class="name">
 			<h1>
 				{data.displayName}
+				{#if data.hasVerifiedBadge}
+					<VerifiedBadge size={24}/>
+				{/if}
 				{#await presence then presence}
 					<p class="status">{$t(`user_status.${presence.userPresenceType}`)}</p>
 				{/await}
@@ -95,13 +99,13 @@
 	</div>
 	<div class="details">
 		{#await friendCount then count}
-			<a href={`/users/${data.id}/friends`}>{count}</a> <p>{$t('user.friends.count')}</p>
+			<a href={`/users/${data.id}/friends`}>{$t('number', [count])}</a><p>{$t('user.friends.count')}</p>
 		{/await}
 		{#await getUserFollowerCount(data.id) then count}
-			<a href={`/users/${data.id}/friends`}>{count}</a> <p>{$t('user.followers')}</p>
+			<a href={`/users/${data.id}/friends`}>{$t('number', [count])}</a><p>{$t('user.followers')}</p>
 		{/await}
 		{#await getUserFollowingCount(data.id) then count}
-			<a href={`/users/${data.id}/friends`}>{count}</a> <p>{$t('user.following')}</p>
+			<a href={`/users/${data.id}/friends`}>{$t('number', [count])}</a><p>{$t('user.following')}</p>
 		{/await}
 	</div>
 	<p class="description">{@html $t('description', [data.description])}</p>
@@ -170,16 +174,18 @@
 			.name {
 				margin-left: 32px;
 				h1 {
+					gap: 16px;
 					margin: 0;
 					display: flex;
 					font-size: 2.25em;
+					align-items: center;
 				}
 				p {
 					color: var(--color-tertiary);
 					margin: 8px 0 0;
 				}
 				.status {
-					margin: 1em 0 0 16px;
+					margin: 0;
 					font-size: .4em;
 					font-weight: 400;
 				}
@@ -200,6 +206,9 @@
 				color: var(--color-primary);
 				margin-right: 4px;
 				text-decoration: none;
+				&:hover {
+					text-decoration: underline;
+				}
 			}
 			p {
 				margin: 0 16px 0 0;

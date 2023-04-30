@@ -7,11 +7,14 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
+	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	export let data: PageData;
 
+	$: showShout = !!data.shout?.body;
+
 	$: icon = getGroupIcons([data.id]).then(i => i[0]?.imageUrl);
-	$: shoutIcon = data.shout ? getUserIcon(data.shout.poster.userId).then(i => i?.imageUrl) : null;
+	$: shoutIcon = showShout ? getUserIcon(data.shout.poster.userId).then(i => i?.imageUrl) : null;
 	$: experiences = getGroupExperiences2(data.id, 2);
 </script>
 
@@ -19,7 +22,12 @@
 	<div class="landing">
 		<Avatar src={icon}/>
 		<div class="details">
-			<h1>{data.name}</h1>
+			<h1>
+				{data.name}
+				{#if data.hasVerifiedBadge}
+					<VerifiedBadge size={24}/>
+				{/if}
+			</h1>
 			<p>by <CreatorLink id={data.owner.userId} name={data.owner.username} type="User" displayName={data.owner.displayName}/></p>
 			<div class="extra">
 				<p>{$t('group.members', [data])}</p>
@@ -32,7 +40,7 @@
 		{/if}
 	</div>
 	<p class="description">{@html $t('description', [data.description])}</p>
-	{#if data.shout}
+	{#if showShout}
 		<p class="shout">{$t('group.shout')}</p>
 		<div class="shout">
 			<Avatar src={shoutIcon} size="sm2" circle/>
