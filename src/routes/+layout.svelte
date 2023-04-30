@@ -40,6 +40,7 @@
 		<a href="/" class="nav-link">{$t('home')}</a>
 		<a href="/groups" class="nav-link">{$t('groups')}</a>
 		<a href="https://create.roblox.com" class="nav-link">{$t('create')}</a>
+		<a href="/settings" class="nav-link settings">{$t('settings')}</a>
 	</Header>
 	<main class="app-content">
 		<slot/>
@@ -125,6 +126,9 @@
 		color: var(--color-primary);
 		margin: 14px 12px;
 		text-decoration: none;
+		&.settings {
+			margin-left: auto;
+		}
 	}
 
 	:global(a) {

@@ -1,5 +1,7 @@
+import { get } from 'svelte/store';
 import { fullRequest } from './api';
 import { getCsrfToken } from './api/auth';
+import { clientChannel } from './settings';
 export async function getLaunchUri(type: 'RequestFollowUser' | 'RequestPrivateGame' | 'RequestGameJob', params: Record<string, string>) {
 	const url = new URL('https://assetgame.roblox.com/game/PlaceLauncher.ashx');
 	for (const [key, value] of Object.entries({ request: type, ...params }))
@@ -19,14 +21,17 @@ export async function getTicket() {
 }
 
 export function launchClient(ticket: string, launchUri: string) {
-	location.href = `roblox-player:1+launchmode:play+gameinfo:${ticket}+placelauncherurl:${encodeURIComponent(launchUri)}+channel:+LaunchExp:InApp`;
+	location.href = `roblox-player:1+launchmode:play+gameinfo:${ticket}+placelauncherurl:${encodeURIComponent(launchUri)}+channel:${get(clientChannel)}+LaunchExp:InApp`;
 }
 export function launchStudio(placeId: number, universeId: number, task: string) {
 	location.href = `roblox-studio:1+launchmode:edit+task:${task}+placeId:${placeId}+universeId:${universeId}`;
 }
 
-export function joinExperience(placeId: number) {
-	location.href = `roblox://placeId=${placeId}`;
+export async function joinExperience(placeId: number) {
+	//location.href = `roblox://placeId=${placeId}`;
+	const ticket = await getTicket();
+	const launchUri = await getLaunchUri('RequestGameJob', { placeId: placeId.toString() });
+	launchClient(ticket, launchUri);
 }
 
 export async function joinUser(userId: number) {

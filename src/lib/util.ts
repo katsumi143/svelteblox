@@ -6,3 +6,11 @@ export function getGreeting() {
 		return 1;
 	return 2;
 }
+
+export function parseJson<T>(data: string): T | null {
+	try {
+		return JSON.parse(data);
+	} catch (err) {
+		return null;
+	}
+}

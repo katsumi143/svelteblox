@@ -76,6 +76,14 @@ export default {
 		'image_status.2': 'This image has been removed',
 		'image_status.3': 'This image is currently unavailable',
 
+		'client_channel.LIVE': 'Default',
+		'client_channel.zcanary': 'Canary',
+		'client_channel.zintegration': 'Integration',
+		'client_channel.zwinplayer64': 'Windows 64-Bit Client',
+
+		'settings': 'Settings',
+		'settings.client_channel': 'Client Launch Channel',
+
 		'number': '{0|number}',
 		'time_ago': '{0|time_ago}',
 		'time_ago.0_0': '{0} seconds ago',
