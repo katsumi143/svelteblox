@@ -9,6 +9,11 @@ export default {
 		'action.copy_universe_id': 'Copy Experience ID',
 		'action.configure_universe': 'Configure Experience',
 
+		'action.friend.0': 'Send Friend Request',
+		'action.friend.1': 'Remove Friend',
+		'action.friend.2': 'Friend Request Sent',
+		'action.friend.3': 'Accept Friend Request',
+
 		'home': 'Home',
 		'home.greeting.0': 'Good morning,',
     	'home.greeting.1': 'Good afternoon,',
@@ -16,13 +21,17 @@ export default {
 		'home.friends': 'Your Friends ({0})',
 		'home.recent': 'Recent Experiences',
 
-		'user.friends': 'friends',
+		'user.join': 'Join {0.displayName} in {1.name}',
+		'user.friends': 'Friends ({0})',
+		'user.friends.count': 'friends',
 		'user.followers': 'followers',
 		'user.following': 'following',
 		'user.favourites': 'Favourite Experiences',
 		'user.experience_2': 'Currently Playing',
 		'user.experience_3': 'Currently Editing',
 		'user.avatar': 'Currently Wearing',
+
+		'friends': '{0}\'s friends',
 
 		'groups': 'Groups',
 		'groups.list': 'Your Groups',
@@ -79,6 +88,12 @@ export default {
 		'time_ago.4_1': 'last month',
 		'time_ago.5_0': '{0} years ago',
 		'time_ago.5_1': 'last year',
-		'description': '{0|description}'
+		'description': '{0|description}',
+
+		'toast.success': 'Success!',
+		'toast.friend_accept': 'You are now friends with <b>{0}</b>.', 
+		'toast.friend_decline': 'You have declined <b>{0}</b>\'s friend request.', 
+		'toast.friend_request': 'You have sent a friend request to <b>{0}</b>.',
+		'toast.friend_removed': 'You have ended your friendship with <b>{0}</b>.'
 	}
 } as Record<string, Record<string, string>>

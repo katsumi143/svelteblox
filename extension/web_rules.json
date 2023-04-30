@@ -1,20 +1,41 @@
-[
-	{
-		"id": 1,
-		"priority": 1,
-		"action": {
-			"type": "modifyHeaders",
-			"requestHeaders": [
-				{
-					"value": "https://www.roblox.com",
-					"header": "Referer",
-					"operation": "set"
-				}
-			]
-		},
-		"condition": {
-			"urlFilter": "||auth.roblox.com",
-			"resourceTypes": ["xmlhttprequest"]
-		}
+[{
+	"id": 1,
+	"priority": 1,
+	"action": {
+		"type": "modifyHeaders",
+		"requestHeaders": [
+			{
+				"value": "https://www.roblox.com",
+				"header": "Referer",
+				"operation": "set"
+			}
+		]
+	},
+	"condition": {
+		"urlFilter": "||auth.roblox.com",
+		"resourceTypes": ["xmlhttprequest"]
 	}
-]
+}, {
+	"id": 2,
+	"priority": 1,
+	"action": {
+		"type": "modifyHeaders",
+		"requestHeaders": [{
+			"operation": "set",
+			"header": "Origin",
+			"value": "https://www.roblox.com"
+		}, {
+			"operation": "set",
+			"header": "Referer",
+			"value": "https://www.roblox.com/login"
+		}, {
+			"value": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.163 Safari/537.36",
+			"header": "User-Agent",
+			"operation": "set"
+		}]
+	},
+	"condition": {
+		"urlFilter": "||arkoselabs.com",
+		"resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest"]
+	}
+}]

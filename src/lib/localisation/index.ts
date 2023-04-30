@@ -13,7 +13,7 @@ export function translate(locale: string, key: string, values: Values) {
 	if (typeof text !== 'string')
 		return key;
 
-	text = text.replaceAll(/{(.*)}/g, (t: string, k: string) => {
+	text = text.replaceAll(/{(.*?)}/g, (t: string, k: string) => {
 		const split = k.split('|');
 		const split2 = split[0].split('??');
 		const formatType = split[1];

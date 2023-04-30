@@ -47,13 +47,28 @@ export default class Cache {
 	}
 
 	public invalidate(id: string) {
+		this.log('invalidating', id);
+
 		delete this.cache[id];
 		this.save();
 	}
 
+	public invalidateAll() {
+		this.log('invalidating all items');
+
+		this.cache = {};
+		this.save();
+	}
+
+	private log(...args: string[]) {
+		console.log(`[cache:${this.id}]:`, ...args);
+	}
+
 	private save() {
-		if (!building && globalThis.localStorage)
+		if (!building && globalThis.localStorage) {
 			localStorage.setItem(this.storageName, JSON.stringify(this.cache));
+			this.log('saved cache to local storage');
+		}
 	}
 
 	private get storageName() {

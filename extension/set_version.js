@@ -1,0 +1,1 @@
+window.__ROSVELTE_VERSION__ = '1.0.0';

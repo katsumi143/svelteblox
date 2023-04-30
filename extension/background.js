@@ -1,7 +1,13 @@
 chrome.runtime.onMessage.addListener(({ url, options }, _, sendResponse) => {
-	fetch(url, options).then(async response => ({
-		data: await response.json(),
-		headers: Object.fromEntries(response.headers.entries())
-	})).then(sendResponse);
+	console.log(url, options);
+	fetch(url, options).then(async response => {
+		const data = url.includes('funcaptcha') ? await response.text() : await response.json();
+		return {
+			data,
+			status: response.status,
+			headers: Object.fromEntries(response.headers.entries()),
+			statusText: response.statusText
+		};
+	}).then(sendResponse);
 	return true;
 });

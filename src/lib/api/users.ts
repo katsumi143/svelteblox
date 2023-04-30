@@ -1,8 +1,9 @@
 import Cache from '../cache';
 import { request } from '.';
 import { GAMES_BASE2 } from './games';
+import { getCsrfToken } from './auth';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { User, Friend, ImageData, ApiDataList, CurrentUser, ExperienceV2, UserPresence } from './types';
+import type { User, Friend, ImageData, Friendship, ApiDataList, CurrentUser, ExperienceV2, UserPresence, FriendshipStatus } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
 export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
 
@@ -11,6 +12,13 @@ export const USERS_CACHE = new Cache('users');
 export function getUser(id: string | number) {
 	return request<User>(`https://users.roblox.com/v1/users/${id}`);
 }
+export function getUsername(id: string | number) {
+	return USERS_CACHE.use(`username_${id}`, () => getUser(id).then(u => u.name), 86400000);
+}
+export function getDisplayName(id: string | number) {
+	return USERS_CACHE.use(`display_name_${id}`, () => getUser(id).then(u => u.displayName), 86400000);
+}
+
 export function getUserFriends(id: string | number) {
 	return USERS_CACHE.use(`friends_${id}`, () =>
 		request<ApiDataList<Friend>>(`${FRIENDS_BASE}/users/${id}/friends`)
@@ -36,6 +44,45 @@ export function getUserCount(id: string | number, count: string) {
 			.then(data => data.count),
 		3600000
 	);
+}
+
+const FRIENDSHIP_MAP: Record<string, number> = {'NotFriends': 0, 'Friends': 1, 'RequestSent': 2, 'RequestReceived': 3};
+export function getFriendshipStatuses(id: number, ids: (string | number)[]): Promise<Friendship[]> {
+	return request<ApiDataList<any>>(`${FRIENDS_BASE}/users/${id}/friends/statuses?userIds=${ids.join(',')}`)
+		.then(data => data.data.map(data => {
+			if (typeof data.status === 'string')
+				data.status = FRIENDSHIP_MAP[data.status];
+			return data as {
+				id: number,
+				status: FriendshipStatus
+			};
+		}));
+}
+
+export async function requestFriendship(id: number) {
+	return request(`${FRIENDS_BASE}/users/${id}/request-friendship`, 'POST', null, {
+		'x-csrf-token': await getCsrfToken()
+	});
+}
+
+export async function removeFriendship(id: number) {
+	USERS_CACHE.invalidate(`user_count_friends_${id}`);
+	return request(`${FRIENDS_BASE}/users/${id}/unfriend`, 'POST', null, {
+		'x-csrf-token': await getCsrfToken()
+	});
+}
+
+export async function acceptFriendRequest(id: number) {
+	USERS_CACHE.invalidate(`user_count_friends_${id}`);
+	return request(`${FRIENDS_BASE}/users/${id}/accept-friend-request`, 'POST', null, {
+		'x-csrf-token': await getCsrfToken()
+	});
+}
+
+export async function declineFriendRequest(id: number) {
+	return request(`${FRIENDS_BASE}/users/${id}/decline-friend-request`, 'POST', null, {
+		'x-csrf-token': await getCsrfToken()
+	});
 }
 
 export function getUserFavourites(id: string | number) {
@@ -64,4 +111,16 @@ export function getUserPresences(userIds: (string | number)[]) {
 
 export function getCurrentUser() {
 	return USERS_CACHE.use('current', () => request<CurrentUser>(`${USERS_BASE}/users/authenticated`), 3600000);
+}
+export const user = await getCurrentUser();
+
+const PRESENCE_SORT = [0, 1, 3, 2];
+export function sortFriends(friends: Friend[], presences: UserPresence[]) {
+	const sorted = friends.map((friend, index) => {
+		friend.presenceType = presences[index]?.userPresenceType ?? 0;
+		return friend;
+	}).sort((a, b) => a.displayName.localeCompare(b.displayName));
+	const online = sorted.filter(friend => friend.presenceType > 0);
+	const offline = sorted.filter(f => !online.includes(f));
+	return [...online.sort((a, b) => PRESENCE_SORT[b.presenceType] - PRESENCE_SORT[a.presenceType]), ...offline];
 }

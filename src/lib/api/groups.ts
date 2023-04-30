@@ -1,5 +1,5 @@
 import Cache from '../cache';
-import { user } from './auth';
+import { user } from './users';
 import { request } from '.';
 import { getThumbnails } from './images';
 import { getExperiences } from './games';

@@ -1,31 +1,22 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
-	import { user } from '$lib/api/auth';
-	import { joinUser } from '$lib/launch';
+	import { user } from '$lib/api/users';
 	import { getGreeting } from '$lib/util';
 	import { getExperiences, getExperienceIcons, getRecentExperiences } from '$lib/api/games';
-	import { getUserIcon, getUserIcons, getUserFriends, getUserPresences } from '$lib/api/users';
+	import { sortFriends, getUserIcon, getUserIcons, getUserFriends, getUserPresences } from '$lib/api/users';
 
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Friend from '$lib/components/User.svelte';
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 
 	const friends = getUserFriends(user.id);
-	const friendAvatars = friends.then(f => getUserIcons(f.map(f => f.id)));
 	
 	const presences = friends.then(f => getUserPresences(f.map(f => f.id)));
 	const presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
 
-	const typeSort = [0, 1, 3, 2];
-	const sortedFriends = friends.then(friends => presences.then(presences => {
-		const sorted = friends.map((friend, index) => {
-			friend.presenceType = presences[index]?.userPresenceType ?? 0;
-			return friend;
-		}).sort((a, b) => a.displayName.localeCompare(b.displayName));
-		const online = sorted.filter(friend => friend.presenceType > 0);
-		const offline = sorted.filter(f => !online.includes(f));
-		return [...online.sort((a, b) => typeSort[b.presenceType] - typeSort[a.presenceType]), ...offline];
-	}));
+	const sortedFriends = friends.then(f => presences.then(p => sortFriends(f, p)));
+	const friendAvatars = sortedFriends.then(f => getUserIcons(f.slice(0, 20).map(f => f.id)));
 
 	const recentExperiences = getRecentExperiences();
 	const experienceIcons = recentExperiences.then(data => getExperienceIcons(data.map(i => i.universeId)));
@@ -38,27 +29,26 @@
 		<h2>{user.displayName}!</h2>
 	</div>
 </div>
-<div class="friends">
-	{#await sortedFriends then friends}
-		<div class="list-header">
-			<p>{$t('home.friends', [friends.length])}</p>
-			<a href={`/users/${user.id}/friends`}>{$t('action.view_all')}<ArrowRight/></a>
+{#await sortedFriends then friends}
+	{#if friends.length > 0}
+		<div class="friends">
+			<div class="list-header">
+				<p>{$t('home.friends', [friends.length])}</p>
+				<a href={`/users/${user.id}/friends`}>{$t('action.view_all')}<ArrowRight/></a>
+			</div>
+			{#each friends.slice(0, 20) as friend}
+				{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
+					<Friend
+						user={friend}
+						avatar={friendAvatars.then(f => f.find(i => i.targetId === friend.id))}
+						presence={presence}
+						experience={presenceExperiences.then(e => e.find(e => e.id === presence?.universeId))}
+					/>
+				{/await}
+			{/each}
 		</div>
-		{#each friends as friend}
-			{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
-				<a href={`/users/${friend.id}`} class={`friend status-${presence?.userPresenceType ?? friend.presenceType}`} title={`${friend.displayName} (@${friend.name}) • ${$t(`user_status.${presence?.userPresenceType ?? friend.presenceType ?? 0}`)}`}>
-					<Avatar src={friendAvatars.then(f => f.find(i => i.targetId === friend.id)?.imageUrl)} size="md" circle/>
-					<p>{friend.displayName}</p>
-					{#if presence && presence.universeId && presence.userPresenceType > 0}
-						{#await presenceExperiences.then(e => e.find(e => e.id === presence.universeId)) then universe}
-							<button class="status" type="button" title={`Join ${friend.name} in ${universe?.name}`} on:click|preventDefault={() => joinUser(friend.id)}>{universe?.name}</button>
-						{/await}
-					{/if}
-				</a>
-			{/await}
-		{/each}
-	{/await}
-</div>
+	{/if}
+{/await}
 <div class="experiences">
 	<div class="list-header">
 		<p>{$t('home.recent')}</p>
@@ -115,56 +105,8 @@
 		flex-wrap: wrap;
 		min-height: 148px;
 		max-height: 148px;
-		.friend {
-			width: 80px;
-			color: var(--color-primary);
-			position: relative;
-			text-align: center;
+		:global(.friend) {
 			margin-bottom: 100px;
-			text-decoration: none;
-			p {
-				margin: 4px 0 0;
-				overflow: hidden;
-				font-size: .85em;
-				line-height: 1.2;
-				white-space: nowrap;
-				text-overflow: ellipsis;
-			}
-			.status {
-				color: var(--color-secondary);
-				border: none;
-				cursor: pointer;
-				padding: 0;
-				font-size: .75em;
-				background: none;
-				font-family: var(--font-primary);
-				&:hover {
-					text-decoration: underline;
-				}
-			}
-			&.status-1, &.status-2, &.status-3 {
-				:before {
-					top: 58px;
-					right: 0;
-					width: 14px;
-					height: 14px;
-					border: 4px solid var(--background-primary);
-					content: '';
-					display: block;
-					position: absolute;
-					background: var(--status-color);
-					border-radius: 50%;
-				}
-				&.status-1 {
-					--status-color: hsl(200, 60%, 60%);
-				}
-				&.status-2 {
-					--status-color: hsl(130, 60%, 60%);
-				}
-				&.status-3 {
-					--status-color: hsl(35, 80%, 60%);
-				}
-			}
 		}
 	}
 	.experiences {

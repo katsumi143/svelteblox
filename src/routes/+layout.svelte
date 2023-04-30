@@ -6,6 +6,7 @@
 	import PageLoader from '$lib/components/PageLoader.svelte';
 	import { onMount } from 'svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
+	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import { Settings, defaultSettings } from 'svelte-contextmenu';
 	onMount(async () => {
 		if (pwaInfo) {
@@ -44,9 +45,15 @@
 		<slot/>
 		<footer>
 			svelte svelte svelte blox blox blox
-			<a href="/">placeholder</a>
+			<a href="/">placeholder <a href="/test">⠀</a></a>
 		</footer>
 	</main>
+	<div id="captcha"/>
+	<SvelteToast options={{
+		pausable: true,
+		duration: 5000,
+		dismissable: false
+	}}/>
 </div>
 
 <PageLoader/>
@@ -56,16 +63,50 @@
 </svelte:head>
 
 <style lang="scss">
+	:global(._toastContainer) {
+		font-family: var(--font-primary);
+	}
+	:global(._toastMsg) {
+		display: flex;
+		font-size: 14px;
+		:global(svg) {
+			margin: auto 16px auto 0;
+		}
+		:global(p) {
+			color: var(--color-secondary);
+			margin: 4px 0 0;
+			font-size: 12px;
+		}
+	}
+
 	.app {
+		height: 100vh;
 		display: flex;
 		min-height: 100vh;
 		background: var(--background-primary);
 		flex-direction: column;
 		.app-content {
+			height: 100%;
 			display: flex;
 			overflow: auto;
 			flex-direction: column;
 		}
+		#captcha {
+			top: 0;
+			left: 0;
+			position: fixed;
+		}
+
+		--toastWidth: auto;
+		--toastColor: var(--color-primary);
+		--toastBarHeight: 4px;
+		--toastBoxShadow: 0 0 16px -12px rgb(0 0 0 / 0.25);
+		--toastMsgPadding: 16px 64px 16px 20px;
+		--toastBackground: var(--background-secondary);
+		--toastBorderRadius: 16px;
+		--toastContainerTop: auto;
+		--toastBarBackground: var(--color-secondary);
+		--toastContainerBottom: 16px;
 	}
 	:global(.theme-dark) {
 		--color-secondary: hsl(0 0% 70%);

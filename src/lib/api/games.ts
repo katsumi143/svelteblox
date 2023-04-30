@@ -12,6 +12,8 @@ export function getExperience(id: number): Promise<Experience | undefined> {
 	return GAMES_CACHE.use(`experience_${id}`, () => getExperiences([id]).then(data => data[0]), 600000);
 }
 export function getExperiences(ids: (string | number)[]) {
+	if (ids.length === 0)
+		return Promise.resolve([]);
 	return request<ApiDataList<Experience>>(`https://games.roblox.com/v1/games?universeIds=${ids.join(',')}`)
 		.then(data => data.data);
 }

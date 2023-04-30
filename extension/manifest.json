@@ -8,14 +8,20 @@
 	"permissions": ["declarativeNetRequest"],
 	"content_scripts": [{
 		"js": ["content.js"],
+		"run_at": "document_start",
+		"matches": ["http://localhost:5173/*", "http://localhost:4173/*", "https://svelteblox.vercel.app/*"]
+	}, {
+		"js": ["set_version.js"],
+		"world": "MAIN",
+		"run_at": "document_start",
 		"matches": ["http://localhost:5173/*", "http://localhost:4173/*", "https://svelteblox.vercel.app/*"]
 	}],
-	"host_permissions": ["https://*.roblox.com/*"],
+	"host_permissions": ["https://*.roblox.com/*", "https://apis.rbxcdn.com/*", "https://funcaptcha.com/*", "https://*.arkoselabs.com/*"],
 	"declarative_net_request": {
 		"rule_resources": [{
-		  	"id": "web_rules",
+			"id": "web_rules",
 			"path": "web_rules.json",
-		  	"enabled": true
+			"enabled": true
 		}]
 	}
 }

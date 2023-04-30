@@ -54,6 +54,16 @@ export interface Friend {
 	friendFrequentScore: number
 	externalAppDisplayName: string | null
 }
+export interface Friendship {
+	id: number,
+	status: FriendshipStatus
+}
+export enum FriendshipStatus {
+	NotFriends,
+	Friends,
+	RequestSent,
+	RequestReceived
+}
 export interface Group {
 	id: number
 	name: string
