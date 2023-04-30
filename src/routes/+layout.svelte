@@ -2,6 +2,7 @@
 	import '@voxelified/voxeliface/styles.scss';
 	import Logo from '$lib/components/TextLogo.svelte';
 	import { t } from '$lib/localisation';
+	import { theme } from '$lib/settings';
 	import { Header } from '@voxelified/voxeliface';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 	import { onMount } from 'svelte';
@@ -26,15 +27,18 @@
 		}
 	});
 
-	const menuSettings = new Settings();
-	menuSettings.Menu.Class.push('theme-dark');
+	$: defaultSettings.update(() => {
+		const settings = new Settings();
+		settings.Menu.Class = ['contextmenu', `theme-${$theme}`];
+		settings.Item.Class = ['contextmenuitem'];
 
-	defaultSettings.set(menuSettings);
+		return settings;
+	});
 
 	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 </script>
 
-<div class="app theme-dark">
+<div class={`app theme-${$theme}`}>
 	<Header>
 		<a href="/" class="logo"><Logo/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
@@ -115,6 +119,12 @@
 		--background-secondary: hsl(0 0% 40%);
 		--background-tertiary: hsl(0 0% 30%);
 	}
+	:global(.theme-light) {
+		--color-secondary: hsl(0 0% 30%);
+		--color-tertiary: hsl(0 0% 20%);
+		--background-secondary: hsl(0 0% 85%);
+		--background-tertiary: hsl(0 0% 80%);
+	}
 	:global(body) {
 		overflow: hidden auto;
 	}
@@ -158,12 +168,13 @@
 		}
 	}
 
-	:global(.context-menu) {
+	:global(.contextmenu) {
 		display: none;
 		min-width: 220px;
+		font-family: var(--font-primary);
 		pointer-events: none;
 	}
-	:global(.context-menu.show) {
+	:global(.contextmenu.show) {
 		border: 1px solid var(--background-secondary);
 		display: flex;
 		padding: 8px 12px;
@@ -175,17 +186,16 @@
 		flex-direction: column;
 		list-style-type: none;
 	}
-	:global(.context-menu p) {
+	:global(.contextmenu p) {
 		color: var(--color-tertiary);
 		margin: 0 8px;
 		font-size: .8em;
 		line-height: 24px;
-		font-family: var(--font-primary);
 	}
-	:global(.context-menu li) {
+	:global(.contextmenu li) {
 		display: flex;
 	}
-	:global(.context-menu-item) {
+	:global(.contextmenuitem) {
 		gap: .75em;
 		width: 100%;
 		color: var(--color-primary);
@@ -195,12 +205,13 @@
 		padding: 8px;
 		font-size: .8em;
 		background: none;
-		transition: background .25s, box-shadow .25s;
+		transition: color .25s, background .25s, box-shadow .25s;
 		font-weight: 450;
 		font-family: var(--font-primary);
 		border-radius: 4px;
 		text-decoration: none;
 		&:hover {
+			color: var(--button-color);
 			box-shadow: var(--button-shadow);
 			background: var(--button-background);
 			text-decoration: none;
