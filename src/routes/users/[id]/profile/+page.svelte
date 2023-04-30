@@ -8,7 +8,7 @@
 	import { joinExperience } from '$lib/launch';
 	import type { Friendship } from '$lib/api/types';
 	import { UserPresenceType, FriendshipStatus } from '$lib/api/types';
-	import { getExperiences, getExperienceId, getExperienceThumbnails } from '$lib/api/games';
+	import { getExperiences, getExperienceId, getExperienceVotes, getExperienceThumbnails } from '$lib/api/games';
 	import { hasPremium, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
 	import XIcon from '$lib/icons/X.svelte';
@@ -56,6 +56,13 @@
 		for (const item of items)
 			images.push((await getExperienceThumbnails(item.UniverseID))[0]);
 		return images;
+	});
+
+	$: favourites = getUserFavourites(data.id).then(f => getExperiences(f.map(e => e.id)));
+	$: favouriteVotes = favourites.then(items => {
+		if (items.length === 0)
+			return [];
+		return getExperienceVotes(items.map(i => i.id));
 	});
 
 	$: friendCount = getUserFriendCount(data.id);
@@ -206,7 +213,7 @@
 		<div class="list-header">{$t('user.avatar')}</div>
 		<Avatar src={fullBody.then(f => f[0]?.imageUrl)} size="xl"/>
 	</div>
-	{#await getUserFavourites(data.id).then(f => getExperiences(f.map(e => e.id))) then items}
+	{#await favourites then items}
 		{#if items.length > 0}
 			<div class="favourites">
 				<div class="list-header">
@@ -214,9 +221,17 @@
 					<a href="/">{$t('action.view_all')}<ArrowRight/></a>
 				</div>
 				<div class="items">
-					{#each items as item}
-						<ExperienceItem id={item.id} name={item.name} playing={item.playing} rootPlaceId={item.rootPlaceId}/>
-					{/each}
+					{#await favouriteVotes then votes}
+						{#each items as item, key}
+							<ExperienceItem
+								id={item.id}
+								name={item.name}
+								voting={votes[key]}
+								playing={item.playing}
+								rootPlaceId={item.rootPlaceId}
+							/>
+						{/each}
+					{/await}
 				</div>
 			</div>
 		{/if}
