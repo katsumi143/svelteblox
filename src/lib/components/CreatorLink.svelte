@@ -2,6 +2,8 @@
 	import { t } from '$lib/localisation';
 	import ContextMenu, { Item } from 'svelte-contextmenu';
 
+	import UserMenu from './UserMenu.svelte';
+	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	import VerifiedBadge from './VerifiedBadge.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
 	export let id: number;
@@ -12,21 +14,30 @@
 	let contextMenu: ContextMenu;
 
 	$: link = `/${type.toLowerCase()}s/${id}`;
-	$: formatted = `${!displayName && type === 'User' ? '@' : ''}${displayName || name}`;
 </script>
 
-<a href={link} title={`${displayName} (@${name})`} on:contextmenu={contextMenu.createHandler()}>
-	{formatted}
+<a href={link} title={displayName ? `${displayName} (@${name})` : `@${name}`} on:contextmenu={contextMenu.createHandler()}>
+	{!displayName && type === 'User' ? '@' : ''}{displayName || name}
 	{#if hasVerifiedBadge}
 		<VerifiedBadge/>
 	{/if}
 </a>
 
-<ContextMenu bind:this={contextMenu}>
-	<p>{formatted} ({type})</p>
-	<Item href={`https://roblox.com${link}`} target="_blank">{$t('action.view_roblox')}</Item>
-	<Item on:click={() => navigator.clipboard.writeText(id.toString())}><ClipboardPlus/>{$t('action.copy_id')}</Item>
-</ContextMenu>
+{#if type === 'User'}
+	<UserMenu id={id} name={name} displayName={displayName} bind:contextMenu={contextMenu}/>
+{:else}
+	<ContextMenu bind:this={contextMenu}>
+		<p>{name}</p>
+		<Item href={`https://roblox.com${link}`} target="_blank">
+			<RobloxIcon/>
+			{$t('action.view_roblox')}
+		</Item>
+		<Item on:click={() => navigator.clipboard.writeText(id.toString())}>
+			<ClipboardPlus/>
+			{$t('action.copy_id')}
+		</Item>
+	</ContextMenu>
+{/if}
 
 <style>
 	a {

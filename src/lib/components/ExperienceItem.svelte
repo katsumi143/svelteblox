@@ -9,6 +9,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
+	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
 
 	export let id: number;
@@ -45,9 +46,18 @@
 
 <ContextMenu bind:this={contextMenu}>
 	<p>{name}</p>
-	<Item href={`https://roblox.com/games/${rootPlaceId}`} target="_blank">{$t('action.view_roblox')}</Item>
-	<Item on:click={() => navigator.clipboard.writeText(rootPlaceId.toString())}><ClipboardPlus/>{$t('action.copy_place_id')}</Item>
-	<Item on:click={() => navigator.clipboard.writeText(id.toString())}><ClipboardPlus/>{$t('action.copy_universe_id')}</Item>
+	<Item href={`https://roblox.com/games/${rootPlaceId}`} target="_blank">
+		<RobloxIcon/>
+		{$t('action.view_roblox')}
+	</Item>
+	<Item on:click={() => navigator.clipboard.writeText(rootPlaceId.toString())}>
+		<ClipboardPlus/>
+		{$t('action.copy_place_id')}
+	</Item>
+	<Item on:click={() => navigator.clipboard.writeText(id.toString())}>
+		<ClipboardPlus/>
+		{$t('action.copy_universe_id')}
+	</Item>
 </ContextMenu>
 
 <style lang="scss">

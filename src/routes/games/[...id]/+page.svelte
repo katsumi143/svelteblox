@@ -18,7 +18,9 @@
 	import ThreeDots from '$lib/icons/ThreeDots.svelte';
 	import Carousel from '$lib/components/Carousel.svelte';
 	import ThumbsDown from '$lib/icons/ThumbsDown.svelte';
+	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
+	import RobloxStudio2 from '$lib/icons/RobloxStudio2.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
 
 	export let data: PageData;
@@ -159,16 +161,32 @@
 	<p>{data.name}</p>
 	{#await permissions then permissions}
 		{#if permissions.canCloudEdit}
-			<Item on:click={() => editExperience(data.rootPlaceId, data.id)}>{$t('action.edit_studio')}</Item>
+			<Item on:click={() => editExperience(data.rootPlaceId, data.id)}>
+				<RobloxStudio2/>
+				{$t('action.edit_studio')}
+			</Item>
 		{/if}
 		{#if permissions.canManage}
-			<Item href={`${CREATE_BASE}/places/${data.rootPlaceId}/configure`} target="_blank">{$t('action.configure_place')}</Item>
-			<Item href={`${CREATE_BASE}/configure`} target="_blank">{$t('action.configure_universe')}</Item>
+			<Item href={`${CREATE_BASE}/places/${data.rootPlaceId}/configure`} target="_blank">
+				{$t('action.configure_place')}
+			</Item>
+			<Item href={`${CREATE_BASE}/configure`} target="_blank">
+				{$t('action.configure_universe')}
+			</Item>
 		{/if}
 	{/await}
-	<Item href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">{$t('action.view_roblox')}</Item>
-	<Item on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}><ClipboardPlus/>{$t('action.copy_place_id')}</Item>
-	<Item on:click={() => navigator.clipboard.writeText(data.id.toString())}><ClipboardPlus/>{$t('action.copy_universe_id')}</Item>
+	<Item href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">
+		<RobloxIcon/>
+		{$t('action.view_roblox')}
+	</Item>
+	<Item on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}>
+		<ClipboardPlus/>
+		{$t('action.copy_place_id')}
+	</Item>
+	<Item on:click={() => navigator.clipboard.writeText(data.id.toString())}>
+		<ClipboardPlus/>
+		{$t('action.copy_universe_id')}
+	</Item>
 </ContextMenu>
 
 <svelte:head>
