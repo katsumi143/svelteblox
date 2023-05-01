@@ -89,6 +89,11 @@ export default {
 		'theme.light': 'Light',
 		'theme.color_purple': 'Purple',
 
+		'locale.en-AU': 'Australian English',
+		'locale.lv-LV': 'Latvian',
+		'locale.ru-RU': 'Russian',
+		'locale.ja-JP': 'Japanese',
+
 		'client_channel.LIVE': 'Default',
 		'client_channel.zcanary': 'Canary',
 		'client_channel.zintegration': 'Integration',
@@ -97,6 +102,8 @@ export default {
 		'settings': 'Settings',
 		'settings.theme': 'Colour Theme',
 		'settings.theme.label': 'Themes',
+		'settings.locale': 'Language',
+		'settings.locale.label': 'Languages',
 		'settings.client_channel': 'Client Launch Channel',
 		'settings.client_channel.label': 'Deployment Channels',
 
@@ -128,5 +135,89 @@ export default {
 		'toast.client_launched': 'The Roblox Player should open in a few seconds.',
 		'toast.studio_edit': 'Starting Edit Session...',
 		'toast.studio_launched': 'Roblox Studio should open in a few seconds.'
+	},
+	'ja-JP': {
+		'action.copy_id': 'IDをコピー',
+		'action.view_all': 'すべて見る',
+		'action.show_all': 'すべて表示する',
+		'action.copy_link': 'リンクをコピーする',
+		'action.edit_studio': 'Studio で編集',
+		'action.view_roblox': 'Roblox で見る',
+		'action.view_talent': 'Talent Hub で見る',
+		'action.view_devforum': 'DevForum で見る',
+
+		'home': '家',
+		'home.greeting.0': 'おはよう',
+    	'home.greeting.1': 'こんにちは',
+    	'home.greeting.2': 'こんばんは',
+		'home.friends': 'あなたの友人 ({0})',
+		'home.recent': '最近の経験',
+
+		'user.join': '{0.displayName} in {1.name} に参加',
+		'user.friends': '友達 ({0})',
+		'user.friends.count': '友達',
+		'user.followers': 'フォロワー',
+		'user.following': '以下',
+		'user.favourites': 'お気に入りの体験',
+		'user.experience_2': '現在プレイ中',
+		'user.experience_3': '現在編集中',
+		'user.avatar': '現在着用中',
+		'user.role.0': 'ROBLOX 職員',
+		'user.role.1': 'ベータテスター',
+		'user.role.3': 'イベントオーガナイザー',
+
+		'groups': 'グループ',
+		'groups.list': 'あなたのグループ',
+
+		'group.members': '{0.memberCount|number} 人のメンバー',
+		'group.join': 'グループに参加',
+		'group.experiences': 'グループ体験',
+		'group.shout': 'グループシャウト',
+
+		'experience.play': 'クイックプレイ',
+		'experience.play2': '遊ぶ {0}',
+		'experience.join_user': '加入する {0??Friend}',
+		'experience.playing2': '{0|number}プレイ',
+		'experience.favourite_false': 'お気に入り',
+		'experience.favourite_true': 'お気に入り',
+		'experience.rating2': '{0}% がこれを気に入りました',
+		'experience.unrated': '未評価',
+		'experience.hover': '{0}\n{1|number} プレイ中',
+
+		'create': '作成',
+
+		'creator': '作成: {0}',
+
+		'user_status.0': 'オフライン',
+		'user_status.1': 'オンライン',
+		'user_status.2': 'ある体験で',
+		'user_status.3': 'スタジオで',
+
+		'theme.dark': '暗い',
+		'theme.light': '灯',
+		'theme.color_purple': '紫',
+
+		'client_channel.LIVE': 'デフォルト',
+		'client_channel.zcanary': 'カナリア',
+		'client_channel.zintegration': '統合化',
+
+		'settings': '設定',
+		'settings.theme': 'カラーテーマ',
+		'settings.theme.label': 'テーマ',
+		'settings.locale': '言語',
+		'settings.locale.label': '言語',
+
+		'time_ago.0_0': '{0} 秒前',
+		'time_ago.0_1': '今',
+		'time_ago.1_0': '{0}分前',
+		'time_ago.1_1': '{0}分前',
+		'time_ago.2_0': '{0}時間前',
+		'time_ago.2_1': '{0}時間前',
+		'time_ago.3_0': '{0}日前',
+		'time_ago.3_1': '昨日',
+		'time_ago.4_0': '{0}ヶ月前',
+		'time_ago.4_1': '先月',
+		'time_ago.5_0': '{0}年前',
+		'time_ago.5_1': '去年',
 	}
 }

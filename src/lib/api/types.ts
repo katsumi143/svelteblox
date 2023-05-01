@@ -224,3 +224,10 @@ export interface ProfileExperience {
 	GameDetailReferralUrl: string
 	IsAsyncThumbnailEnabled: false
 }
+
+export interface MediaAsset {
+	state: string
+	mediaAssetId: string
+	mediaAssetUrl: string
+	mediaAssetAltText: string
+}

@@ -1,7 +1,11 @@
+import { get } from 'svelte/store';
+
 import Cache from '../cache';
+import { locale } from '../settings';
 import { request } from '.';
+import { LOCALE_MAP } from '$lib/constants';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { ImageData, ApiDataList, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PrivateExperienceServer } from './types';
+import type { ImageData, ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PrivateExperienceServer } from './types';
 export const GAMES_BASE = 'https://games.roblox.com/v';
 export const GAMES_BASE1 = GAMES_BASE + 1;
 export const GAMES_BASE2 = GAMES_BASE + 2;
@@ -34,12 +38,12 @@ export function getExperienceIcons(ids: (string | number)[]) {
 	return getThumbnails(ids, 'games/icons?universeIds=%IDS%&format=Png&size=128x128');
 }
 export function getExperienceThumbnails(id: number) {
+	const userLocale = get(locale);
 	return request<ApiDataList<{
-		error: any
-		universeId: number
-		thumbnails: ImageData[]
-	}>>(`${THUMBNAILS_BASE}/games/multiget/thumbnails?countPerUniverse=10&universeIds=${id}&format=Png&size=768x432`)
-		.then(data => data.data[0].thumbnails);
+		mediaAssets: MediaAsset[]
+		languageCode: string
+	}>>(`https://gameinternationalization.roblox.com/v1/game-thumbnails/games/${id}/images`)
+		.then(({ data }) => (data.find(d => LOCALE_MAP[d.languageCode] === userLocale) ?? data[0]).mediaAssets);
 }
 
 export function getExperienceServers(placeId: number) {

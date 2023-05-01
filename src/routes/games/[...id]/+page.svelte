@@ -57,7 +57,7 @@
 		<Carousel length={thumbnails.then(t => t.length)} bind:index={thumbnail}>
 			{#await thumbnails then items}
 				{#each items as image, key}
-					<img src={image.imageUrl} alt="thumbnail" class="thumbnail" class:show={key === thumbnail}>
+					<img src={image.mediaAssetUrl} alt="thumbnail" class="thumbnail" class:show={key === thumbnail}>
 				{/each}
 			{/await}
 		</Carousel>

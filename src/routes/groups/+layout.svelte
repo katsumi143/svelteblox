@@ -23,7 +23,7 @@
 							<VerifiedBadge size={12}/>
 						{/if}
 					</p>
-					<p class="owner">by {group.owner.displayName}</p>
+					<p class="owner">{$t('creator', [group.owner.displayName])}</p>
 				</div>
 			</a>
 		{/each}

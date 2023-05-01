@@ -190,7 +190,7 @@
 					{#each items as item, key}
 						<a class="experience" href={`/games/${item.PlaceID}`}>
 							{#await experienceThumbnails then thumbnails}
-								<img src={thumbnails[key].imageUrl} alt="thumbnail"/>
+								<img src={thumbnails[key].mediaAssetUrl} alt="thumbnail"/>
 							{/await}
 							<p class="name">{item.Name}</p>
 							<div class="details">

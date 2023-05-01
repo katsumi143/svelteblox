@@ -4,7 +4,7 @@
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import { joinUser, joinExperience } from '$lib/launch';
-	import type { ImageData, ExperienceVoting, ExperienceCreator } from '$lib/api/types';
+	import type { MediaAsset, ExperienceVoting, ExperienceCreator } from '$lib/api/types';
 	import { getExperienceVotes, getExperienceThumbnails } from '$lib/api/games';
 	export let data: {
 		id: number
@@ -16,7 +16,7 @@
 	};
 	export let friendId: number | null;
 	export let friendName: string | null;
-	export let thumbnail: Promise<ImageData | undefined> | undefined = undefined;
+	export let thumbnail: Promise<MediaAsset | undefined> | undefined = undefined;
 
 	const voting = data.voting ? Promise.resolve(data.voting) :
 		getExperienceVotes([data.id]).then(v => v[0]);
@@ -27,7 +27,7 @@
 
 <a class="experience" href={`/games/${data.rootPlaceId}`}>
 	{#await thumbnail ?? getExperienceThumbnails(data.id).then(i => i[0]) then image}
-		<img src={image?.imageUrl} alt="experience thumbnail"/>
+		<img src={image?.mediaAssetUrl} alt="experience thumbnail"/>
 	{/await}
 
 	<p class="name">{data.name}</p>
