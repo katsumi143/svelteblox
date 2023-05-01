@@ -182,32 +182,34 @@
 		{/if}
 	{/await}
 
-	<div class="experiences">
-		<div class="list-header">Pinned Experiences</div>
-		<div class="list">
-			{#await experiences then items}
-				{#each items as item, key}
-					<a class="experience" href={`/games/${item.PlaceID}`}>
-						{#await experienceThumbnails then thumbnails}
-							<img src={thumbnails[key].imageUrl} alt="thumbnail"/>
-						{/await}
-						<p class="name">{item.Name}</p>
-						<div class="details">
-							<p>
-								<ThumbsUp/>
-								{$t(`experience.rating2`, [Math.round(item.TotalUpVotes / (item.TotalUpVotes + item.TotalDownVotes) * 100)])}
-							</p>
-							<p><People/>{$t('experience.playing2', [item.PlayerCount])}</p>
-						</div>
-						<button type="button" class="play" on:click|preventDefault={() => joinExperience(item.PlaceID)}>
-							{$t('experience.play')}
-							<PlayIcon size={32}/>
-						</button>
-					</a>
-				{/each}
-			{/await}
-		</div>
-	</div>
+	{#await experiences then items}
+		{#if items.length > 0}
+			<div class="experiences">
+				<div class="list-header">Pinned Experiences</div>
+				<div class="list">
+					{#each items as item, key}
+						<a class="experience" href={`/games/${item.PlaceID}`}>
+							{#await experienceThumbnails then thumbnails}
+								<img src={thumbnails[key].imageUrl} alt="thumbnail"/>
+							{/await}
+							<p class="name">{item.Name}</p>
+							<div class="details">
+								<p>
+									<ThumbsUp/>
+									{$t(`experience.rating2`, [Math.round(item.TotalUpVotes / (item.TotalUpVotes + item.TotalDownVotes) * 100)])}
+								</p>
+								<p><People/>{$t('experience.playing2', [item.PlayerCount])}</p>
+							</div>
+							<button type="button" class="play" on:click|preventDefault={() => joinExperience(item.PlaceID)}>
+								{$t('experience.play')}
+								<PlayIcon size={32}/>
+							</button>
+						</a>
+					{/each}
+				</div>
+			</div>
+		{/if}
+	{/await}
 
 	<div class="avatar">
 		<div class="list-header">{$t('user.avatar')}</div>
@@ -346,7 +348,7 @@
 					position: relative;
 					max-width: 50%;
 					margin-top: 0;
-					transition: opacity .5s;
+					background: var(--background-tertiary);
 					border-radius: 8px;
 					flex-direction: column;
 					justify-content: end;
