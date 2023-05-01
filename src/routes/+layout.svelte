@@ -27,18 +27,30 @@
 		}
 	});
 
+	$: [themeName, themeColour] = $theme.split('_');
+	const themeHues: Record<string, number> = {
+		purple: 280
+	};
+
 	$: defaultSettings.update(() => {
 		const settings = new Settings();
-		settings.Menu.Class = ['contextmenu', `theme-${$theme}`];
+		settings.Menu.Class = ['contextmenu', `theme-${themeName}`];
 		settings.Item.Class = ['contextmenuitem'];
 
 		return settings;
 	});
 
 	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
+	function themeHue(node: HTMLDivElement, color: string) {
+		node.style.setProperty('--theme-hue', themeHues[color]?.toString());
+		return {
+			update: (color: string) =>
+				node.style.setProperty('--theme-hue', themeHues[color]?.toString())
+		}
+	}
 </script>
 
-<div class={`app theme-${$theme}`}>
+<div class={`app theme-${themeName}`} use:themeHue={themeColour}>
 	<Header>
 		<a href="/" class="logo"><Logo/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
@@ -114,16 +126,16 @@
 		--toastContainerBottom: 16px;
 	}
 	:global(.theme-dark) {
-		--color-secondary: hsl(0 0% 70%);
 		--color-tertiary: hsl(0 0% 80%);
-		--background-secondary: hsl(0 0% 40%);
 		--background-tertiary: hsl(0 0% 30%);
 	}
 	:global(.theme-light) {
-		--color-secondary: hsl(0 0% 30%);
 		--color-tertiary: hsl(0 0% 20%);
-		--background-secondary: hsl(0 0% 85%);
 		--background-tertiary: hsl(0 0% 80%);
+	}
+	:global(.theme-color) {
+		--color-tertiary: hsl(var(--theme-hue) 20% 80%);
+		--background-tertiary: hsl(var(--theme-hue) 10% 45%);
 	}
 	:global(body) {
 		overflow: hidden auto;

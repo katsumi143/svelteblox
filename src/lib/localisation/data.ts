@@ -82,6 +82,7 @@ export default {
 
 		'theme.dark': 'Dark',
 		'theme.light': 'Light',
+		'theme.color_purple': 'Purple',
 
 		'client_channel.LIVE': 'Default',
 		'client_channel.zcanary': 'Canary',
@@ -90,7 +91,9 @@ export default {
 
 		'settings': 'Settings',
 		'settings.theme': 'Colour Theme',
+		'settings.theme.label': 'Themes',
 		'settings.client_channel': 'Client Launch Channel',
+		'settings.client_channel.label': 'Deployment Channels',
 
 		'number': '{0|number}',
 		'time_ago': '{0|time_ago}',

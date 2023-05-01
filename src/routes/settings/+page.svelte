@@ -1,35 +1,38 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
+	import { Select } from '@voxelified/voxeliface';
 	import { theme, clientChannel } from '$lib/settings';
 	import { THEMES, CLIENT_CHANNELS } from '$lib/constants';
 </script>
 
 <div class="main">
-	<p>{$t('settings.theme')}</p>
-	<select bind:value={$theme}>
+	<p class="label">{$t('settings.theme')}</p>
+	<Select.Root value={theme} placeholder="Choose Theme">
+		<p>{$t('settings.theme.label')}</p>
 		{#each THEMES as item}
-			<option value={item}>
+			<Select.Item value={item}>
 				{$t(`theme.${item}`)}
-			</option>
+			</Select.Item>
 		{/each}
-	</select>
+	</Select.Root>
 
-	<p>{$t('settings.client_channel')}</p>
-	<select bind:value={$clientChannel}>
+	<p class="label">{$t('settings.client_channel')}</p>
+	<Select.Root value={clientChannel} placeholder="Choose Channel">
+		<p>{$t('settings.client_channel.label')}</p>
 		{#each CLIENT_CHANNELS as item}
-			<option value={item}>
+			<Select.Item value={item}>
 				{$t(`client_channel.${item}`)} • {item}
-			</option>
+			</Select.Item>
 		{/each}
-	</select>
+	</Select.Root>
 </div>
 
 <style lang="scss">
 	.main {
 		margin: 32px 64px;
 
-		p {
-			margin: 32px 0 4px;
+		p.label {
+			margin: 32px 0 8px;
 		}
 	}
 </style>
