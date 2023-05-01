@@ -1,4 +1,6 @@
 export enum UserRole {
 	Staff,
-	BetaTester
+	BetaTester,
+	DeveloperRelations,
+	EventOrganiser
 }

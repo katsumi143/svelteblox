@@ -45,7 +45,7 @@
 	$: presenceExperiences = presences.then(p => getExperiences(p.filter(p => !!p.universeId).map(p => p.universeId)));
 
 	$: isSelf = data.id === user.id;
-	$: roles = getUserRoles(data.id);
+	$: roles = getUserRoles(data.id, data.name);
 	$: premium = hasPremium(data.id);
 	$: friendship = isSelf ? null : getFriendshipStatuses(user.id, [data.id]).then(s => s[0]);
 	$: experiences = getUserProfileExperiences(data.id);

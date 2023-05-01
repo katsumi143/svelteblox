@@ -35,6 +35,8 @@ export default {
 		'user.avatar': 'Currently Wearing',
 		'user.role.0': 'ROBLOX STAFF',
 		'user.role.1': 'BETA TESTER',
+		'user.role.2': 'DEV RELATIONS',
+		'user.role.3': 'EVENT ORGANISER',
 
 		'friends': '{0}\'s friends',
 

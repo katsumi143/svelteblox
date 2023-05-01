@@ -27,7 +27,15 @@ export function getRobloxBadges(id: string | number) {
 	);
 }
 
-export function getUserRoles(id: string | number): Promise<UserRole[]> {
+interface DiscourseUser {
+	user: {
+		groups: [{
+			id: number
+		}]
+	}
+}
+
+export function getUserRoles(id: string | number, username: string): Promise<UserRole[]> {
 	return USERS_CACHE.use(`roles_${id}`, async () => {
 		const roles = [];
 		if (id === user.id)
@@ -38,6 +46,12 @@ export function getUserRoles(id: string | number): Promise<UserRole[]> {
 
 		if ((await getRobloxBadges(id)).some(badge => badge.id === 1))
 			roles.push(UserRole.Staff);
+
+		for (const group of (await request<DiscourseUser>(`https://devforum.roblox.com/u/${username}.json`)).user.groups)
+			if (group.id === 50)
+				roles.push(UserRole.DeveloperRelations);
+			else if (group.id === 115)
+				roles.push(UserRole.EventOrganiser);
 		return roles;
 	}, 3600000);
 }
