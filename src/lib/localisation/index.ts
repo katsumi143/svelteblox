@@ -28,8 +28,8 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 		if (formatType === 'number')
 			finalValue = numFormatter.format(parseInt(finalValue));
 		else if (formatType === 'description')
-			finalValue = finalValue.replace(/(?:http(s)?:\/\/)[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/g, url => {
-				const replaced = url.replace(/(?:http(s)?:\/\/)(www\.)?roblox\.com/g, '');
+			finalValue = finalValue.replace(/(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/g, url => {
+				const replaced = url.replace(/(?:http(s)?:\/\/)?(www\.)?roblox\.com/g, '');
 				return `<a href="${replaced}" ${replaced === url ? 'target="_blank" ' : ''}data-sveltekit-preload-data="tap">${url}</a>`
 			});
 		else if (formatType === 'time_ago') {
