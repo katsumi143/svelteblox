@@ -66,6 +66,7 @@
 		</footer>
 	</main>
 	<div id="captcha"/>
+	<div id="context-menu-portal"/>
 	<SvelteToast options={{
 		pausable: true,
 		duration: 5000,
@@ -112,6 +113,17 @@
 			top: 0;
 			left: 0;
 			position: fixed;
+		}
+		#context-menu-portal {
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			display: none;
+			position: fixed;
+			&:has(.show) {
+				display: block;
+			}
 		}
 
 		--toastWidth: auto;
@@ -181,22 +193,22 @@
 	}
 
 	:global(.contextmenu) {
+		border: 1px solid var(--border-primary);
 		display: none;
-		min-width: 220px;
-		font-family: var(--font-primary);
-		pointer-events: none;
-	}
-	:global(.contextmenu.show) {
-		border: 1px solid var(--background-secondary);
-		display: flex;
 		padding: 8px 12px;
+		min-width: 220px;
 		background: var(--background-primary);
-		box-shadow: 0px 10px 38px -10px rgba(22, 23, 24, 0.35), 0px 10px 20px -15px rgba(22, 23, 24, 0.2);
+		box-shadow: rgb(22 23 24 / 35%) 0px 0px 20px 4px;
 		white-space: nowrap;
-		border-radius: 6px;
-		pointer-events: all;
+		font-family: var(--font-primary);
+		border-radius: 8px;
+		pointer-events: none;
 		flex-direction: column;
 		list-style-type: none;
+	}
+	:global(.contextmenu.show) {
+		display: flex;
+		pointer-events: all;
 	}
 	:global(.contextmenu p) {
 		color: var(--color-tertiary);
