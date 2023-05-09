@@ -1,14 +1,18 @@
 <script lang="ts">
 	import '@voxelified/voxeliface/styles.scss';
-	import Logo from '$lib/components/TextLogo.svelte';
-	import { t } from '$lib/localisation';
-	import { theme } from '$lib/settings';
 	import { Header } from '@voxelified/voxeliface';
-	import PageLoader from '$lib/components/PageLoader.svelte';
 	import { onMount } from 'svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import { Settings, defaultSettings } from 'svelte-contextmenu';
+
+	import Logo from '$lib/components/TextLogo.svelte';
+	import RobuxIcon from '$lib/icons/RobuxIcon.svelte';
+	import PageLoader from '$lib/components/PageLoader.svelte';
+
+	import { t } from '$lib/localisation';
+	import { theme } from '$lib/settings';
+	import { getRobux } from '$lib/api/users';
 	onMount(async () => {
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
@@ -48,6 +52,8 @@
 				node.style.setProperty('--theme-hue', themeHues[color]?.toString())
 		}
 	}
+
+	const robux = getRobux();
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
@@ -56,6 +62,15 @@
 		<a href="/" class="nav-link">{$t('home')}</a>
 		<a href="/groups" class="nav-link">{$t('groups')}</a>
 		<a href="https://create.roblox.com" class="nav-link">{$t('create')}</a>
+
+		<a href="/" class="robux">
+			<RobuxIcon size={26}/>
+			{#await robux}
+				...
+			{:then value}
+				{$t('number', [value])} Robux
+			{/await}
+		</a>
 		<a href="/settings" class="nav-link settings">{$t('settings')}</a>
 	</Header>
 	<main class="app-content">
@@ -160,9 +175,12 @@
 		color: var(--color-primary);
 		margin: 14px 12px;
 		text-decoration: none;
-		&.settings {
-			margin-left: auto;
-		}
+	}
+	.robux {
+		gap: .75em;
+		margin: auto 24px auto auto;
+		display: flex;
+		align-items: center;
 	}
 
 	:global(a) {

@@ -165,6 +165,13 @@ export function getCurrentUser() {
 }
 export const user = await getCurrentUser();
 
+export function getRobux() {
+	return USERS_CACHE.use('robux', () =>
+		request<{ robux: number }>('https://economy.roblox.com/v1/user/currency')
+			.then(data => data.robux), 3600000
+	);
+}
+
 const PRESENCE_SORT = [0, 1, 3, 2];
 export function sortFriends(friends: Friend[], presences: UserPresence[]) {
 	const sorted = friends.map((friend, index) => {
