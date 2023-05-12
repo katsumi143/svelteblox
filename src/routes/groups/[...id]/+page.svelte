@@ -157,6 +157,10 @@
 					margin: 0;
 					font-size: 2.25em;
 				}
+				p {
+					color: var(--color-tertiary);
+					margin-top: 4px;
+				}
 				.extra {
 					margin-top: 40px;
 					p {
