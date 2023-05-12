@@ -54,3 +54,7 @@ export function getRelatedGroups(id: string | number, relationship: GroupRelatio
 		600000
 	)
 }
+
+export function joinGroup(id: string | number) {
+	return request(`${GROUPS_BASE}/groups/${id}/users`, 'POST');
+}

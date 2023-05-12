@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
-	import { Tabs } from '@voxelified/voxeliface';
 	import { writable } from 'svelte/store';
 	import { getUserIcon } from '$lib/api/users';
+	import { Tabs, Button } from '@voxelified/voxeliface';
 	import type { PageData } from './$types';
-	import { GroupRelationship } from '$lib/api/enums';
 	import type { ImageData } from '$lib/api/types';
-	import { getGroupIcons, getRelatedGroups, getGroupExperiences2 } from '$lib/api/groups';
+	import { GroupRelationship } from '$lib/api/enums';
+	import { joinGroup, GROUPS_CACHE, getGroupIcons, getRelatedGroups, getGroupExperiences2 } from '$lib/api/groups';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import GroupItem from '$lib/components/GroupItem.svelte';
@@ -16,6 +16,7 @@
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 
 	import ArrowRight from '$lib/icons/ArrowRight.svelte';
+	import PersonPlus from '$lib/icons/PersonPlus.svelte';
 	export let data: PageData;
 
 	$: showShout = !!data.shout?.body;
@@ -34,7 +35,16 @@
 		resolve([]);
 	});
 
+	let joining = false;
 	const tabValue = writable(0);
+	const join = () => {
+		joining = true;
+		joinGroup(data.id).then(() => {
+			GROUPS_CACHE.invalidate(`group_${data.id}`);
+			GROUPS_CACHE.invalidate('roles');
+			location.reload();
+		});
+	};
 </script>
 
 <div class="main">
@@ -52,11 +62,11 @@
 				<p>{$t('group.members', [data])}</p>
 			</div>
 		</div>
-		{#if !data.groups.some(group => group.id === data.id)}
-			<button type="button" class="join">
-				{$t('group.join')}
-			</button>
-		{/if}
+		<div class="buttons">
+			{#if !data.groups.some(group => group.id === data.id)}
+				<Button disabled={joining} on:click={join}><PersonPlus/>{$t('group.join')}</Button>
+			{/if}
+		</div>
 	</div>
 	<Tabs.Root value={tabValue}>
 		<Tabs.Item value={0} title={$t('group.about')}>
@@ -168,17 +178,9 @@
 					}
 				}
 			}
-			.join {
-				color: var(--color-primary);
-				height: fit-content;
-				border: 1px solid var(--color-tertiary);
-				padding: 6px 10px;
-				font-size: 16px;
-				background: none;
-				font-weight: 400;
+			.buttons {
 				margin-left: auto;
-				font-family: var(--font-primary);
-				border-radius: 8px;
+				margin-right: 32px;
 			}
 		}
 		.description {
