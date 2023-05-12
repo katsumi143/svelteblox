@@ -40,6 +40,10 @@ export default {
 		'user.role.1': 'BETA TESTER',
 		'user.role.2': 'DEV RELATIONS',
 		'user.role.3': 'EVENT ORGANISER',
+		'user.talent': '{0}\'s Creator Page',
+		
+		'talent_status.false': 'Not Open to Work',
+		'talent_status.true': 'Open to Work',
 
 		'friends': '{0}\'s friends',
 

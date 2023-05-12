@@ -10,16 +10,18 @@
 	import { joinServer, joinExperience, editExperience, joinPrivateServer } from '$lib/launch';
 	import { getExperienceVotes, getExperienceThumbnails, getExperienceFriendServers, getExperiencePrivateServers } from '$lib/api/games';
 
-	import Star from '$lib/icons/Star.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import Carousel from '$lib/components/Carousel.svelte';
+	import Description from '$lib/components/Description.svelte';
+	import CreatorLink from '$lib/components/CreatorLink.svelte';
+
+	import Star from '$lib/icons/Star.svelte';
 	import StarFill from '$lib/icons/StarFill.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThreeDots from '$lib/icons/ThreeDots.svelte';
-	import Carousel from '$lib/components/Carousel.svelte';
 	import ThumbsDown from '$lib/icons/ThumbsDown.svelte';
 	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
-	import CreatorLink from '$lib/components/CreatorLink.svelte';
 	import RobloxStudio2 from '$lib/icons/RobloxStudio2.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
 
@@ -94,7 +96,7 @@
 		</div>
 	</div>
 	<div class="description">
-		<p>{@html $t('description', [data.description])}</p>
+		<p><Description input={data.description}/></p>
 	</div>
 	{#await friendServers then servers}
 		{#if servers.length > 0}

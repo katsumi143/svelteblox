@@ -4,8 +4,8 @@ import Cache from '../cache';
 import { locale } from '../settings';
 import { request } from '.';
 import { LOCALE_MAP } from '$lib/constants';
-import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { ImageData, ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PrivateExperienceServer } from './types';
+import { getThumbnails } from './images';
+import type { ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PrivateExperienceServer } from './types';
 export const GAMES_BASE = 'https://games.roblox.com/v';
 export const GAMES_BASE1 = GAMES_BASE + 1;
 export const GAMES_BASE2 = GAMES_BASE + 2;
@@ -37,25 +37,27 @@ export function getExperienceId(placeId: string | number) {
 export function getExperienceIcons(ids: (string | number)[]) {
 	return getThumbnails(ids, 'games/icons?universeIds=%IDS%&format=Png&size=128x128');
 }
-export function getExperienceThumbnails(id: number) {
-	const userLocale = get(locale);
-	return request<ApiDataList<{
-		mediaAssets: MediaAsset[]
-		languageCode: string
-	}>>(`https://gameinternationalization.roblox.com/v1/game-thumbnails/games/${id}/images`)
-		.then(({ data }) => (data.find(d => LOCALE_MAP[d.languageCode] === userLocale) ?? data[0]).mediaAssets);
+export function getExperienceThumbnails(id: string | number) {
+	return GAMES_CACHE.use(`thumbnail_${id}`, () => {
+		const userLocale = get(locale);
+		return request<ApiDataList<{
+			mediaAssets: MediaAsset[]
+			languageCode: string
+		}>>(`https://gameinternationalization.roblox.com/v1/game-thumbnails/games/${id}/images`)
+			.then(({ data }) => (data.find(d => LOCALE_MAP[d.languageCode] === userLocale) ?? data[0]).mediaAssets);
+	}, 7200000);
 }
 
-export function getExperienceServers(placeId: number) {
+export function getExperienceServers(placeId: string | number) {
 	return request<ServerListResponse>(`${GAMES_BASE1}/games/${placeId}/servers/0`)
 		.then(data => data.data);
 }
-export function getExperiencePrivateServers(placeId: number) {
+export function getExperiencePrivateServers(placeId: string | number) {
 	return request<ServerListResponse<PrivateExperienceServer>>(`${GAMES_BASE1}/games/${placeId}/private-servers`)
 		.then(data => data.data);
 }
 
-export function getExperienceFriendServers(placeId: number) {
+export function getExperienceFriendServers(placeId: string | number) {
 	return request<ServerListResponse>(`${GAMES_BASE1}/games/${placeId}/servers/Friend`)
 		.then(data => data.data);
 }

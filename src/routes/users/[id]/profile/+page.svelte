@@ -11,19 +11,21 @@
 	import { getExperiences, getExperienceId, getExperienceVotes, getExperienceThumbnails } from '$lib/api/games';
 	import { hasPremium, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserFriends, getUserPresences, removeFriendship, requestFriendship, getUserFullBodies, getUserFavourites, getUserFriendCount, acceptFriendRequest, getUserFollowerCount, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
-	import XIcon from '$lib/icons/X.svelte';
-	import People from '$lib/icons/People.svelte';
 	import Friend from '$lib/components/User.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
-	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import UserMenu from '$lib/components/UserMenu.svelte';
-	import ArrowRight from '$lib/icons/ArrowRight.svelte';
-	import PersonPlus from '$lib/icons/PersonPlus.svelte';
+	import Description from '$lib/components/Description.svelte';
 	import PremiumBadge from '$lib/components/PremiumBadge.svelte';
 	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	import ExperienceCard from '$lib/components/ExperienceCard.svelte';
+
+	import XIcon from '$lib/icons/X.svelte';
+	import People from '$lib/icons/People.svelte';
+	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
+	import PlayIcon from '$lib/icons/PlayIcon.svelte';
+	import ArrowRight from '$lib/icons/ArrowRight.svelte';
+	import PersonPlus from '$lib/icons/PersonPlus.svelte';
 	export let data: PageData;
 
 	$: icon = getUserIcon(data.id);
@@ -148,7 +150,7 @@
 			<a href={`/users/${data.id}/friends`}>{$t('number', [count])}</a><p>{$t('user.following')}</p>
 		{/await}
 	</div>
-	<p class="description">{@html $t('description', [data.description])}</p>
+	<p class="description"><Description input={data.description}/></p>
 
 	{#await currentExperience then experience}
 		{#if experience}

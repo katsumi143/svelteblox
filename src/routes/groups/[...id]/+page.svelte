@@ -5,10 +5,12 @@
 	import { getGroupIcons, getGroupExperiences2 } from '$lib/api/groups';
 
 	import Avatar from '$lib/components/Avatar.svelte';
-	import ArrowRight from '$lib/icons/ArrowRight.svelte';
+	import Description from '$lib/components/Description.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
 	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
+
+	import ArrowRight from '$lib/icons/ArrowRight.svelte';
 	export let data: PageData;
 
 	$: showShout = !!data.shout?.body;
@@ -39,7 +41,7 @@
 			</button>
 		{/if}
 	</div>
-	<p class="description">{@html $t('description', [data.description])}</p>
+	<p class="description"><Description input={data.description}/></p>
 	{#if showShout}
 		<p class="shout">{$t('group.shout')}</p>
 		<div class="shout">

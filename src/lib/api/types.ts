@@ -231,3 +231,24 @@ export interface MediaAsset {
 	mediaAssetUrl: string
 	mediaAssetAltText: string
 }
+
+export interface DiscourseTopic {
+	title: string
+}
+
+export interface TalentProfile {
+	isPublic: boolean
+	jobTypes: string[]
+	linkTypes: string[]
+	createdUtc: string
+	updatedUtc: string
+	skillTypes: string[]
+	socialLinks: string[]
+	isOpenToWork: boolean
+	creatorUserId: number
+	requiresAction: 'NoAction'
+	isContactAllowed: boolean
+	creatorDescription: string
+	interestDescription: string
+	preferredContactLinkType: string
+}
