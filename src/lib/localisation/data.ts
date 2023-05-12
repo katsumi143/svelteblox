@@ -45,7 +45,7 @@ export default {
 		'talent_status.false': 'Not Open to Work',
 		'talent_status.true': 'Open to Work',
 
-		'friends': '{0}\'s friends',
+		'friends': '{0}\'s Friends ({1})',
 
 		'groups': 'Groups',
 		'groups.list': 'Your Groups',
@@ -116,6 +116,15 @@ export default {
 		'settings.locale.label': 'Languages',
 		'settings.client_channel': 'Client Launch Channel',
 		'settings.client_channel.label': 'Deployment Channels',
+
+		'pagination.sort_order': 'Sort by',
+		'pagination.sort_direction': 'Sort direction',
+
+		'sort_order.0': 'Name',
+		'sort_order.1': 'User Status',
+
+		'sort_direction.0': 'Descending',
+		'sort_direction.1': 'Ascending',
 
 		'number': '{0|number}',
 		'number_small': '{0|number_small}',

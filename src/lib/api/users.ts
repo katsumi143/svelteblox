@@ -174,8 +174,8 @@ export function getRobux() {
 
 const PRESENCE_SORT = [0, 1, 3, 2];
 export function sortFriends(friends: Friend[], presences: UserPresence[]) {
-	const sorted = friends.map((friend, index) => {
-		friend.presenceType = presences[index]?.userPresenceType ?? 0;
+	const sorted = friends.map(friend => {
+		friend.presenceType = presences.find(p => p.userId === friend.id)?.userPresenceType ?? 0;
 		return friend;
 	}).sort((a, b) => a.displayName.localeCompare(b.displayName));
 	const online = sorted.filter(friend => friend.presenceType > 0);

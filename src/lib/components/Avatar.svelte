@@ -8,7 +8,7 @@
 	export let circle = false;
 
 	$: className = `avatar ${size}${circle ? ' circle' : ''}`;
-	const deleted = /(9fc30fe577bf95e045c9a3d4abaca05d|b48637b2a6266bd379a09afb5a8d5131)$/g;
+	const deleted = /(9fc30fe577bf95e045c9a3d4abaca05d|b48637b2a6266bd379a09afb5a8d5131|4ddecd2c3b001fe699e1d2ffb8379b9e)$/g;
 	const pending = /(;)$/g;
 	const unavailable = /(bf5841143a43ff8b754b7026159a2a18)$/g;
 </script>

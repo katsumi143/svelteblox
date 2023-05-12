@@ -32,3 +32,11 @@ export function prettifyName(displayName: string, username: string) {
 		return displayName;
 	return `${displayName} (@${username})`;
 }
+
+export function splitArray<T>(array: T[], chunkSize: number) {
+	return array.reduce<T[][]>((chunks, value, key) => {
+		const index = Math.floor(key / chunkSize); 
+		chunks[index] = [...chunks[index] ?? [], value]; 
+		return chunks;
+	}, []);
+}
