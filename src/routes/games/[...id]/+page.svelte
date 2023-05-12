@@ -95,9 +95,7 @@
 			<p class="players">{$t('experience.playing', [data.playing])}</p>
 		</div>
 	</div>
-	<div class="description">
-		<p><Description input={data.description}/></p>
-	</div>
+	<div class="description"><Description input={data.description}/></div>
 	{#await friendServers then servers}
 		{#if servers.length > 0}
 			<div class="servers">
@@ -300,14 +298,7 @@
 		}
 		.description {
 			width: 100%;
-			p {
-				color: var(--color-tertiary);
-				margin: 32px 0 64px;
-				overflow: hidden;
-				word-break: break-word;
-				line-height: 1.25;
-				white-space: pre-wrap;
-			}
+			margin: 32px 0 64px;
 		}
 		.servers {
 			display: flex;

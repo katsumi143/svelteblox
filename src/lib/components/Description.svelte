@@ -51,9 +51,23 @@
 		return `<a href="${url}">${url}</a>`;
 	}).then(text => text
 		.replace(/(?:<a.*?<\/a>\n?){2,}/g, match => `<div class="cool-links">${match}</div>`)
+		.replace(/\*\*.*?\*\*/g, match => `<strong>${match.slice(2, -2)}</strong>`)
 	);
 </script>
 
-{#await test then result}
-	{@html result}
-{/await}
+<p class="description">
+	{#await test then result}
+		{@html result}
+	{/await}
+</p>
+
+<style lang="scss">
+	p.description {
+		color: var(--color-tertiary);
+		margin: 0;
+		overflow: hidden;
+		word-break: break-word;
+		line-height: 1.25;
+		white-space: pre-wrap;
+	}
+</style>

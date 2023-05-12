@@ -67,7 +67,7 @@
 					<Avatar src={shoutIcon} size="sm2" circle/>
 					<div class="text">
 						<CreatorLink id={data.shout.poster.userId} name={data.shout.poster.username} type="User" displayName={data.shout.poster.displayName}/>
-						<p>{data.shout.body}</p>
+						<Description input={data.shout.body}/>
 						<p class="time">{$t('group.shout.time', [data.shout.updated])}</p>
 					</div>
 				</div>
@@ -157,10 +157,6 @@
 					margin: 0;
 					font-size: 2.25em;
 				}
-				p {
-					color: var(--color-tertiary);
-					margin-top: 6px;
-				}
 				.extra {
 					margin-top: 40px;
 					p {
@@ -201,9 +197,8 @@
 			.text {
 				margin-top: .25em;
 				margin-left: 16px;
-				p {
-					color: var(--color-tertiary);
-					margin: .25em 0 0;
+				:global(.description) {
+					margin-top: 2px;
 				}
 				.time {
 					color: var(--color-secondary);

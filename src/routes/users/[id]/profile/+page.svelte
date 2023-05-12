@@ -150,7 +150,7 @@
 			<a href={`/users/${data.id}/friends`}>{$t('number', [count])}</a><p>{$t('user.following')}</p>
 		{/await}
 	</div>
-	<p class="description"><Description input={data.description}/></p>
+	<Description input={data.description}/>
 
 	{#await currentExperience then experience}
 		{#if experience}
@@ -306,13 +306,8 @@
 				line-height: 1.25;
 			}
 		}
-		.description {
-			color: var(--color-tertiary);
+		:global(.description) {
 			margin: 24px 0 0;
-			overflow: hidden;
-			word-break: break-word;
-			line-height: 1.25;
-			white-space: pre-wrap;
 		}
 
 		.experience {

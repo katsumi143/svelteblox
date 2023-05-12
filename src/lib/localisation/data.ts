@@ -137,7 +137,6 @@ export default {
 		'time_ago.4_1': 'last month',
 		'time_ago.5_0': '{0} years ago',
 		'time_ago.5_1': 'last year',
-		'description': '{0|description}',
 
 		'toast.success': 'Success!',
 		'toast.friend_accept': 'You are now friends with <b>{0}</b>.', 

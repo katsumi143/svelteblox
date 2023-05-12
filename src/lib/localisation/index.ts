@@ -45,12 +45,7 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 			else if (number > 999)
 				return translate(locale, 'number_small.0', ns(number));
 			return translate(locale, 'number', [finalValue]);
-		} else if (formatType === 'description')
-			finalValue = finalValue.replace(/(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/g, url => {
-				const replaced = url.replace(/(?:http(s)?:\/\/)?(www\.)?roblox\.com/g, '');
-				return `<a href="${replaced}" ${replaced === url ? 'target="_blank" ' : ''}data-sveltekit-preload-data="tap">${url}</a>`
-			});
-		else if (formatType === 'time_ago') {
+		} else if (formatType === 'time_ago') {
 			const diff = Date.now() - new Date(finalValue).getTime();
 			const year = Math.floor(diff / 31536000000);
 			if (year > 0)
