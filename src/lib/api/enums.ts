@@ -4,3 +4,8 @@ export enum UserRole {
 	DeveloperRelations,
 	EventOrganiser
 }
+
+export enum GroupRelationship {
+	Allies = 'Allies',
+	Enemies = 'Enemies'
+}

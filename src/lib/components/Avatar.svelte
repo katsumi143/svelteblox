@@ -33,9 +33,9 @@
 
 <style lang="scss">
 	.avatar {
-		color: var(--background-secondary);
+		color: var(--color-secondary);
 		display: flex;
-		background: var(--background-tertiary);
+		background: var(--background-secondary);
 		align-items: center;
 		justify-content: center;
 		&.sm {

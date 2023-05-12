@@ -73,7 +73,7 @@ export interface Group {
 		poster: PartialUser
 		created: string
 		updated: string
-	}
+	} | null
 	description: string
 	memberCount: number
 	hasVerifiedBadge: boolean

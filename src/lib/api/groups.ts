@@ -3,6 +3,7 @@ import { user } from './users';
 import { request } from '.';
 import { getThumbnails } from './images';
 import { getExperiences } from './games';
+import type { GroupRelationship } from './enums';
 import type { Group, ImageData, ApiDataList, ExperienceV2 } from './types';
 export const GROUPS_BASE = 'https://groups.roblox.com/v1';
 
@@ -38,4 +39,18 @@ export function getSelfGroupRoles() {
 		}>>(`${GROUPS_BASE}/users/${user.id}/groups/roles`).then(data => data.data),
 		600000
 	);
+}
+
+export function getRelatedGroups(id: string | number, relationship: GroupRelationship) {
+	return GROUPS_CACHE.use(`related_${id}_${relationship}`, () =>
+		request<{
+			groupId: number
+			nextRowIndex: number
+			relatedGroups: Group[]
+			totalGroupCount: number
+			relationshipType: GroupRelationship
+		}>(`${GROUPS_BASE}/groups/${id}/relationships/${relationship}?StartRowIndex=0&MaxRows=10`)
+			.then(data => data.relatedGroups),
+		600000
+	)
 }

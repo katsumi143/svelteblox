@@ -154,15 +154,12 @@
 	}
 	:global(.theme-dark) {
 		--color-tertiary: hsl(0 0% 80%);
-		--background-tertiary: hsl(0 0% 30%);
 	}
 	:global(.theme-light) {
 		--color-tertiary: hsl(0 0% 20%);
-		--background-tertiary: hsl(0 0% 80%);
 	}
 	:global(.theme-color) {
 		--color-tertiary: hsl(var(--theme-hue) 20% 80%);
-		--background-tertiary: hsl(var(--theme-hue) 10% 45%);
 	}
 	:global(body) {
 		overflow: hidden auto;

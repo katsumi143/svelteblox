@@ -9,8 +9,14 @@ export type Key = keyof typeof data[typeof sourceLocale]
 export type Locale = typeof LOCALES[number]
 export type Values = Iterable<any> | Record<string, any>
 
-const ta = (id: number, val: number) => `time_ago.${id}_${val === 1 ? 1 : 0}`;
 const numFormatter = new Intl.NumberFormat();
+
+const ta = (id: number, val: number) => `time_ago.${id}_${val === 1 ? 1 : 0}`;
+const ns = (number: number) => {
+	const string = numFormatter.format(number).replace(',', '.');
+	const position = string.indexOf('.');
+	return [string.slice(0, position === -1 ? undefined : position > 2 ? position : position + 2)];
+};
 export function translate(locale: Locale, key: Key | string, values: Values) {
 	let text: string = (data as any)[locale]?.[key] ?? (data as any)[sourceLocale]?.[key];
 	if (typeof text !== 'string')
@@ -28,7 +34,18 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 		let finalValue: string = value ?? split2[1] ?? t;
 		if (formatType === 'number')
 			finalValue = numFormatter.format(parseInt(finalValue));
-		else if (formatType === 'description')
+		else if (formatType === 'number_small') {
+			const number = parseInt(finalValue);
+			if (number > 999999999999)
+				return translate(locale, 'number_small.3', ns(number));
+			else if (number > 999999999)
+				return translate(locale, 'number_small.2', ns(number));
+			else if (number > 999999)
+				return translate(locale, 'number_small.1', ns(number));
+			else if (number > 999)
+				return translate(locale, 'number_small.0', ns(number));
+			return translate(locale, 'number', [finalValue]);
+		} else if (formatType === 'description')
 			finalValue = finalValue.replace(/(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/g, url => {
 				const replaced = url.replace(/(?:http(s)?:\/\/)?(www\.)?roblox\.com/g, '');
 				return `<a href="${replaced}" ${replaced === url ? 'target="_blank" ' : ''}data-sveltekit-preload-data="tap">${url}</a>`

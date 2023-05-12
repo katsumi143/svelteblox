@@ -18,12 +18,16 @@ export function getExperience(id: number): Promise<Experience | undefined> {
 export function getExperiences(ids: (string | number)[]) {
 	if (ids.length === 0)
 		return Promise.resolve([]);
-	return request<ApiDataList<Experience>>(`https://games.roblox.com/v1/games?universeIds=${ids.join(',')}`)
+	return request<ApiDataList<Experience>>(`${GAMES_BASE1}/games?universeIds=${ids.join(',')}`)
 		.then(data => data.data);
 }
 export function getExperienceVotes(ids: (string | number)[]) {
-	return request<ApiDataList<ExperienceVoting>>(`https://games.roblox.com/v1/games/votes?universeIds=${ids.join(',')}`)
-		.then(data => data.data);
+	const ids2 = ids.filter(id => !GAMES_CACHE.isValid(`votes_${id}`));
+	if (ids2.length > 0)
+		return request<ApiDataList<ExperienceVoting>>(`${GAMES_BASE1}/games/votes?universeIds=${ids2.join(',')}`)
+			.then(data => data.data.map(data => GAMES_CACHE.set(`votes_${data.id}`, data, 600000)))
+			.then(data => [...data, ...ids.filter(id => !ids2.includes(id)).map(id => GAMES_CACHE.get<ExperienceVoting>(`votes_${id}`)!)]);
+	return Promise.resolve(ids.map(id => GAMES_CACHE.get<ExperienceVoting>(`votes_${id}`)!));
 }
 
 export function getExperienceId(placeId: string | number) {

@@ -52,9 +52,15 @@ export default {
 
 		'group.members': '{0.memberCount|number} members',
 		'group.join': 'Join Group',
-		'group.experiences': 'Group Experiences',
+		'group.about': 'About',
+		'group.experiences': 'Experiences',
+		'group.related_groups': 'Affiliates',
 		'group.shout': 'Group Shout',
 		'group.shout.time': 'Posted {0|time_ago}',
+		'group.hover': '{0}\n{1} Member(s)',
+
+		'group_relationship.Allies': 'Allies',
+		'group_relationship.Enemies': 'Enemies',
 
 		'experience.play': 'Quick Play',
 		'experience.play2': 'Play {0}',
@@ -112,6 +118,12 @@ export default {
 		'settings.client_channel.label': 'Deployment Channels',
 
 		'number': '{0|number}',
+		'number_small': '{0|number_small}',
+		'number_small.0': '{0}K',
+		'number_small.1': '{0}M',
+		'number_small.2': '{0}B',
+		'number_small.3': '{0}T',
+
 		'time_ago': '{0|time_ago}',
 		'time_ago.0_0': '{0} seconds ago',
 		'time_ago.0_1': 'now',
