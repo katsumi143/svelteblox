@@ -20,6 +20,12 @@ export default {
 		'action.friend.2': 'Friend Request Sent',
 		'action.friend.3': 'Accept Friend Request',
 
+		'user_action.user.profile': 'Your Profile',
+		'user_action.user.creations': 'Your Creations',
+		'user_action.group': 'Your Primary Group',
+		'user_action.settings.settings': 'Website Settings',
+		'user_action.other.logout': 'Sign out',
+
 		'home': 'Home',
 		'home.greeting.0': 'Good morning,',
     	'home.greeting.1': 'Good afternoon,',

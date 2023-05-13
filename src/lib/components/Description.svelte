@@ -8,10 +8,10 @@
 	import { getGroup, getGroupIcon } from '$lib/api/groups';
 	import { getExperience, getExperienceId, getExperienceIcons } from '$lib/api/games';
 
-	export let input: string;
+	export let input: string | undefined | null;
 	
 	const verifiedBadge = '<img src="/verified.svg" width="16" height="16"/>';
-	$: test = replaceAsync(input, /(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/g, async url => {
+	$: description = input ? replaceAsync(input, /(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/g, async url => {
 		const userId = url.match(/(?:https:\/\/)(?:(?:www|web)\.)?roblox\.com\/users\/(\d*).*/)?.[1];
 		if (userId) {
 			const user = await getUser(userId);
@@ -52,12 +52,14 @@
 	}).then(text => text
 		.replace(/(?:<a.*?<\/a>\n?){2,}/g, match => `<div class="cool-links">${match}</div>`)
 		.replace(/\*\*.*?\*\*/g, match => `<strong>${match.slice(2, -2)}</strong>`)
-	);
+	) : null;
 </script>
 
 <p class="description">
-	{#await test then result}
-		{@html result}
+	{#await description then value}
+		{#if value}
+			{@html value}
+		{/if}
 	{/await}
 </p>
 

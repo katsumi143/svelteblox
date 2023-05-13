@@ -4,13 +4,14 @@
 	import Question from '$lib/icons/Question.svelte';
 	import Hourglass from '$lib/icons/Hourglass.svelte';
 	export let src: Promise<string | undefined> | null = null;
-	export let size: 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
+	export let size: 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let circle = false;
+	export let transparent = false;
 
-	$: className = `avatar ${size}${circle ? ' circle' : ''}`;
+	$: className = `avatar ${size}${circle ? ' circle' : ''}${transparent ? ' transparent' : ''}`;
 	const deleted = /(9fc30fe577bf95e045c9a3d4abaca05d|b48637b2a6266bd379a09afb5a8d5131|4ddecd2c3b001fe699e1d2ffb8379b9e)$/g;
 	const pending = /(;)$/g;
-	const unavailable = /(bf5841143a43ff8b754b7026159a2a18)$/g;
+	const unavailable = /(bf5841143a43ff8b754b7026159a2a18|d5ffea87836a253a362647b6c8985786)$/g;
 </script>
 
 {#if src}
@@ -38,6 +39,11 @@
 		background: var(--background-secondary);
 		align-items: center;
 		justify-content: center;
+		&.xs {
+			width: 24px;
+			height: 24px;
+			border-radius: 4px;
+		}
 		&.sm {
 			width: 40px;
 			height: 40px;
@@ -71,6 +77,9 @@
 		}
 		&.circle {
 			border-radius: 50%;
+		}
+		&.transparent {
+			background: none;
 		}
 	}
 </style>

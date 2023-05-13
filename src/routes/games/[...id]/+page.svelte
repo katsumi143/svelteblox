@@ -2,10 +2,10 @@
 	import { t } from '$lib/localisation';
 	import { request } from '$lib/api';
 	import { getUserIcons } from '$lib/api/users';
+	import { DropdownMenu } from '@voxelified/voxeliface';
 	import type { PageData } from './$types';
 	import { THUMBNAILS_BASE } from '$lib/api/images';
 	import type { ApiDataList } from '$lib/api/types';
-	import ContextMenu, { Item } from 'svelte-contextmenu';
 	import { getExperiencePermissions } from '$lib/api/develop';
 	import { joinServer, joinExperience, editExperience, joinPrivateServer } from '$lib/launch';
 	import { getExperienceVotes, getExperienceThumbnails, getExperienceFriendServers, getExperiencePrivateServers } from '$lib/api/games';
@@ -49,7 +49,7 @@
 	});
 
 	let thumbnail = 0;
-	let contextMenu: ContextMenu;
+	let dropdownTrigger: () => void;
 	let showAllPrivateServers = false;
 	const CREATE_BASE = `https://create.roblox.com/dashboard/creations/experiences/${data.id}`;
 </script>
@@ -64,7 +64,41 @@
 			{/await}
 		</Carousel>
 		<div class="details">
-			<h1>{data.name} <button type="button" on:click={contextMenu.createHandler()}><ThreeDots/></button></h1>
+			<h1>
+				{data.name}
+				<DropdownMenu bind:trigger={dropdownTrigger}>
+					<button type="button" slot="trigger" on:click={dropdownTrigger}><ThreeDots/></button>
+					<p>{data.name}</p>
+					{#await permissions then permissions}
+						{#if permissions.canCloudEdit}
+							<button type="button" on:click={() => editExperience(data.rootPlaceId, data.id)}>
+								<RobloxStudio2/>
+								{$t('action.edit_studio')}
+							</button>
+						{/if}
+						{#if permissions.canManage}
+							<a href={`${CREATE_BASE}/places/${data.rootPlaceId}/configure`} target="_blank">
+								{$t('action.configure_place')}
+							</a>
+							<a href={`${CREATE_BASE}/configure`} target="_blank">
+								{$t('action.configure_universe')}
+							</a>
+						{/if}
+					{/await}
+					<a href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">
+						<RobloxIcon/>
+						{$t('action.view_roblox')}
+					</a>
+					<button type="button" on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}>
+						<ClipboardPlus/>
+						{$t('action.copy_place_id')}
+					</button>
+					<button type="button" on:click={() => navigator.clipboard.writeText(data.id.toString())}>
+						<ClipboardPlus/>
+						{$t('action.copy_universe_id')}
+					</button>
+				</DropdownMenu>
+			</h1>
 			<p>by <CreatorLink {...data.creator}/></p>
 
 			<div class="share">
@@ -156,38 +190,6 @@
 		{/if}
 	{/await}
 </div>
-
-<ContextMenu bind:this={contextMenu}>
-	<p>{data.name}</p>
-	{#await permissions then permissions}
-		{#if permissions.canCloudEdit}
-			<Item on:click={() => editExperience(data.rootPlaceId, data.id)}>
-				<RobloxStudio2/>
-				{$t('action.edit_studio')}
-			</Item>
-		{/if}
-		{#if permissions.canManage}
-			<Item href={`${CREATE_BASE}/places/${data.rootPlaceId}/configure`} target="_blank">
-				{$t('action.configure_place')}
-			</Item>
-			<Item href={`${CREATE_BASE}/configure`} target="_blank">
-				{$t('action.configure_universe')}
-			</Item>
-		{/if}
-	{/await}
-	<Item href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">
-		<RobloxIcon/>
-		{$t('action.view_roblox')}
-	</Item>
-	<Item on:click={() => navigator.clipboard.writeText(data.rootPlaceId.toString())}>
-		<ClipboardPlus/>
-		{$t('action.copy_place_id')}
-	</Item>
-	<Item on:click={() => navigator.clipboard.writeText(data.id.toString())}>
-		<ClipboardPlus/>
-		{$t('action.copy_universe_id')}
-	</Item>
-</ContextMenu>
 
 <svelte:head>
 	<title>{data.name}</title>

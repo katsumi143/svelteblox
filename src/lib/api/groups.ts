@@ -58,3 +58,17 @@ export function getRelatedGroups(id: string | number, relationship: GroupRelatio
 export function joinGroup(id: string | number) {
 	return request(`${GROUPS_BASE}/groups/${id}/users`, 'POST');
 }
+
+export function getPrimaryGroup(userId: string | number) {
+	return GROUPS_CACHE.use(`primary_${userId}`, () =>
+		request<PrimaryGroupResponse | null>(`${GROUPS_BASE}/users/${userId}/groups/primary/role`)
+			.then(data => data?.group),
+		3600000
+	);
+}
+
+interface PrimaryGroupResponse {
+	role: any
+	group: Group
+	isPrimaryGroup: boolean
+}

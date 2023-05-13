@@ -1,18 +1,20 @@
 <script lang="ts">
 	import '@voxelified/voxeliface/styles.scss';
-	import { Header } from '@voxelified/voxeliface';
 	import { onMount } from 'svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
+	import { Header, DropdownMenu } from '@voxelified/voxeliface';
 	import { Settings, defaultSettings } from 'svelte-contextmenu';
 
 	import Logo from '$lib/components/TextLogo.svelte';
-	import RobuxIcon from '$lib/icons/RobuxIcon.svelte';
+	import Avatar from '$lib/components/Avatar.svelte';
+	import CaretDown from '$lib/icons/CaretDown.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 
 	import { t } from '$lib/localisation';
 	import { theme } from '$lib/settings';
-	import { getRobux } from '$lib/api/users';
+	import { user, getRobux, getUserIcon } from '$lib/api/users';
+	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
 	onMount(async () => {
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
@@ -54,6 +56,11 @@
 	}
 
 	const robux = getRobux();
+	const avatar = getUserIcon(user.id);
+	const primaryGroup = getPrimaryGroup(user.id);
+	const primaryGroupIcon = primaryGroup.then(group => group ? getGroupIcon(group.id) : null);
+
+	let userMenuTrigger: () => void;
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
@@ -63,15 +70,44 @@
 		<a href="/groups" class="nav-link">{$t('groups')}</a>
 		<a href="https://create.roblox.com" class="nav-link">{$t('create')}</a>
 
-		<a href="/" class="robux">
-			<RobuxIcon size={26}/>
-			{#await robux}
-				...
-			{:then value}
-				{$t('number', [value])} Robux
+		<DropdownMenu bind:trigger={userMenuTrigger}>
+			<button class="user focusable" type="button" slot="trigger" on:click={userMenuTrigger}>
+				<Avatar src={avatar.then(a => a?.imageUrl)} size="sm" circle/>
+				<div>
+					<p class="name">
+						{user.displayName}
+						{#if user.displayName !== user.name}
+							<span>@{user.name}</span>
+						{/if}
+					</p>
+					<p class="robux">
+						{#await robux}
+							...
+						{:then value}
+							{$t('number', [value])} Robux
+						{/await}
+					</p>
+				</div>
+				<CaretDown/>
+			</button>
+			<p>{user.displayName}</p>
+			<a href={`/users/${user.id}/profile`}>{$t('user_action.user.profile')}</a>
+			<a href="https://create.roblox.com/dashboard/creations">{$t('user_action.user.creations')}</a>
+			{#await primaryGroup then group}
+				{#if group}
+					<div class="separator"/>
+					<p>{$t('user_action.group')}</p>
+					<a href={`/groups/${group.id}`}>
+						<Avatar src={primaryGroupIcon.then(i => i?.imageUrl)} size="xs" transparent/>
+						{group.name}
+					</a>
+				{/if}
 			{/await}
-		</a>
-		<a href="/settings" class="nav-link settings">{$t('settings')}</a>
+			<div class="separator"/>
+			<a href="/settings">{$t('user_action.settings.settings')}</a>
+			<div class="separator"/>
+			<a href="/">{$t('user_action.other.logout')}</a>
+		</DropdownMenu>
 	</Header>
 	<main class="app-content">
 		<slot/>
@@ -173,11 +209,43 @@
 		margin: 14px 12px;
 		text-decoration: none;
 	}
-	.robux {
-		gap: .75em;
-		margin: auto 24px auto auto;
+	:global(.container) {
+		margin-left: auto;
+	}
+	.user {
+		color: var(--color-secondary);
+		border: none;
+		cursor: pointer;
+		padding: 4px 8px;
 		display: flex;
+		background: none;
+		text-align: start;
 		align-items: center;
+		font-family: var(--font-primary);
+		border-radius: 8px;
+		div {
+			margin: 0 24px 0 16px;
+			p {
+				margin: 0;
+				&.name {
+					font-size: 1.2em;
+					font-weight: 600;
+					span {
+						font-size: .75em;
+						font-weight: 500;
+						margin-left: 4px;
+					}
+				}
+				&.robux {
+					font-size: .85em;
+					margin-top: 2px;
+					font-weight: 500;
+				}
+			}
+		}
+		&:hover {
+			background: #ffffff40;
+		}
 	}
 
 	:global(a) {
