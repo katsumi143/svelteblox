@@ -22,13 +22,13 @@
 		{:else if image.match(pending)}
 			<div class={className} title={$t('image_status.1')} on:contextmenu><Hourglass/></div>
 		{:else if image.match(unavailable)}
-			<div class={className} title={$t('image_status.3')} on:contextmenu><Question/></div>
+			<div class={className} title={$t('image_status.3')} on:contextmenu><Question size={32}/></div>
 		{:else}
 			<img src={image} alt="avatar" class={className} on:contextmenu/>
 		{/if}
 	{/await}
 {:else}
-	<div class={className} title={$t('image_status.3')} on:contextmenu><Question/></div>
+	<div class={className} title={$t('image_status.3')} on:contextmenu><Question size={32}/></div>
 {/if}
 
 <style lang="scss">

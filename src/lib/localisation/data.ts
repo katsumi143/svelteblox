@@ -1,9 +1,11 @@
 export default {
 	'en-AU': {
+		'action.close': 'Close',
 		'action.copy_id': 'Copy ID',
 		'action.view_all': 'View all',
 		'action.show_all': 'Show all',
 		'action.copy_link': 'Copy Link',
+		'action.learn_more': 'Learn More',
 		'action.edit_studio': 'Edit in Studio',
 		'action.view_roblox': 'View on Roblox',
 		'action.view_talent': 'View on Talent Hub',
@@ -127,6 +129,12 @@ export default {
 
 		'sort_direction.0': 'Descending',
 		'sort_direction.1': 'Ascending',
+
+		'badge.verified': 'Verified Badge',
+		'badge.verified.summary': 'This badge verifies that the holder is a notable and authentic creator, brand, or public figure.',
+
+		'badge.premium': 'Premium Badge',
+		'badge.premium.summary': 'This badge indicates that the holder has an active Premium Membership.',
 
 		'number': '{0|number}',
 		'number_small': '{0|number_small}',
