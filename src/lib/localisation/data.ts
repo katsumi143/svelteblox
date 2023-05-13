@@ -47,6 +47,7 @@ export default {
 		'talent_status.true': 'Open to Work',
 
 		'friends': '{0}\'s Friends ({1})',
+		'favourites': '{0}\'s Favourite Experiences ({1})',
 
 		'groups': 'Groups',
 		'groups.list': 'Your Groups',

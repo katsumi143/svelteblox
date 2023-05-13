@@ -87,7 +87,7 @@
 <div class="experiences">
 	<div class="list-header">
 		<p>{$t('home.favourites')}</p>
-		<a href="/games/favourites">{$t('action.view_all')}<ArrowRight/></a>
+		<a href={`/users/${user.id}/favourites`}>{$t('action.view_all')}<ArrowRight/></a>
 	</div>
 	<div class="items">
 		{#await favourites then items}

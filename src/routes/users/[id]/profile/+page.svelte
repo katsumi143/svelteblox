@@ -222,7 +222,7 @@
 			<div class="favourites">
 				<div class="list-header">
 					<p>{$t('user.favourites')}</p>
-					<a href="/">{$t('action.view_all')}<ArrowRight/></a>
+					<a href={`/users/${data.id}/favourites`}>{$t('action.view_all')}<ArrowRight/></a>
 				</div>
 				<div class="items">
 					{#await favouriteVotes then votes}
