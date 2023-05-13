@@ -130,8 +130,11 @@ export async function declineFriendRequest(id: number) {
 }
 
 export function getUserFavourites(id: string | number) {
-	return request<ApiDataList<ExperienceV2>>(`${GAMES_BASE2}/users/${id}/favorite/games`)
-		.then(data => data.data);
+	return USERS_CACHE.use(`user_favourites_${id}`, () =>
+		request<ApiDataList<ExperienceV2>>(`${GAMES_BASE2}/users/${id}/favorite/games`)
+			.then(data => data.data),
+		3600000
+	);
 }
 
 export function getUserIcon(id: string | number): Promise<ImageData | undefined> {

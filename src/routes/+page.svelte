@@ -4,7 +4,7 @@
 	import { getGreeting } from '$lib/util';
 	import type ContextMenu from 'svelte-contextmenu';
 	import { getExperiences, getExperienceIcons, getRecentExperiences } from '$lib/api/games';
-	import { sortFriends, getUserIcon, getUserIcons, getUserFriends, getUserPresences } from '$lib/api/users';
+	import { sortFriends, getUserIcon, getUserIcons, getUserFriends, getUserPresences, getUserFavourites } from '$lib/api/users';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Friend from '$lib/components/User.svelte';
@@ -20,8 +20,11 @@
 	const sortedFriends = friends.then(f => presences.then(p => sortFriends(f, p)));
 	const friendAvatars = sortedFriends.then(f => getUserIcons(f.slice(0, 20).map(f => f.id)));
 
+	const favourites = getUserFavourites(user.id);
 	const recentExperiences = getRecentExperiences();
-	const experienceIcons = recentExperiences.then(data => getExperienceIcons(data.map(i => i.universeId)));
+	const experienceIcons = recentExperiences.then(recent => favourites.then(favourites =>
+		getExperienceIcons([...recent.map(i => i.universeId), ...favourites.map(i => i.id)])
+	));
 
 	let contextMenu: ContextMenu;
 </script>
@@ -81,6 +84,25 @@
 	</div>
 </div>
 
+<div class="experiences">
+	<div class="list-header">
+		<p>{$t('home.favourites')}</p>
+		<a href="/games/favourites">{$t('action.view_all')}<ArrowRight/></a>
+	</div>
+	<div class="items">
+		{#await favourites then items}
+			{#each items as item}
+				<ExperienceItem
+					id={item.id}
+					name={item.name}
+					icon={experienceIcons.then(i => i.find(i => i.targetId === item.id))}
+					rootPlaceId={item.rootPlace.id}
+				/>
+			{/each}
+		{/await}
+	</div>
+</div>
+
 <svelte:head>
 	<title>svelteblox</title>
 </svelte:head>
@@ -117,12 +139,15 @@
 		}
 	}
 	.experiences {
-		margin: 32px 64px;
+		margin: 32px 64px 0;
 		.items {
 			gap: 16px;
 			height: 200px;
 			display: flex;
 			overflow: hidden;
+		}
+		&:last-of-type {
+			margin-bottom: 64px;
 		}
 	}
 </style>

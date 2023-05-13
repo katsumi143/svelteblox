@@ -24,6 +24,7 @@ export default {
     	'home.greeting.2': 'Good evening,',
 		'home.friends': 'Your Friends ({0})',
 		'home.recent': 'Recent Experiences',
+		'home.favourites': 'Your Favourite Experiences',
 
 		'user.join': 'Join {0.displayName} in {1.name}',
 		'user.friends': 'Friends ({0})',
