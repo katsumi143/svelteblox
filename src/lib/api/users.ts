@@ -11,7 +11,10 @@ export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
 export const USERS_CACHE = new Cache('users');
 
 export function getUser(id: string | number) {
-	return request<User>(`https://users.roblox.com/v1/users/${id}`);
+	return USERS_CACHE.use(`user_${id}`, () =>
+		request<User>(`https://users.roblox.com/v1/users/${id}`),
+		3600000
+	);
 }
 export function getUsername(id: string | number) {
 	return USERS_CACHE.use(`username_${id}`, () => getUser(id).then(u => u.name), 86400000);
