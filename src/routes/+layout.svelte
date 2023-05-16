@@ -6,15 +6,19 @@
 	import { Header, DropdownMenu } from '@voxelified/voxeliface';
 	import { Settings, defaultSettings } from 'svelte-contextmenu';
 
+	import { t } from '$lib/localisation';
+	import { theme } from '$lib/settings';
+	import { lockPin, pinLocked } from '$lib/api/auth';
+	import { user, getRobux, getUserIcon } from '$lib/api/users';
+	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
+
 	import Logo from '$lib/components/TextLogo.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import CaretDown from '$lib/icons/CaretDown.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
+	import UnlockPinModal from '$lib/components/UnlockPinModal.svelte';
 
-	import { t } from '$lib/localisation';
-	import { theme } from '$lib/settings';
-	import { user, getRobux, getUserIcon } from '$lib/api/users';
-	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
+	import ExclamationTriangle from '$lib/icons/ExclamationTriangle.svelte';
 	onMount(async () => {
 		if (pwaInfo) {
 			const { registerSW } = await import('virtual:pwa-register');
@@ -88,10 +92,19 @@
 						{/await}
 					</p>
 				</div>
+				{#if !$pinLocked}
+					<ExclamationTriangle size={24}/>
+				{/if}
 				<CaretDown/>
 			</button>
+			{#if !$pinLocked}
+				<button type="button" on:click={lockPin}>
+					<ExclamationTriangle/>
+					{$t('action.lock_pin')}
+				</button>
+			{/if}
 			<p>{user.displayName}</p>
-			<a href={`/users/${user.id}/profile`}>{$t('user_action.user.profile')}</a>
+			<a href={`/user/${user.name}`}>{$t('user_action.user.profile')}</a>
 			<a href="https://create.roblox.com/dashboard/creations">{$t('user_action.user.creations')}</a>
 			{#await primaryGroup then group}
 				{#if group}
@@ -118,6 +131,7 @@
 	</main>
 	<div id="captcha"/>
 	<div id="context-menu-portal"/>
+	<UnlockPinModal/>
 	<SvelteToast options={{
 		pausable: true,
 		duration: 5000,
@@ -188,29 +202,20 @@
 		--toastBarBackground: var(--color-secondary);
 		--toastContainerBottom: 16px;
 	}
-	:global(.theme-dark) {
-		--color-tertiary: hsl(0 0% 80%);
-	}
-	:global(.theme-light) {
-		--color-tertiary: hsl(0 0% 20%);
-	}
-	:global(.theme-color) {
-		--color-tertiary: hsl(var(--theme-hue) 20% 80%);
-	}
 	:global(body) {
 		overflow: hidden auto;
 	}
 
 	:global(header) {
 		display: flex;
+		:global(.container) {
+			margin-left: auto;
+		}
 	}
 	.nav-link {
 		color: var(--color-primary);
 		margin: 14px 12px;
 		text-decoration: none;
-	}
-	:global(.container) {
-		margin-left: auto;
 	}
 	.user {
 		color: var(--color-secondary);
@@ -242,6 +247,10 @@
 					font-weight: 500;
 				}
 			}
+		}
+		:global(.exclamation-triangle) {
+			color: var(--color-primary);
+			margin-right: 16px;
 		}
 		&:hover {
 			background: #ffffff40;

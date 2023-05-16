@@ -1,5 +1,5 @@
 import { redirect } from '@sveltejs/kit';
-import type { PageLoad } from '../$types';
+import type { PageLoad } from './$types';
 export const load = (async ({ params }) => {
-	throw redirect(304, `/users/${params.id}/profile`);
+	throw redirect(301, `/user/${params.id}`);
 }) satisfies PageLoad

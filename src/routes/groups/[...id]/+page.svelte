@@ -59,7 +59,7 @@
 			</h1>
 			<p>by <CreatorLink id={data.owner.userId} name={data.owner.username} type="User" displayName={data.owner.displayName} hasVerifiedBadge={data.owner.hasVerifiedBadge}/></p>
 			<div class="extra">
-				<p>{$t('group.members', [data])}</p>
+				<p>{$t('group.members', [data.memberCount])}</p>
 			</div>
 		</div>
 		<div class="buttons">

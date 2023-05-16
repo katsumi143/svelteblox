@@ -1,45 +1,44 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
-	import People from '$lib/icons/People.svelte';
+	import People from '$lib/icons/PeopleFill.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import { joinUser, joinExperience } from '$lib/launch';
-	import type { MediaAsset, ExperienceVoting, ExperienceCreator } from '$lib/api/types';
 	import { getExperienceVotes, getExperienceThumbnails } from '$lib/api/games';
-	export let data: {
-		id: number
-		name: string
-		playing: number
-		voting?: ExperienceVoting
-		creator: ExperienceCreator
-		rootPlaceId: number
-	};
-	export let friendId: number | null;
-	export let friendName: string | null;
+	import type { MediaAsset, ExperienceVoting, ExperienceCreator } from '$lib/api/types';
+	export let id: number;
+	export let name: string;
+	export let voting: ExperienceVoting | null = null;
+	export let playing: number;
+	export let creator: ExperienceCreator;
+	export let rootPlaceId: number;
+
+	export let friendId: number | null = null;
+	export let friendName: string | null = null;
 	export let thumbnail: Promise<MediaAsset | undefined> | undefined = undefined;
 
-	const voting = data.voting ? Promise.resolve(data.voting) :
-		getExperienceVotes([data.id]).then(v => v[0]);
-	const rating = voting.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
+	const voting2 = voting ? Promise.resolve(voting) :
+		getExperienceVotes([id]).then(v => v[0]);
+	const rating = voting2.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
 	const quickLaunch = () =>
-		friendId ? joinUser(friendId) : joinExperience(data.rootPlaceId);
+		friendId ? joinUser(friendId) : joinExperience(rootPlaceId);
 </script>
 
-<a class="experience" href={`/games/${data.rootPlaceId}`}>
-	{#await thumbnail ?? getExperienceThumbnails(data.id).then(i => i[0]) then image}
+<a class="experience" href={`/games/${rootPlaceId}`}>
+	{#await thumbnail ?? getExperienceThumbnails(id).then(i => i[0]) then image}
 		<img src={image?.mediaAssetUrl} alt="experience thumbnail"/>
 	{/await}
 
-	<p class="name">{data.name}</p>
+	<p class="name">{name}</p>
 	<div class="details">
-		<p>{$t('creator', [data.creator.name])}</p>
+		<p>{$t('creator', [creator.name])}</p>
 		<p>
 			<ThumbsUp/>
 			{#await rating then rating}
 				{$t(`experience.${rating ? 'rating2' : 'unrated'}`, [rating])}
 			{/await}
 		</p>
-		<p><People/>{$t('experience.playing2', [data.playing])}</p>
+		<p><People/>{$t('experience.playing2', [playing])}</p>
 	</div>
 	<button type="button" class="play" on:click|preventDefault={quickLaunch}>
 		{$t(`experience.${friendId ? 'join_user' : 'play'}`, [friendName])}
@@ -49,7 +48,7 @@
 
 <style lang="scss">
 	.experience {
-		flex: 0 0 auto;
+		flex: 0 1 auto;
 		width: 512px;
 		color: var(--color-primary);
 		height: 256px;
@@ -99,10 +98,10 @@
 		}
 		.play {
 			gap: 6px;
-			top: 176px;
 			right: 8px;
 			color: #fff;
 			border: none;
+			bottom: 40px;
 			cursor: pointer;
 			opacity: 0;
 			padding: 2px 4px 2px 16px;

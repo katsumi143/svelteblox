@@ -7,7 +7,7 @@
 	import Avatar from './Avatar.svelte';
 	import VerifiedBadge from './VerifiedBadge.svelte';
 
-	import People from '$lib/icons/People.svelte';
+	import People from '$lib/icons/PeopleFill.svelte';
 	import RobloxIcon from '../icons/RobloxIcon.svelte';
 	import ClipboardPlus from '../icons/ClipboardPlus.svelte';
 

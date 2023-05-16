@@ -5,7 +5,7 @@
 	import type { ImageData, ExperienceVoting } from '$lib/api/types';
 	import { getExperienceIcons, getExperienceVotes } from '$lib/api/games';
 
-	import People from '$lib/icons/People.svelte';
+	import People from '$lib/icons/PeopleFill.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';

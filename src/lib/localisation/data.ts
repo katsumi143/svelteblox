@@ -1,9 +1,16 @@
 export default {
 	'en-AU': {
+		'action.save': 'Save',
+		'action.edit': 'Edit',
+		'action.undo': 'Undo',
 		'action.close': 'Close',
+		'action.cancel': 'Cancel',
+		'action.preview': 'Preview',
 		'action.copy_id': 'Copy ID',
+		'action.continue': 'Continue',
 		'action.view_all': 'View all',
 		'action.show_all': 'Show all',
+		'action.lock_pin': 'Lock PIN',
 		'action.copy_link': 'Copy Link',
 		'action.learn_more': 'Learn More',
 		'action.edit_studio': 'Edit in Studio',
@@ -19,6 +26,7 @@ export default {
 		'action.friend.1': 'Remove Friend',
 		'action.friend.2': 'Friend Request Sent',
 		'action.friend.3': 'Accept Friend Request',
+		'action.friend.5': 'Decline Friend Request',
 
 		'user_action.user.profile': 'Your Profile',
 		'user_action.user.creations': 'Your Creations',
@@ -40,17 +48,51 @@ export default {
 		'user.followers': 'followers',
 		'user.following': 'following',
 		'user.favourites': 'Favourite Experiences',
+		'user.joined': 'Joined {0|time_ago}',
+		'user.badges': 'Achievements',
+		'user.id': 'User ID:',
+		'user.group': 'Primary Group',
 		'user.experience_0': 'Unknown Status',
 		'user.experience_1': 'Unknown Status',
 		'user.experience_2': 'Currently Playing',
 		'user.experience_3': 'Currently Editing',
 		'user.avatar': 'Currently Wearing',
-		'user.role.0': 'ROBLOX STAFF',
-		'user.role.1': 'BETA TESTER',
-		'user.role.2': 'DEV RELATIONS',
-		'user.role.3': 'EVENT ORGANISER',
 		'user.talent': '{0}\'s Creator Page',
-		
+
+		'user_role.0': 'Staff',
+		'user_role.1': 'Beta Tester',
+		'user_role.2': 'Dev Relations',
+		'user_role.3': 'Event Organiser',
+		'user_role.4': 'This user is banned.',
+		'user_role.5': 'svelteblox Contributor',
+
+		'profile.name': 'Display Name',
+		'profile.about': 'Bio',
+		'profile.about.placeholder': 'Tell the Roblox community about what you like to make, build, and explore...',
+		'profile.overview': 'Overview',
+		'profile.creations': 'Creations',
+		'profile.creations.experiences': 'Pinned Experiences',
+
+		'badge.id': 'Badge ID:',
+		'badge.enabled.true': 'Obtainable',
+		'badge.enabled.false': 'Unobtainable',
+		'badge.given': 'Awarded {0|number} times, {1|number} today',
+		'badge.given.none': 'No-one has this achievement yet!',
+		'badge.earned': '{0}% of players have this achievement',
+		'badge.user_has': 'You have this achievement, good job!',
+		'badge.earn_date': 'You earned this {0|time_ago}',
+
+		'unlock_pin': 'Unlock PIN',
+		'unlock_pin.summary': 'You need to enter your four-digit PIN before you can continue.',
+		'unlock_pin.placeholder': '1234',
+		'unlock_pin.incorrect': 'The PIN you entered is incorrect, please try again.',
+		'unlock_pin.ratelimited': 'You are being rate-limited, please try again later.',
+
+		'name_change_result.0': '',
+		'name_change_result.1': 'This name has been deemed inappropriate.',
+		'name_change_result.2': 'You can only change your name every 7 days.',
+		'name_change_result.3': 'Your name must be between 3-20 characters.',
+
 		'talent_status.false': 'Not Open to Work',
 		'talent_status.true': 'Open to Work',
 
@@ -60,7 +102,7 @@ export default {
 		'groups': 'Groups',
 		'groups.list': 'Your Groups',
 
-		'group.members': '{0.memberCount|number} members',
+		'group.members': '{0|number} members',
 		'group.join': 'Join Group',
 		'group.about': 'About',
 		'group.experiences': 'Experiences',
@@ -68,6 +110,9 @@ export default {
 		'group.shout': 'Group Shout',
 		'group.shout.time': 'Posted {0|time_ago}',
 		'group.hover': '{0}\n{1} Member(s)',
+
+		'group_entry.true': 'Public',
+		'group_entry.false': 'Invite-only',
 
 		'group_relationship.Allies': 'Allies',
 		'group_relationship.Enemies': 'Enemies',
@@ -94,6 +139,8 @@ export default {
 		'create': 'Create',
 
 		'creator': 'by {0}',
+		'created_date': 'Created {0|time_ago}',
+		'updated_date': 'Updated {0|time_ago}',
 
 		'user_status.0': 'Offline',
 		'user_status.1': 'Online',
@@ -149,6 +196,8 @@ export default {
 		'number_small.2': '{0}B',
 		'number_small.3': '{0}T',
 
+		'date_format': 'MMMM D, YYYY [at] h:mm:ss A',
+
 		'time_ago': '{0|time_ago}',
 		'time_ago.0_0': '{0} seconds ago',
 		'time_ago.0_1': 'now',
@@ -202,10 +251,6 @@ export default {
 		'user.experience_2': '現在プレイ中',
 		'user.experience_3': '現在編集中',
 		'user.avatar': '現在着用中',
-		'user.role.0': 'ROBLOX 職員',
-		'user.role.1': 'ベータテスター',
-		'user.role.3': 'イベントオーガナイザー',
-
 		'groups': 'グループ',
 		'groups.list': 'あなたのグループ',
 

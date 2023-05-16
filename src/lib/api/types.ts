@@ -9,6 +9,7 @@ export interface GameListItem {
 export interface User {
 	id: number
 	name: string
+	created: string
 	isBanned: boolean
 	displayName: string
 	description: string
@@ -170,6 +171,11 @@ export interface Partial {
 	id: number
 	type: PartialType
 }
+export interface NamedPartial {
+	id: number
+	name: string
+	type: PartialType
+}
 export enum PartialType {
 	User = 'User',
 	Group = 'Group',
@@ -251,4 +257,45 @@ export interface TalentProfile {
 	creatorDescription: string
 	interestDescription: string
 	preferredContactLinkType: string
+}
+
+export interface UserBadge {
+	id: number
+	name: string
+	created: string
+	updated: string
+	enabled: boolean
+	awarder: NamedPartial
+	statistics: {
+		awardedCount: number
+		winRatePercentage: number
+		pastDayAwardedCount: number
+	}
+	iconImageId: number
+	description: string
+	displayName: string
+	displayDescription: string
+	displayIconImageId: number
+}
+export interface Badge {
+	id: number
+	name: string
+	created: string
+	updated: string
+	enabled: boolean
+	statistics: {
+		awardedCount: number
+		winRatePercentage: number
+		pastDayAwardedCount: number
+	}
+	iconImageId: number
+	description: string
+	displayName: string
+	awardingUniverse: {
+		id: number
+		name: string
+		rootPlaceId: number
+	}
+	displayDescription: string
+	displayIconImageId: number
 }

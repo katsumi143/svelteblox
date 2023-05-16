@@ -5,7 +5,6 @@
 	import X from '../icons/X.svelte';
 	import Modal from './Modal.svelte';
 	import Question from '../icons/Question.svelte';
-	import VerifiedBadge from '../icons/VerifiedBadge.svelte';
 	export let id: string;
 	export let link: string;
 

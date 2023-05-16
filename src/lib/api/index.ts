@@ -4,7 +4,7 @@ import type { HttpMethod } from '@sveltejs/kit/types/private';
 export function request<T>(targetUrl: string, method: HttpMethod = 'GET', body?: any, headers?: Record<string, string>, extraOptions?: Record<string, any>): Promise<T> {
 	return fullRequest<T>(targetUrl, method, body, headers, extraOptions).then(response => response.data);
 }
-export function fullRequest<T>(targetUrl: string, method: HttpMethod = 'GET', body?: any, headers?: Record<string, string>, extraOptions?: Record<string, any>): Promise<{
+export function fullRequest<T>(targetUrl: string, method: HttpMethod = 'GET', body?: any, headers?: Record<string, string>, extraOptions?: Record<string, any>, ignoreErrors?: boolean): Promise<{
 	data: T,
 	status: number,
 	headers: Headers,
@@ -25,11 +25,12 @@ export function fullRequest<T>(targetUrl: string, method: HttpMethod = 'GET', bo
 							const token = headers['x-csrf-token'];
 							if (token) {
 								console.warn('request failed, retrying with new token');
-								return fullRequest<T>(targetUrl, method, body, headers, extraOptions).then(resolve).catch(reject);
+								return fullRequest<T>(targetUrl, method, body, headers, extraOptions, ignoreErrors).then(resolve).catch(reject);
 							}
+						} else if (!ignoreErrors) {
+							console.error('request failed', targetUrl, status, statusText, data, headers);
+							return reject(new Error(`${status} ${statusText}`));
 						}
-						console.error('request failed', targetUrl, status, statusText, data, headers);
-						return reject(new Error(`${status} ${statusText}`));
 					}
 					resolve({
 						data,

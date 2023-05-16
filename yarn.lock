@@ -1252,10 +1252,10 @@
   resolved "https://registry.yarnpkg.com/@vite-pwa/sveltekit/-/sveltekit-0.2.1.tgz#feb6e1355fef233bf683b31f3c010d065c5d9cd3"
   integrity sha512-B13xF2slkrnRZhAwSgje4EvsX3+pdmxDYXIJ/iiRotYa9o+ThwfhtMrpvmapqHBazzIlvOu9HY7TV8W2qxh+AA==
 
-"@voxelified/voxeliface@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@voxelified/voxeliface/-/voxeliface-1.3.0.tgz#709d9f7880ec89470d3b1353c188a26355fb26b0"
-  integrity sha512-j6sj1IIjb+3KcVK062abSDiz2wN+FuUpFKiWlytgChyUM2HoTZ76PpR3esCbYaUKPfbFXvOMyr1aVWqa65xvng==
+"@voxelified/voxeliface@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/@voxelified/voxeliface/-/voxeliface-1.4.0.tgz#42893421199831e3b5e5b5112d32c498526340d5"
+  integrity sha512-/U2ysQll3FH6L8cnsnNFkQQbxxeAih82qtmNpiMKznmKqSeda97IPZNJtu31oZQiEefRAfHmXoTHZ94hC4CQzQ==
   dependencies:
     svelte "^3.54.0"
 
@@ -1517,6 +1517,11 @@ crypto-random-string@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/crypto-random-string/-/crypto-random-string-2.0.0.tgz#ef2a7a966ec11083388369baa02ebead229b30d5"
   integrity sha512-v1plID3y9r/lPhviJ1wrXpLeyUIGAZ2SHNYTEapm7/8A9nLPoyvVp3RK/EPFqn5kEznyWgYZNsRtYYIWbuG8KA==
+
+dayjs@^1.11.3:
+  version "1.11.7"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.7.tgz#4b296922642f70999544d1144a2c25730fce63e2"
+  integrity sha512-+Yw9U6YO5TQohxLcIkrXBeY73WP3ejHWVvx8XCk3gxvQDCTEmS48ZrSZCKciI7Bhl/uCMyxYtE9UqRILmFphkQ==
 
 debug@^4.1.0, debug@^4.1.1, debug@^4.3.4:
   version "4.3.4"
@@ -2706,6 +2711,13 @@ svelte-preprocess@^5.0.3:
     magic-string "^0.27.0"
     sorcery "^0.11.0"
     strip-indent "^3.0.0"
+
+svelte-time@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/svelte-time/-/svelte-time-0.7.1.tgz#5608f6e12cb9bd61f739026ce006642d649d66be"
+  integrity sha512-E7IL/85j7oj5fhxvmlau616TUbFfa6Vyy1PFTL3Y8SJGY6NXJaUj7DOYJrXVdoS3Rm9RVST0M6qWd6vqrYgM+w==
+  dependencies:
+    dayjs "^1.11.3"
 
 svelte@^3.54.0, svelte@^3.57.0:
   version "3.57.0"

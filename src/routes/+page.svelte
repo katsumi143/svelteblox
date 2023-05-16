@@ -30,7 +30,7 @@
 </script>
 
 <div class="landing">
-	<a href={`/users/${user.id}/profile`} on:contextmenu={contextMenu.createHandler()}>
+	<a href={`/user/${user.name}`} on:contextmenu={contextMenu.createHandler()}>
 		<Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)} circle/>
 		<UserMenu {...user} bind:contextMenu={contextMenu}/>
 	</a>

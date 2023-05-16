@@ -106,7 +106,7 @@
 					{#if data.isFavoritedByUser}
 						<StarFill/>
 					{:else}
-						<Star/>
+						<Star size={24}/>
 					{/if}
 					{$t(`experience.favourite_${data.isFavoritedByUser}`)}
 				</p>

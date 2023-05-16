@@ -11,12 +11,12 @@
 	export let input: string | undefined | null;
 	
 	const verifiedBadge = '<img src="/verified.svg" width="16" height="16"/>';
-	$: description = input ? replaceAsync(input, /(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+/g, async url => {
+	$: description = input ? replaceAsync(input, /(?:http(s)?:\/\/)?[\w]+(?:\.[\w\.-]+)+[\w\-_~:/?#[\]@!\$&'\(\)\*\+,;=]+/g, async url => {
 		const userId = url.match(/(?:https:\/\/)(?:(?:www|web)\.)?roblox\.com\/users\/(\d*).*/)?.[1];
 		if (userId) {
 			const user = await getUser(userId);
 			const icon = await getUserIcon(userId);
-			return `<a class="cool-link" href="/users/${userId}"><img src="${icon?.imageUrl}" width="25" height="25"/>${prettifyName(user.displayName, user.name)}${user.hasVerifiedBadge ? verifiedBadge : ''}</a>`;
+			return `<a class="cool-link" href="/user/${user.name}"><img src="${icon?.imageUrl}" width="25" height="25"/>${prettifyName(user.displayName, user.name)}${user.hasVerifiedBadge ? verifiedBadge : ''}</a>`;
 		}
 		
 		const groupId = url.match(/(?:https:\/\/)(?:(?:www|web)\.)?roblox\.com\/groups\/(\d*).*/)?.[1];
@@ -61,6 +61,7 @@
 			{@html value}
 		{/if}
 	{/await}
+	<slot/>
 </p>
 
 <style lang="scss">

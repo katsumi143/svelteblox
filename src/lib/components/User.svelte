@@ -17,7 +17,7 @@
 	let contextMenu: ContextMenu;
 </script>
 
-<a href={`/users/${user.id}`} class={`friend status-${presenceType}`} title={`${user.displayName} (@${user.name}) • ${$t(`user_status.${presenceType}`)}`} on:contextmenu={contextMenu.createHandler()}>
+<a href={`/user/${user.name}`} class={`friend status-${presenceType}`} title={`${user.displayName} (@${user.name}) • ${$t(`user_status.${presenceType}`)}`} on:contextmenu={contextMenu.createHandler()}>
 	<Avatar src={avatar?.then(i => i?.imageUrl)} size="md" circle/>
 	<p>{user.displayName}</p>
 	{#if presenceType > 0 && experience}
