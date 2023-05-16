@@ -415,6 +415,10 @@
 	</Tabs.Root>
 </div>
 
+<svelte:head>
+	<title>{data.displayName}</title>
+</svelte:head>
+
 <style lang="scss">
 	.main {
 		margin: 128px 32px 16px;
