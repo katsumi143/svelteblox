@@ -60,7 +60,7 @@ export function getRobloxBadges(userId: string | number) {
 }
 
 export function userHasBadge(userId: string | number, badgeId: string | number) {
-	return USERS_CACHE.use(`badge_time_${userId}`, () =>
+	return USERS_CACHE.use(`badge_time_${userId}_${badgeId}`, () =>
 		request<ApiDataList<{
 			badgeId: number
 			awardedDate: string

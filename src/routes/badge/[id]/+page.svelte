@@ -1,10 +1,11 @@
 <script lang="ts">
 	import Time from 'svelte-time';
 	import { t } from '$lib/localisation';
+	import { page } from '$app/stores';
 	import { getImages } from '$lib/api/images';
 	import type { PageData } from './$types';
 	import { getExperience } from '$lib/api/games';
-	import { user, userHasBadge } from '$lib/api/users';
+	import { user, getUser, userHasBadge } from '$lib/api/users';
 	export let data: PageData;
 
 	import Avatar from '$lib/components/Avatar.svelte';
@@ -19,6 +20,10 @@
 	$: icon = getImages([data.displayIconImageId], '150x150')
 		.then(data => data[0]);
 
+	$: targetId = $page.url.searchParams.get('targetUser');
+	$: target = targetId && targetId !== user.id.toString() ? getUser(targetId) : null;
+	$: targetDate = target?.then(target => target ? userHasBadge(target.id, data.id) : null);
+	
 	$: awardDate = userHasBadge(user.id, data.id);
 	$: experience = getExperience(data.awardingUniverse.id);
 </script>
@@ -56,6 +61,18 @@
 				</div>
 			{/if}
 		{/await}
+		{#await target then user}
+			{#if user}
+				{#await targetDate then date}
+					{#if date}
+						<div class="counter">
+							<Star/>
+							<p>{$t('badge.earn_date.target', [user.displayName, date.valueOf()])}</p>
+						</div>
+					{/if}
+				{/await}
+			{/if}
+		{/await}
 		<div class="counter">
 			<People/>
 			<p>{data.statistics.awardedCount ? $t('badge.given', [data.statistics.awardedCount, data.statistics.pastDayAwardedCount]) : $t('badge.given.none')}</p>
@@ -63,7 +80,7 @@
 		{#if data.statistics.awardedCount}
 			<div class="counter">
 				<Percentage/>
-				<p>{$t('badge.earned', [data.statistics.winRatePercentage])}</p>
+				<p>{$t('badge.earned', [(data.statistics.winRatePercentage * 100).toString().slice(0, 4)])}</p>
 			</div>
 		{/if}
 		<div class="separator"/>

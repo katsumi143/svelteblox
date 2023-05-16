@@ -269,7 +269,7 @@
 						</div>
 						<div class="items">
 							{#each items.slice(0, 6) as item}
-								<a class="focusable" href={`/badge/${item.id}`} title={item.displayName}>
+								<a class="focusable" href={`/badge/${item.id}${data.id !== user.id ? `?targetUser=${data.id}` : ''}`} title={item.displayName}>
 									<Avatar src={badgeIcons.then(b => b.find(i => i.targetId === item.displayIconImageId)?.imageUrl)} size="sm2" transparent/>
 								</a>
 							{/each}
