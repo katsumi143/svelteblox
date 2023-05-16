@@ -3,6 +3,7 @@
 	width: fit-content;
 	color: var(--color-primary);
 	margin: 4px 0;
+	height: fit-content;
 	padding: 4px 8px;
 	display: flex;
 	font-size: .85em;
@@ -21,4 +22,5 @@
 .cool-links {
 	gap: 8px;
 	display: flex;
+	flex-wrap: wrap;
 }

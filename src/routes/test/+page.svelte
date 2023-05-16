@@ -1,11 +1,15 @@
 <script lang="ts">
+	import { Button, TextInput } from '@voxelified/voxeliface';
+
 	import * as toast from '$lib/toast';
-	import { Button } from '@voxelified/voxeliface';
 	import { USERS_CACHE } from '$lib/api/users';
 	import { GAMES_CACHE } from '$lib/api/games';
 	import { GROUPS_CACHE } from '$lib/api/groups';
 	import { IMAGES_CACHE } from '$lib/api/images';
 
+	import Description from '$lib/components/Description.svelte';
+
+	let desc = 'こんにちは世界！';
 	const clearAllCaches = () => {
 		USERS_CACHE.invalidateAll();
 		GAMES_CACHE.invalidateAll();
@@ -22,6 +26,10 @@
 	<Button on:click={clearAllCaches}>
 		Clear All Caches
 	</Button>
+</div>
+<div class="description">
+	<TextInput multiline bind:value={desc}/>
+	<Description input={desc}/>
 </div>
 
 <style>
