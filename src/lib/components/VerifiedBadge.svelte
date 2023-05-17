@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Badge from './Badge.svelte';
+	import Badge from './UserBadge.svelte';
 	import VerifiedBadge from '../icons/VerifiedBadge.svelte';
 	export let size = 16;
 </script>

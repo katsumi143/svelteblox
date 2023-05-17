@@ -14,9 +14,14 @@ export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
 
 export const USERS_CACHE = new Cache('users');
 
-export function getUser(id: string | number) {
-	return USERS_CACHE.use(`user_${id}`, () =>
-		request<User>(`${USERS_BASE}/users/${id}`),
+export function getUser(userId: string | number) {
+	return USERS_CACHE.use(`user_${userId}`, () =>
+		request<User>(`${USERS_BASE}/users/${userId}`)
+			.then(user => {
+				USERS_CACHE.set(`username_${userId}`, user.name, 86400000);
+				USERS_CACHE.set(`displayname_${userId}`, user.displayName, 86400000);
+				return user;
+			}),
 		3600000
 	);
 }
@@ -41,7 +46,7 @@ export function getUsername(userId: string | number) {
 	return USERS_CACHE.use(`username_${userId}`, () => getUser(userId).then(u => u.name), 86400000);
 }
 export function getDisplayName(userId: string | number) {
-	return USERS_CACHE.use(`display_name_${userId}`, () => getUser(userId).then(u => u.displayName), 86400000);
+	return USERS_CACHE.use(`displayname_${userId}`, () => getUser(userId).then(u => u.displayName), 86400000);
 }
 
 export function getBadges(userId: string | number) {
@@ -228,7 +233,7 @@ export const user = await getCurrentUser();
 if (user) {
 	USERS_CACHE.set(`userid_${user.name}`, user.id, -1);
 	USERS_CACHE.set(`username_${user.id}`, user.name, -1);
-	USERS_CACHE.set(`display_name_${user.id}`, user.displayName, -1);
+	USERS_CACHE.set(`displayname_${user.id}`, user.displayName, -1);
 }
 
 export function getRobux() {

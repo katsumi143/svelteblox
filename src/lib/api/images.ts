@@ -9,7 +9,7 @@ export async function getImages(assetIds: number[], size: '150x150') {
 	const ids2 = assetIds.filter(id => !IMAGES_CACHE.isValid(`image_${id}`));
 	if (ids2.length) {
 		const items: ImageData[] = [];
-		for (const chunk of splitArray(ids2, 100))
+		for (const chunk of splitArray(ids2, 50))
 			items.push(...await request<ApiDataList<ImageData>>(`${THUMBNAILS_BASE}/assets?assetIds=${chunk.join(',')}&format=Png&size=${size}`)
 				.then(data => data.data.map(data => IMAGES_CACHE.set(`image_${data.targetId}`, data, -1)))
 				.then(data => [...data, ...assetIds.filter(id => !ids2.includes(id)).map(id => IMAGES_CACHE.get<ImageData>(`image_${id}`)!)]));

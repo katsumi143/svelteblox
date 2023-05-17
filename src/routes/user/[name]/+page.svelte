@@ -6,17 +6,20 @@
 	import { t } from '$lib/localisation';
 	import * as toast from '$lib/toast';
 	import { getImages } from '$lib/api/images';
+	import { getUserBadges } from '$lib/api/badges';
 	import type { LayoutData } from './$types';
 	import type { Friendship } from '$lib/api/types';
 	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
 	import { UserRole, ChangeDisplayNameResult } from '$lib/api/enums';
 	import { FriendshipStatus, UserPresenceType } from '$lib/api/types';
 	import { getExperiences, getExperienceId, getExperienceThumbnails } from '$lib/api/games';
-	import { user, getBadges, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
+	import { user, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
 	import User from '$lib/components/User.svelte';
+	import Badge from '$lib/components/Badge.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import GroupCard from '$lib/components/GroupCard.svelte';
+	import BadgeList from '$lib/components/BadgeList.svelte';
 	import Description from '$lib/components/Description.svelte';
 	import PremiumBadge from '$lib/components/PremiumBadge.svelte';
 	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
@@ -57,7 +60,7 @@
 	$: following = getUserFollowingCount(data.id);
 
 	$: roles = getUserRoles(data.id, data.name, data.isBanned);
-	$: badges = getBadges(data.id);
+	$: badges = getUserBadges(data.id, 10).then(data => data.data);
 	$: premium = hasPremium(data.id);
 	$: badgeIcons = badges.then(items => items.length ? getImages(items.map(i => i.displayIconImageId), '150x150') : Promise.resolve([]));
 
@@ -93,6 +96,7 @@
 	let saving = false;
 	let editing = false;
 	let friending = false;
+	let viewBadges = false;
 	let nameResult = ChangeDisplayNameResult.Success;
 	let menuTrigger: () => void;
 	const tabValue = writable(0);
@@ -103,7 +107,7 @@
 			nameResult = result;
 			
 			if (result === ChangeDisplayNameResult.Success)
-				USERS_CACHE.set(`display_name_${data.id}`, editName, 86400000);
+				USERS_CACHE.set(`displayname_${data.id}`, editName, 86400000);
 			else {
 				saving = false;
 				return;
@@ -265,13 +269,17 @@
 					<div class="badges">
 						<div class="list-header">
 							<p>{$t('user.badges')}</p>
-							<a href={`/user/${data.name}/badges`} class="focusable">{$t('action.view_all')}<ArrowRight/></a>
+							<!-- svelte-ignore a11y-invalid-attribute -->
+							<a href="#" class="focusable" on:click={() => viewBadges = true}>{$t('action.view_all')}<ArrowRight/></a>
 						</div>
 						<div class="items">
 							{#each items.slice(0, 6) as item}
-								<a class="focusable" href={`/badge/${item.id}${data.id !== user.id ? `?targetUser=${data.id}` : ''}`} title={item.displayName}>
-									<Avatar src={badgeIcons.then(b => b.find(i => i.targetId === item.displayIconImageId)?.imageUrl)} size="sm2" transparent/>
-								</a>
+								<Badge
+									id={item.id}
+									name={item.displayName}
+									icon={badgeIcons.then(b => b.find(i => i.targetId === item.displayIconImageId)?.imageUrl)}
+									userId={data.id !== user.id ? data.id : null}
+								/>
 							{/each}
 						</div>
 					</div>
@@ -415,6 +423,10 @@
 	</Tabs.Root>
 </div>
 
+{#if viewBadges}
+	<BadgeList close={() => viewBadges = false} userId={data.id}/>
+{/if}
+
 <svelte:head>
 	<title>{data.displayName}</title>
 </svelte:head>
@@ -425,6 +437,7 @@
 		display: flex;
 		.card {
 			width: 416px;
+			height: fit-content;
 			padding: 24px;
 			position: relative;
 			min-width: 416px;

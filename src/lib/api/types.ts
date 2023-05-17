@@ -299,3 +299,34 @@ export interface Badge {
 	displayDescription: string
 	displayIconImageId: number
 }
+
+export interface PagedResponse<T> {
+	data: T[]
+	nextCursor: string
+	prevCursor: string
+}
+export interface ApiPageResponse<T> {
+	data: T[]
+	nextPageCursor: string
+	previousPageCursor: string
+}
+export interface BadgeResponseV2 {
+	id: number
+	name: string
+	created: string
+	updated: string
+	enabled: boolean
+	awarder: NamedPartial
+	statistics: {
+		awardedCount: number
+		winRatePercentage: number
+		pastDayAwardedCount: number
+	}
+	iconImageId: number
+	description: string
+	displayName: string
+	displayDescription: string
+	displayIconImageId: number
+}
+
+export type Id = string | number;

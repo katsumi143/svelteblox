@@ -1,8 +1,14 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
+
+	export let autoOpen = false;
 	export const trigger = () => dialog.showModal();
 	export const close = () => dialog.close();
 
 	let dialog: HTMLDialogElement;
+
+	if (autoOpen)
+		onMount(trigger);
 </script>
 
 <dialog bind:this={dialog}>
@@ -17,6 +23,7 @@
 		min-width: 40%;
 		font-size: initial;
 		animation: .5s show;
+		max-height: 80%;
 		background: var(--background-secondary);
 		font-weight: initial;
 		border-radius: 16px;

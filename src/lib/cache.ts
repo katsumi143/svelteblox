@@ -43,7 +43,9 @@ export default class Cache {
 		const obj = this.cache[id];
 		if (!obj)
 			return false;
-		return obj[1] > Date.now();
+
+		const date = obj[1];
+		return date === -1 || date > Date.now();
 	}
 
 	public invalidate(id: string) {

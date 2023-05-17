@@ -83,6 +83,8 @@ export default {
 		'badge.earn_date': 'You earned this {0|time_ago}',
 		'badge.earn_date.target': '{0} earned this {1|time_ago}',
 
+		'badge_list': '{0}\'s Achievements',
+
 		'unlock_pin': 'Unlock PIN',
 		'unlock_pin.summary': 'You need to enter your four-digit PIN before you can continue.',
 		'unlock_pin.placeholder': '1234',
