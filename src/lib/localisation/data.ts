@@ -47,7 +47,6 @@ export default {
 		'user.friends.count': 'friends',
 		'user.followers': 'followers',
 		'user.following': 'following',
-		'user.favourites': 'Favourite Experiences',
 		'user.joined': 'Joined {0|time_ago}',
 		'user.badges': 'Achievements',
 		'user.id': 'User ID:',
@@ -70,6 +69,7 @@ export default {
 		'profile.about': 'Bio',
 		'profile.about.placeholder': 'Tell the Roblox community about what you like to make, build, and explore...',
 		'profile.overview': 'Overview',
+		'profile.overview.experiences': 'Favourite Experiences',
 		'profile.creations': 'Creations',
 		'profile.creations.experiences': 'Pinned Experiences',
 

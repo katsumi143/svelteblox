@@ -50,7 +50,7 @@ export function getExperienceThumbnails(experienceId: string | number) {
 	return GAMES_CACHE.use(`thumbnail_${experienceId}`, () => {
 		const userLocale = get(locale);
 		return request<ApiDataList<{
-			mediaAssets: MediaAsset[]
+			mediaAssets: (MediaAsset & { targetId: string | number })[]
 			languageCode: string
 		}>>(`https://gameinternationalization.roblox.com/v1/game-thumbnails/games/${experienceId}/images`)
 			.then(({ data }) => (data.find(d => LOCALE_MAP[d.languageCode] === userLocale) ?? data[0]).mediaAssets)
@@ -59,11 +59,15 @@ export function getExperienceThumbnails(experienceId: string | number) {
 					return getExperienceThumbnails2(experienceId)
 						.then(data => data.map(img => ({
 							state: img.state,
+							targetId: experienceId,
 							mediaAssetId: '',
 							mediaAssetUrl: img.imageUrl,
 							mediaAssetAltText: ''
 						})));
-				return data;
+				return data.map(asset => {
+					asset.targetId = experienceId;
+					return asset;
+				});
 			})
 	}, 7200000);
 }

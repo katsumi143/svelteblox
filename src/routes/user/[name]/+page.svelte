@@ -12,8 +12,8 @@
 	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
 	import { UserRole, ChangeDisplayNameResult } from '$lib/api/enums';
 	import { FriendshipStatus, UserPresenceType } from '$lib/api/types';
-	import { getExperiences, getExperienceId, getExperienceThumbnails } from '$lib/api/games';
-	import { user, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
+	import { getExperiences, getExperienceId, getExperienceIcons, getExperienceThumbnails } from '$lib/api/games';
+	import { user, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFavourites, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
 	import User from '$lib/components/User.svelte';
 	import Badge from '$lib/components/Badge.svelte';
@@ -24,6 +24,7 @@
 	import PremiumBadge from '$lib/components/PremiumBadge.svelte';
 	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
 	import ExperienceCard from '$lib/components/ExperienceCard.svelte';
+	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 
 	import X from '$lib/icons/X.svelte';
 	import Check from '$lib/icons/Check.svelte';
@@ -82,12 +83,19 @@
 
 	$: experiences = getUserProfileExperiences(data.id);
 	$: experienceThumbnails = experiences.then(async items => {
-		if (items.length === 0)
+		if (!items.length)
 			return [];
 		const images = [];
 		for (const item of items)
 			images.push((await getExperienceThumbnails(item.UniverseID))[0]);
 		return images;
+	});
+
+	$: favourites = getUserFavourites(data.id);
+	$: favouriteIcons = favourites.then(items => {
+		if (!items.length)
+			return [];
+		return getExperienceIcons(items.map(i => i.id));
 	});
 
 	let editName = data.displayName;
@@ -389,13 +397,33 @@
 					</div>
 				{/if}
 			{/await}
+			{#await favourites then items}
+				{#if items.length}
+					<div class="experiences2">
+						<p class="list-header">
+							{$t('profile.overview.experiences')}
+							<a href={`/users/${data.id}/favourites`}>{$t('action.view_all')}<ArrowRight/></a>
+						</p>
+						<div class="items">
+							{#each items as item}
+								<ExperienceItem
+									id={item.id}
+									name={item.name}
+									icon={favouriteIcons.then(t => t.find(i => i.targetId === item.id))}
+									rootPlaceId={item.rootPlace.id}
+								/>
+							{/each}
+						</div>
+					</div>
+				{/if}
+			{/await}
 		</Tabs.Item>
 		<Tabs.Item value={1} title={$t('profile.creations')}>
 			{#await experiences then items}
-				{#if items.length > 0}
+				{#if items.length}
 					<p class="text-header">{$t('profile.creations.experiences')}</p>
 					<div class="experiences">
-						{#each items as item, key}
+						{#each items as item}
 							<ExperienceCard
 								id={item.UniverseID}
 								name={item.Name}
@@ -412,7 +440,7 @@
 									isRNVAccount: false,
 									hasVerifiedBadge: data.hasVerifiedBadge
 								}}
-								thumbnail={experienceThumbnails.then(t => t[key])}
+								thumbnail={experienceThumbnails.then(t => t.find(i => i.targetId === item.UniverseID))}
 								rootPlaceId={item.PlaceID}
 							/>
 						{/each}
@@ -580,6 +608,7 @@
 		}
 		:global(.tabs-container) {
 			width: 100%;
+			overflow: hidden;
 			margin-left: 32px;
 		}
 		.experiences {
@@ -590,6 +619,15 @@
 				flex: 1 1 calc(50% - 8px);
 				width: unset;
 				height: 224px;
+			}
+		}
+		.experiences2 {
+			margin-top: 24px;
+			.items {
+				gap: 16px;
+				width: 100%;
+				display: flex;
+				overflow: hidden;
 			}
 		}
 		.friends {
