@@ -22,6 +22,7 @@
 	import ThreeDots from '$lib/icons/ThreeDots.svelte';
 	import ThumbsDown from '$lib/icons/ThumbsDown.svelte';
 	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
+	import PencilSquare from '$lib/icons/PencilSquare.svelte';
 	import RobloxStudio2 from '$lib/icons/RobloxStudio2.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
 
@@ -67,7 +68,7 @@
 			<h1>
 				{data.name}
 				<DropdownMenu bind:trigger={dropdownTrigger}>
-					<button type="button" slot="trigger" on:click={dropdownTrigger}><ThreeDots/></button>
+					<button class="trigger" type="button" slot="trigger" on:click={dropdownTrigger}><ThreeDots/></button>
 					<p>{data.name}</p>
 					{#await permissions then permissions}
 						{#if permissions.canCloudEdit}
@@ -78,11 +79,14 @@
 						{/if}
 						{#if permissions.canManage}
 							<a href={`${CREATE_BASE}/places/${data.rootPlaceId}/configure`} target="_blank">
+								<PencilSquare/>
 								{$t('action.configure_place')}
 							</a>
 							<a href={`${CREATE_BASE}/configure`} target="_blank">
+								<PencilSquare/>
 								{$t('action.configure_universe')}
 							</a>
+							<div class="separator"/>
 						{/if}
 					{/await}
 					<a href={`https://roblox.com/games/${data.rootPlaceId}`} target="_blank">
@@ -99,7 +103,7 @@
 					</button>
 				</DropdownMenu>
 			</h1>
-			<p>by <CreatorLink {...data.creator}/></p>
+			<p class="creator">by <CreatorLink {...data.creator}/></p>
 
 			<div class="share">
 				<p>
@@ -123,7 +127,7 @@
 					</div>
 				{/await}
 			</div>
-			<button type="button" on:click={() => joinExperience(data.rootPlaceId)}>
+			<button class="play" type="button" on:click={() => joinExperience(data.rootPlaceId)}>
 				<PlayIcon/>
 			</button>
 			<p class="players">{$t('experience.playing', [data.playing])}</p>
@@ -224,12 +228,15 @@
 					margin: 16px 8px 8px 0;
 					display: flex;
 					font-size: 2.5em;
-					button {
+					:global(.container) {
+						margin: 0 8px 0 auto;
+					}
+					button.trigger {
 						width: fit-content;
 						color: var(--color-tertiary);
 						border: none;
+						cursor: pointer;
 						height: fit-content;
-						margin: 8px 8px 0 auto;
 						padding: 0;
 						background: none;
 						&:hover {
@@ -237,14 +244,14 @@
 						}
 					}
 				}
-				p {
+				.creator {
 					color: var(--color-tertiary);
 				}
 				.players {
 					margin: 8px 0 16px;
 					font-size: 14px;
 				}
-				button {
+				button.play {
 					width: 100%;
 					color: #fff;
 					border: none;

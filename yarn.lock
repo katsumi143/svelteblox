@@ -1252,10 +1252,10 @@
   resolved "https://registry.yarnpkg.com/@vite-pwa/sveltekit/-/sveltekit-0.2.1.tgz#feb6e1355fef233bf683b31f3c010d065c5d9cd3"
   integrity sha512-B13xF2slkrnRZhAwSgje4EvsX3+pdmxDYXIJ/iiRotYa9o+ThwfhtMrpvmapqHBazzIlvOu9HY7TV8W2qxh+AA==
 
-"@voxelified/voxeliface@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@voxelified/voxeliface/-/voxeliface-1.4.0.tgz#42893421199831e3b5e5b5112d32c498526340d5"
-  integrity sha512-/U2ysQll3FH6L8cnsnNFkQQbxxeAih82qtmNpiMKznmKqSeda97IPZNJtu31oZQiEefRAfHmXoTHZ94hC4CQzQ==
+"@voxelified/voxeliface@^1.4.1":
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/@voxelified/voxeliface/-/voxeliface-1.4.1.tgz#f35038ffdf6e908978eed8e012514159cfb6eec0"
+  integrity sha512-eyXt9NU62d95hlrrb2H+Ho/YA4KOF/Ol5xzJdmmEduyx5G/ZUrc3pjIosXx83PfKKXLCSJNsYg8P44j7aNGFQQ==
   dependencies:
     svelte "^3.54.0"
 
