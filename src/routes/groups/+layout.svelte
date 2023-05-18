@@ -35,14 +35,16 @@
 
 <style lang="scss">
 	.main {
+		height: 100%;
 		display: flex;
+		overflow: hidden;
+		min-height: 100%;
 		.groups {
 			height: 100%;
-			margin: 16px 0 0 16px;
 			display: flex;
+			padding: 16px 0 32px 16px;
 			overflow: auto;
 			min-width: 20%;
-			padding-bottom: 12px;
 			flex-direction: column;
 			p {
 				margin: 0 0 12px;
@@ -80,7 +82,8 @@
 		}
 		.group-page {
 			width: 100%;
-			overflow: hidden;
+			height: 100%;
+			overflow: auto;
 		}
 	}
 </style>
