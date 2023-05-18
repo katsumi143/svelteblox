@@ -24,7 +24,7 @@
 		friendId ? joinUser(friendId) : joinExperience(rootPlaceId);
 </script>
 
-<a class="experience" href={`/games/${rootPlaceId}`}>
+<a class="experience" href={`/experience/${id}`}>
 	{#await thumbnail ?? getExperienceThumbnails(id).then(i => i[0]) then image}
 		<img src={image?.mediaAssetUrl} alt="experience thumbnail"/>
 	{/await}

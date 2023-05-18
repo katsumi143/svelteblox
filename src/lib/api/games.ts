@@ -5,15 +5,15 @@ import { locale } from '../settings';
 import { request } from '.';
 import { LOCALE_MAP } from '$lib/constants';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { Badge, ImageData, ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PrivateExperienceServer } from './types';
+import type { Id, Badge, ImageData, ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PrivateExperienceServer } from './types';
 export const GAMES_BASE = 'https://games.roblox.com/v';
 export const GAMES_BASE1 = GAMES_BASE + 1;
 export const GAMES_BASE2 = GAMES_BASE + 2;
 
 export const GAMES_CACHE = new Cache('experiences');
 
-export function getExperience(id: number): Promise<Experience | undefined> {
-	return GAMES_CACHE.use(`experience_${id}`, () => getExperiences([id]).then(data => data[0]), 600000);
+export function getExperience(universeId: Id): Promise<Experience | undefined> {
+	return GAMES_CACHE.use(`experience_${universeId}`, () => getExperiences([universeId]).then(data => data[0]), 600000);
 }
 export function getExperiences(experienceIds: (string | number)[]) {
 	if (experienceIds.length === 0)

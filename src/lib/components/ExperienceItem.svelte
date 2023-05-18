@@ -25,7 +25,7 @@
 	const rating = voting2.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
 </script>
 
-<a class="experience" href={`/games/${rootPlaceId}`} title={$t('experience.hover', [name, playing])} on:contextmenu={contextMenu.createHandler()}>
+<a class="experience" href={`/experience/${id}`} title={$t('experience.hover', [name, playing])} on:contextmenu={contextMenu.createHandler()}>
 	<Avatar src={icon ? icon.then(i => i?.imageUrl) : getExperienceIcons([id]).then(i => i[0]?.imageUrl)} size="lg2"/>
 	<p class="name">{name}</p>
 	<div class="details">

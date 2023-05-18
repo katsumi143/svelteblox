@@ -34,7 +34,7 @@
 					throw new Error('uh oh');
 				const data = await getExperience(id);
 				const [icon] = await getExperienceIcons([id]);
-				return `<a class="cool-link" href="/games/${placeId}"><img src="${icon?.imageUrl}" width="25" height="25"/>${data?.name}</a>`;
+				return `<a class="cool-link" href="/experience/${id}"><img src="${icon?.imageUrl}" width="25" height="25"/>${data?.name}</a>`;
 			}
 
 			const topicId = url.match(/https:\/\/devforum\.roblox\.com\/t\/.*?\/(\d*).*/)?.[1];
