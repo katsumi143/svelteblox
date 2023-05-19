@@ -9,6 +9,7 @@
 	import People from '../icons/PeopleFill.svelte';
 	export let icon: Promise<ImageData | null | undefined> | null = null;
 	export let group: Group;
+	export let userRole: [string, string] | null = null;
 </script>
 
 <a class="group focusable" href={`/groups/${group.id}`} title={group.name}>
@@ -25,6 +26,9 @@
 	<div class="details">
 		<p><Eye/>{$t(`group_entry.${group.publicEntryAllowed}`)}</p>
 		<p><People/>{$t('group.members', [group.memberCount])}</p>
+		{#if userRole}
+			<p class="role">{$t('group.user_role', userRole)}</p>
+		{/if}
 	</div>
 </a>
 
@@ -61,6 +65,9 @@
 					margin-right: 6px;
 					margin-bottom: -2px;
 				}
+			}
+			.role {
+				margin-left: auto;
 			}
 		}
 		&:hover {

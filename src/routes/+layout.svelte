@@ -62,7 +62,7 @@
 	const robux = getRobux();
 	const avatar = getUserIcon(user.id);
 	const primaryGroup = getPrimaryGroup(user.id);
-	const primaryGroupIcon = primaryGroup.then(group => group ? getGroupIcon(group.id) : null);
+	const primaryGroupIcon = primaryGroup.then(group => group ? getGroupIcon(group[0].id) : null);
 
 	let userMenuTrigger: () => void;
 </script>
@@ -110,9 +110,9 @@
 				{#if group}
 					<div class="separator"/>
 					<p>{$t('user_action.group')}</p>
-					<a href={`/groups/${group.id}`}>
+					<a href={`/groups/${group[0].id}`}>
 						<Avatar src={primaryGroupIcon.then(i => i?.imageUrl)} size="xs" transparent/>
-						{group.name}
+						{group[0].name}
 					</a>
 				{/if}
 			{/await}

@@ -70,7 +70,7 @@
 	$: fullDescription = data.description.length <= 200;
 
 	$: group = getPrimaryGroup(data.id);
-	$: groupIcon = group.then(group => group ? getGroupIcon(group.id) : null);
+	$: groupIcon = group.then(g => g ? getGroupIcon(g[0].id) : null);
 
 	$: socials = getUserSocials(data.id);
 	$: presence = getUserPresences([data.id]).then(data => data[0]);
@@ -374,7 +374,7 @@
 			{#await group then group}
 				{#if group}
 					<p class="text-header">{$t('user.group')}</p>
-					<GroupCard icon={groupIcon} group={group}/>
+					<GroupCard icon={groupIcon} group={group[0]} userRole={[data.displayName, group[1].name]}/>
 				{/if}
 			{/await}
 			{#await sortedFriends then friends}

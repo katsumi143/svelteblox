@@ -114,6 +114,8 @@ export default {
 		'group.shout.time': 'Posted {0|time_ago}',
 		'group.hover': '{0}\n{1} Member(s)',
 
+		'group.user_role': '{0}\'s Role: {1}',
+
 		'group_entry.true': 'Public',
 		'group_entry.false': 'Invite-only',
 

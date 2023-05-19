@@ -61,16 +61,24 @@ export function joinGroup(groupId: string | number) {
 	return request(`${GROUPS_BASE}/groups/${groupId}/users`, 'POST');
 }
 
-export function getPrimaryGroup(userId: string | number) {
+export function getPrimaryGroup(userId: string | number): Promise<[Group, PrimaryGroupResponse['role']] | null> {
 	return GROUPS_CACHE.use(`primary_${userId}`, () =>
 		request<PrimaryGroupResponse | null>(`${GROUPS_BASE}/users/${userId}/groups/primary/role`)
-			.then((data) => data ? getGroup(data.group.id) : null),
+			.then(data => {
+				if (data)
+					return getGroup(data.group.id).then(group => [group, data.role]);
+				return null;
+			}),
 		3600000
 	);
 }
 
 interface PrimaryGroupResponse {
-	role: any
+	role: {
+		id: number
+		name: string
+		rank: number
+	}
 	group: {
 		id: number
 		name: string
