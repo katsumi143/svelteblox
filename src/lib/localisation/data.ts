@@ -167,7 +167,7 @@ export default {
 		'locale.ru-RU': 'Russian',
 		'locale.ja-JP': 'Japanese',
 
-		'client_channel.LIVE': 'Default',
+		'client_channel.live': 'Default',
 		'client_channel.zcanary': 'Canary',
 		'client_channel.zintegration': 'Integration',
 		'client_channel.zwinplayer64': 'Windows 64-Bit Client',
@@ -288,7 +288,7 @@ export default {
 		'theme.light': '灯',
 		'theme.color_purple': '紫',
 
-		'client_channel.LIVE': 'デフォルト',
+		'client_channel.live': 'デフォルト',
 		'client_channel.zcanary': 'カナリア',
 		'client_channel.zintegration': '統合化',
 

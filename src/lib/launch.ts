@@ -23,7 +23,8 @@ export async function getTicket() {
 }
 
 export function launchClient(ticket: string, launchUri: string) {
-	location.href = `roblox-player:1+launchmode:play+gameinfo:${ticket}+placelauncherurl:${encodeURIComponent(launchUri)}+channel:${get(clientChannel)}+LaunchExp:InApp`;
+	const channel = get(clientChannel);
+	location.href = `roblox-player:1+launchmode:play+gameinfo:${ticket}+placelauncherurl:${encodeURIComponent(launchUri)}+channel:${channel === 'live' ? '' : channel}+LaunchExp:InApp`;
 }
 export function launchStudio(placeId: number, universeId: number, task: string) {
 	location.href = `roblox-studio:1+launchmode:edit+task:${task}+placeId:${placeId}+universeId:${universeId}`;
