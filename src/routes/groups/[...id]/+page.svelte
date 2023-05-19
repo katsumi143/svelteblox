@@ -59,11 +59,11 @@
 			</h1>
 			<p>by <CreatorLink id={data.owner.userId} name={data.owner.username} type="User" displayName={data.owner.displayName} hasVerifiedBadge={data.owner.hasVerifiedBadge}/></p>
 			<div class="extra">
-				<p>{$t('group.members', [data.memberCount])}</p>
+				<p>{$t('group.members', [data.memberCount])} • {$t('group.role', [data.groups.find(g => g.group.id === data.id)?.role.name])}</p>
 			</div>
 		</div>
 		<div class="buttons">
-			{#if !data.groups.some(group => group.id === data.id)}
+			{#if !data.groups.some(({ group }) => group.id === data.id)}
 				<Button disabled={joining} on:click={join}><PersonPlus/>{$t('group.join')}</Button>
 			{/if}
 		</div>

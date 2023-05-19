@@ -4,26 +4,25 @@
 	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
 	import { getGroupIcons } from '$lib/api/groups';
 	import type { LayoutData } from './$types';
-
 	export let data: LayoutData;
 
-	const icons = getGroupIcons(data.groups.map(group => group.id));
+	const icons = getGroupIcons(data.groups.map(({ group }) => group.id));
 </script>
 
 <div class="main">
 	<div class="groups">
 		<p>{$t('groups.list')}</p>
-		{#each data.groups as group}
+		{#each data.groups as { group, role }}
 			<a class="group" href={`/groups/${group.id}`}>
 				<Avatar src={icons.then(i => i.find(icon => icon.targetId === group.id)?.imageUrl)} size="sm"/>
 				<div>
 					<p>
-						{group.name}
+						{group.name} 
 						{#if group.hasVerifiedBadge}
 							<VerifiedBadge size={12}/>
 						{/if}
 					</p>
-					<p class="owner">{$t('creator', [group.owner.displayName])}</p>
+					<p class="owner">{$t('creator', [group.owner.displayName])} • {role.name}</p>
 				</div>
 			</a>
 		{/each}
