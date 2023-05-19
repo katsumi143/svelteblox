@@ -37,7 +37,7 @@
 				return `<a class="cool-link" href="/experience/${id}"><img src="${icon?.imageUrl}" width="25" height="25"/>${data?.name}</a>`;
 			}
 
-			const topicId = url.match(/https:\/\/devforum\.roblox\.com\/t\/.*?\/(\d*).*/)?.[1];
+			const topicId = url.match(/https:\/\/devforum\.roblox\.com\/t\/(?:.*?\/)?(\d+).*/)?.[1];
 			if (topicId) {
 				const topic = await getTopic(topicId);
 				return `<a class="cool-link" href="${url}" target="_blank"><img src="/devforum.svg" width="25" height="25"/>${topic.title}</a>`;
