@@ -4,7 +4,7 @@ import { request } from '.';
 import { getThumbnails } from './images';
 import { getExperiences } from './games';
 import type { GroupRelationship } from './enums';
-import type { Group, ImageData, ApiDataList, ExperienceV2 } from './types';
+import type { Group, ImageData, SocialLink, ApiDataList, ExperienceV2 } from './types';
 export const GROUPS_BASE = 'https://groups.roblox.com/v1';
 
 export const GROUPS_CACHE = new Cache('groups');
@@ -15,6 +15,13 @@ export function getGroup(groupId: string | number): Promise<Group> {
 export function getGroupIcon(groupId: string | number): Promise<ImageData | undefined> {
 	return GROUPS_CACHE.use(`group_icon_${groupId}`, () => getGroupIcons([groupId]).then(data => data[0]), 3600000);
 }
+export function getGroupName(groupId: string | number) {
+	return GROUPS_CACHE.use(`group_name_${groupId}`, () => getGroup(groupId).then(data => data.name), 86400000);
+}
+export function getGroupVerified(groupId: string | number) {
+	return GROUPS_CACHE.use(`group_verified_${groupId}`, () => getGroup(groupId).then(data => data.hasVerifiedBadge), 86400000);
+}
+
 export function getGroupIcons(groupIds: (string | number)[]) {
 	if (groupIds.length === 0)
 		return Promise.resolve([]);
@@ -27,6 +34,14 @@ export function getGroupExperiences(groupId: string | number, access?: number) {
 export function getGroupExperiences2(groupId: string | number, access?: number) {
 	return getGroupExperiences(groupId, access)
 		.then(data => getExperiences(data.map(e => e.id)));
+}
+
+export function getGroupSocials(groupId: string | number) {
+	return GROUPS_CACHE.use(`group_socials_${groupId}`, () =>
+		request<ApiDataList<SocialLink>>(`${GROUPS_BASE}/groups/${groupId}/social-links`)
+			.then(data => data.data),
+		86400000
+	)
 }
 
 export function getSelfGroupRoles() {

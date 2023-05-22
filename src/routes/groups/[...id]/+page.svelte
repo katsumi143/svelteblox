@@ -6,10 +6,11 @@
 	import type { PageData } from './$types';
 	import type { ImageData } from '$lib/api/types';
 	import { GroupRelationship } from '$lib/api/enums';
-	import { joinGroup, GROUPS_CACHE, getGroupIcons, getRelatedGroups, getGroupExperiences2 } from '$lib/api/groups';
+	import { joinGroup, GROUPS_CACHE, getGroupIcons, getGroupSocials, getRelatedGroups, getGroupExperiences2 } from '$lib/api/groups';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import GroupItem from '$lib/components/GroupItem.svelte';
+	import SocialLink from '$lib/components/SocialLink.svelte';
 	import Description from '$lib/components/Description.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
 	import VerifiedBadge from '$lib/components/VerifiedBadge.svelte';
@@ -22,6 +23,7 @@
 	$: showShout = !!data.shout?.body;
 
 	$: icon = getGroupIcons([data.id]).then(i => i[0]?.imageUrl);
+	$: socials = getGroupSocials(data.id);
 	$: shoutIcon = showShout ? getUserIcon(data.shout!.poster.userId).then(i => i?.imageUrl) : null;
 	$: experiences = getGroupExperiences2(data.id, 2);
 
@@ -71,6 +73,16 @@
 	<Tabs.Root value={tabValue}>
 		<Tabs.Item value={0} title={$t('group.about')}>
 			<p class="description"><Description input={data.description}/></p>
+			{#await socials then items}
+				{#if items.length}
+					<p class="list-header">{$t('experience.socials')}</p>
+					<div class="socials">
+						{#each items as item}
+							<SocialLink data={item}/>
+						{/each}
+					</div>
+				{/if}
+			{/await}
 			{#if showShout && data.shout}
 				<p class="shout">{$t('group.shout')}</p>
 				<div class="shout">
@@ -190,6 +202,13 @@
 			word-break: break-word;
 			line-height: 1.25;
 			white-space: pre-wrap;
+		}
+		.list-header {
+			margin-top: 48px;
+		}
+		.socials {
+			gap: 16px;
+			display: flex;
 		}
 		p.shout {
 			margin: 48px 0 12px;

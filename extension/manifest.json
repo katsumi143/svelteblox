@@ -16,7 +16,7 @@
 		"run_at": "document_start",
 		"matches": ["http://localhost:5173/*", "http://localhost:4173/*", "https://svelteblox.vercel.app/*"]
 	}],
-	"host_permissions": ["https://*.roblox.com/*", "https://apis.rbxcdn.com/*", "https://funcaptcha.com/*", "https://*.arkoselabs.com/*"],
+	"host_permissions": ["https://*.roblox.com/*", "https://apis.rbxcdn.com/*", "https://funcaptcha.com/*", "https://*.arkoselabs.com/*", "https://*.guilded.gg/*", "https://*.discord.com/api/*"],
 	"declarative_net_request": {
 		"rule_resources": [{
 			"id": "web_rules",

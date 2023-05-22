@@ -55,7 +55,6 @@
 		.replace(/(?:<a.*?<\/a>(?:\n|<br>)?){2,}/g, match => `<div class="cool-links">${match}</div>`)
 		.replace(/\*\*.*?\*\*/g, match => `<strong>${match.slice(2, -2)}</strong>`)
 	) : null;
-	$: description?.then(console.log);
 </script>
 
 <p class="description">

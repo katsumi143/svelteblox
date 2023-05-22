@@ -4,7 +4,7 @@
 	import Question from '$lib/icons/Question.svelte';
 	import Hourglass from '$lib/icons/Hourglass.svelte';
 	export let src: Promise<string | undefined> | null = null;
-	export let size: 'xs' | 'sm' | 'sm2' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
+	export let size: 'xs' | 'sm' | 'sm2' | 'sm3' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let circle = false;
 	export let transparent = false;
 
@@ -70,6 +70,15 @@
 			width: 50px;
 			height: 50px;
 			border-radius: 4px;
+			:global(svg) {
+				width: 24px;
+				height: 24px;
+			}
+		}
+		&.sm3 {
+			width: 48px;
+			height: 48px;
+			border-radius: 8px;
 			:global(svg) {
 				width: 24px;
 				height: 24px;

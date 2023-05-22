@@ -24,3 +24,13 @@ export enum ChangeDisplayNameResult {
 	Ratelimited,
 	BadLength
 }
+
+export enum SocialLinkType {
+	Group = 'RobloxGroup',
+	Discord = 'Discord',
+	Facebook = 'Facebook',
+	Guilded = 'Guilded',
+	Twitter = 'Twitter',
+	Twitch = 'Twitch',
+	YouTube = 'YouTube'
+}

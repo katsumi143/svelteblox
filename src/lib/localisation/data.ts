@@ -134,6 +134,7 @@ export default {
 		'experience.rating2': '{0}% liked this',
 		'experience.unrated': 'Unrated',
 		'experience.hover': '{0}\n{1|number} Playing',
+		'experience.socials': 'Social Links',
 		'experience.friend_servers': 'Friend Servers ({0})',
 		'experience.private_servers': 'Private Servers ({0})',
 
@@ -194,6 +195,14 @@ export default {
 
 		'badge.premium': 'Premium Badge',
 		'badge.premium.summary': 'This badge indicates that the holder has an active Premium Membership.',
+
+		'social_link.type.Twitch': 'Twitch Channel',
+		'social_link.type.Discord': 'Discord Server',
+		'social_link.type.Facebook': 'Facebook Profile',
+		'social_link.type.Guilded': 'Guilded Server',
+		'social_link.type.Twitter': 'Twitter Profile',
+		'social_link.type.YouTube': 'YouTube Channel',
+		'social_link.type.RobloxGroup': 'Roblox Group',
 
 		'number': '{0|number}',
 		'number_small': '{0|number_small}',

@@ -1,3 +1,4 @@
+import type { SocialLinkType } from './enums';
 export interface GameListItem {
 	name: string
 	placeId: number
@@ -330,3 +331,70 @@ export interface BadgeResponseV2 {
 }
 
 export type Id = string | number;
+
+export interface SocialLink {
+	id: number
+	url: string
+	type: SocialLinkType
+	title: string
+}
+
+export interface DiscordInvite {
+	code: string
+	type: number
+	guild: {
+		id: string
+		name: string
+		nsfw: boolean
+		icon: string | null
+		splash: string | null
+		banner: string | null
+		features: string[]
+		nsfw_level: number
+		description: string
+		vanity_url_code: string | null
+		verification_level: number
+		premium_subscription_count: number
+	}
+	channel: {
+		id: string
+		name: string
+		type: number
+	}
+	inviter: {
+		id: string
+		avatar: string | null
+		username: string
+		global_name: string | null
+		public_flags: number
+		discriminator: string
+		avatar_decoration: string | null
+	}
+	expires_at: number | null
+}
+
+export interface GuildedInvite {
+	team: {
+		id: string
+		name: string
+		games: number[]
+		ownerId: string
+		members: {
+			id: string
+			name: string
+			profilePicture: string
+			membershipRole: string
+		}[]
+		profilePicture: string
+	}
+	user: {
+		id: string
+		name: string
+		type: string
+		createdAt: string
+		profilePicture: string
+		profilePictureSm: string
+		profilePictureLg: string
+		profilePictureBlur: string
+	}
+}

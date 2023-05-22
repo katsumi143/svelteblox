@@ -8,10 +8,11 @@
 	import type { ApiDataList } from '$lib/api/types';
 	import { getExperiencePermissions } from '$lib/api/develop';
 	import { joinServer, joinExperience, editExperience, joinPrivateServer } from '$lib/launch';
-	import { getExperienceVotes, getExperienceThumbnails, getExperienceFriendServers, getExperiencePrivateServers } from '$lib/api/games';
+	import { getExperienceVotes, getExperienceSocials, getExperienceThumbnails, getExperienceFriendServers, getExperiencePrivateServers } from '$lib/api/games';
 
 	import Avatar from '$lib/components/Avatar.svelte';
 	import Carousel from '$lib/components/Carousel.svelte';
+	import SocialLink from '$lib/components/SocialLink.svelte';
 	import Description from '$lib/components/Description.svelte';
 	import CreatorLink from '$lib/components/CreatorLink.svelte';
 
@@ -30,6 +31,7 @@
 
 	$: votes = getExperienceVotes([data.id]);
 	$: rating = votes.then(([v]) => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
+	$: socials = getExperienceSocials(data.id);
 	$: thumbnails = getExperienceThumbnails(data.id);
 	$: permissions = getExperiencePermissions(data.id);
 	$: friendServers = getExperienceFriendServers(data.rootPlaceId);
@@ -134,8 +136,18 @@
 		</div>
 	</div>
 	<div class="description"><Description input={data.description}/></div>
+	{#await socials then items}
+		{#if items.length}
+			<p class="list-header">{$t('experience.socials')}</p>
+			<div class="socials">
+				{#each items as item}
+					<SocialLink data={item}/>
+				{/each}
+			</div>
+		{/if}
+	{/await}
 	{#await friendServers then servers}
-		{#if servers.length > 0}
+		{#if servers.length}
 			<div class="servers">
 				<div class="list-header">
 					{$t('experience.friend_servers', [servers.length])}
@@ -308,6 +320,11 @@
 		.description {
 			width: 100%;
 			margin: 32px 0 64px;
+		}
+		.socials {
+			gap: 16px;
+			display: flex;
+			margin-bottom: 48px;
 		}
 		.servers {
 			display: flex;
