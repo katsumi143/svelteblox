@@ -291,3 +291,19 @@ export function sortFriends(friends: Friend[], presences: UserPresence[]) {
 	const offline = sorted.filter(f => !online.includes(f));
 	return [...online.sort((a, b) => PRESENCE_SORT[b.presenceType] - PRESENCE_SORT[a.presenceType]), ...offline];
 }
+
+export function getModerationNotice() {
+	return request<{
+		endDate: string
+		beginDate: string
+		punishmentId: number
+		messageToUser: string
+		badUtterances: {
+			imageUrl: string
+			abuseType: string
+			utteranceText: string
+		}[]
+		punishedUserId: number
+		punishmentTypeDescription: string
+	}>('https://usermoderation.roblox.com/v1/not-approved');
+}

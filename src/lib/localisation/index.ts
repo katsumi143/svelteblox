@@ -11,6 +11,7 @@ export type Values = Iterable<any> | Record<string, any>
 
 const numFormatter = new Intl.NumberFormat();
 
+const ti = (id: number, val: number) => `time_in.${id}_${val === 1 ? 1 : 0}`;
 const ta = (id: number, val: number) => `time_ago.${id}_${val === 1 ? 1 : 0}`;
 const ns = (number: number) => {
 	const string = numFormatter.format(number).replace(',', '.');
@@ -46,29 +47,53 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 				return translate(locale, 'number_small.0', ns(number));
 			return translate(locale, 'number', [finalValue]);
 		} else if (formatType === 'time_ago') {
-			const diff = Date.now() - new Date(finalValue).getTime();
-			const year = Math.floor(diff / 31536000000);
+			const diff = Date.now() - Date.parse(finalValue);
+			const year = Math.round(diff / 31536000000);
 			if (year > 0)
 				return translate(locale, ta(5, year), [year]);
 
-			const month = Math.floor(diff / 2628000000);
+			const month = Math.round(diff / 2628000000);
 			if (month > 0)
 				return translate(locale, ta(4, month), [month]);
 
-			const day = Math.floor(diff / 86400000);
+			const day = Math.round(diff / 86400000);
 			if (day > 0)
 				return translate(locale, ta(3, day), [day]);
 
-			const hour = Math.floor(diff / 3600000);
+			const hour = Math.round(diff / 3600000);
 			if (hour > 0)
 				return translate(locale, ta(2, hour), [hour]);
 
-			const minute = Math.floor(diff / 60000);
+			const minute = Math.round(diff / 60000);
 			if (minute > 0)
 				return translate(locale, ta(1, minute), [minute]);
 
-			const second = Math.floor(diff / 1000);
+			const second = Math.round(diff / 1000);
 			return translate(locale, ta(0, second), [second]);
+		} else if (formatType === 'time_in') {
+			const diff = Date.parse(finalValue) - Date.now();
+			const year = Math.round(diff / 31536000000);
+			if (year > 0)
+				return translate(locale, ti(5, year), [year]);
+
+			const month = Math.round(diff / 2628000000);
+			if (month > 0)
+				return translate(locale, ti(4, month), [month]);
+
+			const day = Math.round(diff / 86400000);
+			if (day > 0)
+				return translate(locale, ti(3, day), [day]);
+
+			const hour = Math.round(diff / 3600000);
+			if (hour > 0)
+				return translate(locale, ti(2, hour), [hour]);
+
+			const minute = Math.round(diff / 60000);
+			if (minute > 0)
+				return translate(locale, ti(1, minute), [minute]);
+
+			const second = Math.round(diff / 1000);
+			return translate(locale, ti(0, second), [second]);
 		}
 
 		return finalValue;

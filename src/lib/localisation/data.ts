@@ -204,6 +204,12 @@ export default {
 		'social_link.type.YouTube': 'YouTube Channel',
 		'social_link.type.RobloxGroup': 'Roblox Group',
 
+		'mod_notice.title.Ban 3 Days': 'You have been temporarily banned for 3 days.',
+		'mod_notice.reviewed': 'Reviewed {0|time_ago}.',
+		'mod_notice.ends': 'You can re-active your account {0|time_in}.',
+		'mod_notice.details': 'More Information',
+		'mod_notice.guidelines': 'Roblox Community Guidelines',
+
 		'number': '{0|number}',
 		'number_small': '{0|number_small}',
 		'number_small.0': '{0}K',
@@ -226,6 +232,20 @@ export default {
 		'time_ago.4_1': 'last month',
 		'time_ago.5_0': '{0} years ago',
 		'time_ago.5_1': 'last year',
+
+		'time_in': '{0|time_in}',
+		'time_in.0_0': 'in {0} seconds',
+		'time_in.0_1': 'now',
+		'time_in.1_0': 'in {0} minutes',
+		'time_in.1_1': 'in one minute',
+		'time_in.2_0': 'in {0} hours',
+		'time_in.2_1': 'in one hour',
+		'time_in.3_0': 'in {0} days',
+		'time_in.3_1': 'tomorrow',
+		'time_in.4_0': 'in {0} months',
+		'time_in.4_1': 'next month',
+		'time_in.5_0': 'in {0} years',
+		'time_in.5_1': 'next year',
 
 		'toast.success': 'Success!',
 		'toast.friend_accept': 'You are now friends with <b>{0}</b>.', 

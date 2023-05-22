@@ -9,15 +9,20 @@
 	import { t } from '$lib/localisation';
 	import { theme } from '$lib/settings';
 	import { lockPin, pinLocked } from '$lib/api/auth';
-	import { user, getRobux, getUserIcon } from '$lib/api/users';
 	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
+	import { user, getRobux, getUserIcon, getModerationNotice } from '$lib/api/users';
 
 	import Logo from '$lib/components/TextLogo.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
-	import CaretDown from '$lib/icons/CaretDown.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
+	import Description from '$lib/components/Description.svelte';
 	import UnlockPinModal from '$lib/components/UnlockPinModal.svelte';
 
+	import Search from '$lib/icons/Search.svelte';
+	import Question from '$lib/icons/Question.svelte';
+	import CaretDown from '$lib/icons/CaretDown.svelte';
+	import Hourglass from '$lib/icons/Hourglass.svelte';
+	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	import ExclamationTriangle from '$lib/icons/ExclamationTriangle.svelte';
 	onMount(async () => {
 		if (pwaInfo) {
@@ -59,10 +64,13 @@
 		}
 	}
 
-	const robux = getRobux();
-	const avatar = getUserIcon(user.id);
-	const primaryGroup = getPrimaryGroup(user.id);
-	const primaryGroupIcon = primaryGroup.then(group => group ? getGroupIcon(group[0].id) : null);
+	const banned = !!(user as any).errors;
+	const notice = banned ? getModerationNotice() : null;
+
+	const robux = banned ? 0 : getRobux();
+	const avatar = banned ? null : getUserIcon(user.id);
+	const primaryGroup = banned ? null : getPrimaryGroup(user.id);
+	const primaryGroupIcon = banned ? null : primaryGroup!.then(group => group ? getGroupIcon(group[0].id) : null);
 
 	let userMenuTrigger: () => void;
 </script>
@@ -74,56 +82,85 @@
 		<a href="/groups" class="nav-link">{$t('groups')}</a>
 		<a href="https://create.roblox.com" class="nav-link">{$t('create')}</a>
 
-		<DropdownMenu bind:trigger={userMenuTrigger}>
-			<button class="user focusable" type="button" slot="trigger" on:click={userMenuTrigger}>
-				<Avatar src={avatar.then(a => a?.imageUrl)} size="sm" circle/>
-				<div>
-					<p class="name">
-						{user.displayName}
-						{#if user.displayName !== user.name}
-							<span>@{user.name}</span>
-						{/if}
-					</p>
-					<p class="robux">
-						{#await robux}
-							...
-						{:then value}
-							{$t('number', [value])} Robux
-						{/await}
-					</p>
-				</div>
-				{#if !$pinLocked}
-					<ExclamationTriangle size={24}/>
-				{/if}
-				<CaretDown/>
-			</button>
-			{#if !$pinLocked}
-				<button type="button" on:click={lockPin}>
-					<ExclamationTriangle/>
-					{$t('action.lock_pin')}
+		{#if !banned}
+			<DropdownMenu bind:trigger={userMenuTrigger}>
+				<button class="user focusable" type="button" slot="trigger" on:click={userMenuTrigger}>
+					<Avatar src={avatar?.then(a => a?.imageUrl)} size="sm" circle/>
+					<div>
+						<p class="name">
+							{user.displayName}
+							{#if user.displayName !== user.name}
+								<span>@{user.name}</span>
+							{/if}
+						</p>
+						<p class="robux">
+							{#await robux}
+								...
+							{:then value}
+								{$t('number', [value])} Robux
+							{/await}
+						</p>
+					</div>
+					{#if !$pinLocked}
+						<ExclamationTriangle size={24}/>
+					{/if}
+					<CaretDown/>
 				</button>
-			{/if}
-			<p>{user.displayName}</p>
-			<a href={`/user/${user.name}`}>{$t('user_action.user.profile')}</a>
-			<a href="https://create.roblox.com/dashboard/creations">{$t('user_action.user.creations')}</a>
-			{#await primaryGroup then group}
-				{#if group}
-					<div class="separator"/>
-					<p>{$t('user_action.group')}</p>
-					<a href={`/groups/${group[0].id}`}>
-						<Avatar src={primaryGroupIcon.then(i => i?.imageUrl)} size="xs" transparent/>
-						{group[0].name}
-					</a>
+				{#if !$pinLocked}
+					<button type="button" on:click={lockPin}>
+						<ExclamationTriangle/>
+						{$t('action.lock_pin')}
+					</button>
 				{/if}
-			{/await}
-			<div class="separator"/>
-			<a href="/settings">{$t('user_action.settings.settings')}</a>
-			<div class="separator"/>
-			<a href="/">{$t('user_action.other.logout')}</a>
-		</DropdownMenu>
+				<p>{user.displayName}</p>
+				<a href={`/user/${user.name}`}>{$t('user_action.user.profile')}</a>
+				<a href="https://create.roblox.com/dashboard/creations">{$t('user_action.user.creations')}</a>
+				{#await primaryGroup then group}
+					{#if group}
+						<div class="separator"/>
+						<p>{$t('user_action.group')}</p>
+						<a href={`/groups/${group[0].id}`}>
+							<Avatar src={primaryGroupIcon?.then(i => i?.imageUrl)} size="xs" transparent/>
+							{group[0].name}
+						</a>
+					{/if}
+				{/await}
+				<div class="separator"/>
+				<a href="/settings">{$t('user_action.settings.settings')}</a>
+				<div class="separator"/>
+				<a href="/">{$t('user_action.other.logout')}</a>
+			</DropdownMenu>
+		{/if}
 	</Header>
 	<main class="app-content">
-		<slot/>
+		{#if notice}
+			<div class="notice">
+				{#await notice then notice}
+					<h1>{$t(`mod_notice.title.${notice.punishmentTypeDescription}`)}</h1>
+					<Description input={notice.messageToUser} disableEmbeds/>
+					<div class="separator"/>
+					<div class="detail">
+						<Search/>
+						<p>{$t('mod_notice.reviewed', [notice.beginDate])}</p>
+					</div>
+					<div class="detail">
+						<Hourglass/>
+						<p>{$t('mod_notice.ends', [notice.endDate])}</p>
+					</div>
+					<div class="separator"/>
+					<a class="link" href="https://www.roblox.com/not-approved" target="_blank">
+						<Question/>
+						{$t('mod_notice.details')}
+					</a>
+					<a class="link" href="https://www.roblox.com/info/community-guidelines" target="_blank">
+						<RobloxIcon/>
+						{$t('mod_notice.guidelines')}
+					</a>
+				{/await}
+			</div>
+		{:else}
+			<slot/>
+		{/if}
 		<footer>
 			svelte svelte svelte blox blox blox
 			<a href="/">placeholder <a href="/test">⠀</a></a>
@@ -339,6 +376,49 @@
 		border: none;
 		margin: 4px 0;
 		background: var(--background-tertiary);
+	}
+
+	.notice {
+		width: 75%;
+		margin: auto;
+		padding: 24px;
+		background: var(--background-secondary);
+		border-radius: 16px;
+		h1 {
+			margin: 0;
+			font-size: 2.5em;
+		}
+		:global(.description) {
+			margin-top: 16px;
+		}
+		.separator {
+			width: 100%;
+			height: 1px;
+			margin: 16px 0;
+			background: var(--border-secondary);
+		}
+		.detail {
+			gap: 12px;
+			width: fit-content;
+			display: flex;
+			position: relative;
+			align-items: end;
+			margin-bottom: 12px;
+			p {
+				color: var(--color-tertiary);
+				margin: 0;
+				white-space: nowrap;
+			}
+		}
+		.link {
+			gap: 8px;
+			display: flex;
+			align-items: center;
+			margin-bottom: 8px;
+			&:last-child {
+				margin: 0;
+			}
+		}
 	}
 
 	footer {

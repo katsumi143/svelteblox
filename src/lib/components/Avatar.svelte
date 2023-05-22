@@ -16,12 +16,12 @@
 
 {#if src}
 	{#await src}
-		<div class={className} title={$t('image_status.0')} on:contextmenu><Hourglass/><slot/></div>
+		<div class={className} title={$t('image_status.0')} on:contextmenu><Hourglass size={32}/><slot/></div>
 	{:then image}
 		{#if !image || image.match(deleted)}
 			<div class={className} title={$t('image_status.2')} on:contextmenu><Blocked/><slot/></div>
 		{:else if image.match(pending)}
-			<div class={className} title={$t('image_status.1')} on:contextmenu><Hourglass/><slot/></div>
+			<div class={className} title={$t('image_status.1')} on:contextmenu><Hourglass size={32}/><slot/></div>
 		{:else if image.match(unavailable)}
 			<div class={className} title={$t('image_status.3')} on:contextmenu><Question size={32}/><slot/></div>
 		{:else}
