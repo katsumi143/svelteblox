@@ -354,20 +354,18 @@
 		<Tabs.Item value={0} title={$t('profile.overview')}>
 			{#await experience then experience}
 				{#if experience}
-					<div class="experiences">
-						{#await presence then presence}
-							<p class="text-header">{$t(`user.experience_${presence.userPresenceType}`)}</p>
-							<ExperienceCard
-								id={experience.id}
-								name={experience.name}
-								creator={experience.creator}
-								playing={experience.playing}
-								friendId={presence.userPresenceType === UserPresenceType.InExperience ? data.id : null}
-								friendName={data.displayName}
-								rootPlaceId={experience.rootPlaceId}
-							/>
-						{/await}
-					</div>
+					{#await presence then presence}
+						<p class="text-header">{$t(`user.experience_${presence.userPresenceType}`)}</p>
+						<ExperienceCard
+							id={experience.id}
+							name={experience.name}
+							creator={experience.creator}
+							playing={experience.playing}
+							friendId={presence.userPresenceType === UserPresenceType.InExperience ? data.id : null}
+							friendName={data.displayName}
+							rootPlaceId={experience.rootPlaceId}
+						/>
+					{/await}
 				{/if}
 			{/await}
 			{#await group then group}
@@ -428,11 +426,7 @@
 							<ExperienceCard
 								id={item.UniverseID}
 								name={item.Name}
-								voting={{
-									id: item.UniverseID,
-									upVotes: item.TotalUpVotes,
-									downVotes: item.TotalDownVotes
-								}}
+								votes={[item.TotalUpVotes, item.TotalDownVotes]}
 								playing={item.PlayerCount}
 								creator={{
 									id: data.id,
@@ -619,7 +613,6 @@
 			:global(.experience) {
 				flex: 1 1 calc(50% - 8px);
 				width: unset;
-				height: 224px;
 			}
 		}
 		.experiences2 {

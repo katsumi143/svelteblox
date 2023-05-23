@@ -5,10 +5,10 @@
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import { joinUser, joinExperience } from '$lib/launch';
 	import { getExperienceVotes, getExperienceThumbnails } from '$lib/api/games';
-	import type { MediaAsset, ExperienceVoting, ExperienceCreator } from '$lib/api/types';
+	import type { MediaAsset, ExperienceCreator, PartialExperience } from '$lib/api/types';
 	export let id: number;
 	export let name: string;
-	export let voting: ExperienceVoting | null = null;
+	export let votes: PartialExperience['votes'] | null = null;
 	export let playing: number;
 	export let creator: ExperienceCreator;
 	export let rootPlaceId: number;
@@ -17,9 +17,8 @@
 	export let friendName: string | null = null;
 	export let thumbnail: Promise<MediaAsset | undefined> | undefined = undefined;
 
-	const voting2 = voting ? Promise.resolve(voting) :
-		getExperienceVotes([id]).then(v => v[0]);
-	const rating = voting2.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
+	const voting = votes ? Promise.resolve(votes) : getExperienceVotes([id]).then(v => v[0]);
+	const rating = voting.then(v => Math.round(v[0] / (v[0] + v[1]) * 100));
 	const quickLaunch = () =>
 		friendId ? joinUser(friendId) : joinExperience(rootPlaceId);
 </script>
@@ -51,7 +50,7 @@
 		flex: 0 1 auto;
 		width: 512px;
 		color: var(--color-primary);
-		height: 256px;
+		height: 224px;
 		display: flex;
 		overflow: hidden;
 		position: relative;
