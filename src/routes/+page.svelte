@@ -40,7 +40,7 @@
 	</div>
 </div>
 {#await sortedFriends then friends}
-	{#if friends.length > 0}
+	{#if friends.length}
 		<div class="friends">
 			<div class="list-header">
 				<p>{$t('home.friends', [friends.length])}</p>
@@ -59,49 +59,53 @@
 		</div>
 	{/if}
 {/await}
-<div class="experiences">
-	<div class="list-header">
-		<p>{$t('home.recent')}</p>
-		<a href="/games/recent">{$t('action.view_all')}<ArrowRight/></a>
-	</div>
-	<div class="items">
-		{#await recentExperiences then items}
-			{#each items as item}
-				<ExperienceItem
-					id={item.universeId}
-					name={item.name}
-					icon={experienceIcons.then(i => i.find(i => i.targetId === item.universeId))}
-					voting={{
-						id: item.universeId,
-						upVotes: item.totalUpVotes,
-						downVotes: item.totalDownVotes
-					}}
-					playing={item.playerCount}
-					rootPlaceId={item.placeId}
-				/>
-			{/each}
-		{/await}
-	</div>
-</div>
+{#await recentExperiences then items}
+	{#if items.length}
+		<div class="experiences">
+			<div class="list-header">
+				<p>{$t('home.recent')}</p>
+				<a href="/games/recent">{$t('action.view_all')}<ArrowRight/></a>
+			</div>
+			<div class="items">
+				{#each items as item}
+					<ExperienceItem
+						id={item.universeId}
+						name={item.name}
+						icon={experienceIcons.then(i => i.find(i => i.targetId === item.universeId))}
+						voting={{
+							id: item.universeId,
+							upVotes: item.totalUpVotes,
+							downVotes: item.totalDownVotes
+						}}
+						playing={item.playerCount}
+						rootPlaceId={item.placeId}
+					/>
+				{/each}
+			</div>
+		</div>
+	{/if}
+{/await}
 
-<div class="experiences">
-	<div class="list-header">
-		<p>{$t('home.favourites')}</p>
-		<a href={`/users/${user.id}/favourites`}>{$t('action.view_all')}<ArrowRight/></a>
-	</div>
-	<div class="items">
-		{#await favourites then items}
-			{#each items as item}
-				<ExperienceItem
-					id={item.id}
-					name={item.name}
-					icon={experienceIcons.then(i => i.find(i => i.targetId === item.id))}
-					rootPlaceId={item.rootPlace.id}
-				/>
-			{/each}
-		{/await}
-	</div>
-</div>
+{#await favourites then items}
+	{#if items.length}
+		<div class="experiences">
+			<div class="list-header">
+				<p>{$t('home.favourites')}</p>
+				<a href={`/users/${user.id}/favourites`}>{$t('action.view_all')}<ArrowRight/></a>
+			</div>
+			<div class="items">
+				{#each items as item}
+					<ExperienceItem
+						id={item.id}
+						name={item.name}
+						icon={experienceIcons.then(i => i.find(i => i.targetId === item.id))}
+						rootPlaceId={item.rootPlace.id}
+					/>
+				{/each}
+			</div>
+		</div>
+	{/if}
+{/await}
 
 <svelte:head>
 	<title>svelteblox</title>
