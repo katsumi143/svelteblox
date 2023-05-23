@@ -34,3 +34,27 @@ export enum SocialLinkType {
 	Twitch = 'Twitch',
 	YouTube = 'YouTube'
 }
+
+export enum UserPresenceType {
+	Offline,
+	Online,
+	InExperience,
+	InStudio
+}
+export enum UserPresenceLocation {
+	Unknown = '',
+	Website = 'Website'
+}
+
+export enum FriendshipStatus {
+	NotFriends,
+	Friends,
+	RequestSent,
+	RequestReceived
+}
+
+export enum PartialType {
+	User = 'User',
+	Group = 'Group',
+	Place = 'Place'
+}

@@ -7,8 +7,8 @@ import { getCsrfToken } from './auth';
 import { promptPinUnlock } from '$lib/store';
 import { request, fullRequest } from '.';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import { UserRole, ChangeDisplayNameResult } from './enums';
-import type { User, Friend, ImageData, UserBadge, Friendship, RobloxBadge, ApiDataList, CurrentUser, ExperienceV2, UserPresence, FriendshipStatus, ProfileExperience } from './types';
+import { UserRole, FriendshipStatus, ChangeDisplayNameResult } from './enums';
+import type { User, Friend, ImageData, UserBadge, Friendship, RobloxBadge, ApiDataList, CurrentUser, ExperienceV2, UserPresence, ProfileExperience, PartialExperience } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
 export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
 
@@ -60,7 +60,7 @@ export function getBadges(userId: string | number) {
 export function getRobloxBadges(userId: string | number) {
 	return USERS_CACHE.use(`roblox_badges_${userId}`, () =>
 		request<RobloxBadge[]>(`https://accountinformation.roblox.com/v1/users/${userId}/roblox-badges`),
-		3600000
+		86400000
 	);
 }
 
@@ -75,7 +75,7 @@ export function userHasBadge(userId: string | number, badgeId: string | number) 
 					return new Date(data[0].awardedDate);
 				return false;
 			}),
-		3600000	
+		86400000	
 	)
 }
 
@@ -96,10 +96,9 @@ export function getUserRoles(userId: string | number, username: string, banned?:
 			roles.push(UserRole.Contributor);
 			
 		if (userId === user.id)
-			for (const role of await request<{ roles: string[] }>(`${USERS_BASE}/users/authenticated/roles`).then(d => d.roles)) {
+			for (const role of await request<{ roles: string[] }>(`${USERS_BASE}/users/authenticated/roles`).then(d => d.roles))
 				if (role === 'BetaTester')
 					roles.push(UserRole.BetaTester);
-			}
 
 		if ((await getRobloxBadges(userId)).some(badge => badge.id === 1))
 			roles.push(UserRole.Staff);
@@ -116,7 +115,7 @@ export function getUserRoles(userId: string | number, username: string, banned?:
 export function hasPremium(userId: string | number) {
 	return USERS_CACHE.use(`premium_${userId}`, () =>
 		request<boolean>(`https://premiumfeatures.roblox.com/v1/users/${userId}/validate-membership`),
-		3600000
+		86400000
 	);
 }
 
@@ -143,7 +142,7 @@ export function getUserCount(userId: string | number, count: string) {
 	return USERS_CACHE.use(`user_count_${count}_${userId}`, () =>
 		request<{ count: number }>(`${FRIENDS_BASE}/users/${userId}/${count}/count`)
 			.then(data => data.count),
-		3600000
+		86400000
 	);
 }
 
@@ -186,10 +185,19 @@ export async function declineFriendRequest(userId: number) {
 	});
 }
 
-export function getUserFavourites(userId: string | number) {
+export function getUserFavourites(userId: string | number): Promise<PartialExperience[]> {
 	return USERS_CACHE.use(`user_favourites_${userId}`, () =>
 		request<ApiDataList<ExperienceV2>>(`${GAMES_BASE2}/users/${userId}/favorite/games`)
-			.then(data => data.data),
+			.then(d => d.data.map(data => ({
+				id: data.id,
+				name: data.name,
+				creator: data.creator,
+				created: data.created,
+				updated: data.updated,
+				description: data.description,
+				rootPlaceId: data.rootPlace.id,
+				playerVisits: data.placeVisits
+			}))),
 		3600000
 	);
 }
@@ -253,7 +261,7 @@ export function getUserSocials(userId: number) {
 			youtube: string | null
 			facebook: string | null
 		}>(`https://accountinformation.roblox.com/v1/users/${userId}/promotion-channels`),
-		3600000
+		86400000
 	);
 }
 
@@ -293,17 +301,20 @@ export function sortFriends(friends: Friend[], presences: UserPresence[]) {
 }
 
 export function getModerationNotice() {
-	return request<{
-		endDate: string
-		beginDate: string
-		punishmentId: number
-		messageToUser: string
-		badUtterances: {
-			imageUrl: string
-			abuseType: string
-			utteranceText: string
-		}[]
-		punishedUserId: number
-		punishmentTypeDescription: string
-	}>('https://usermoderation.roblox.com/v1/not-approved');
+	return USERS_CACHE.use('mod_notice', () =>
+		request<{
+			endDate: string
+			beginDate: string
+			punishmentId: number
+			messageToUser: string
+			badUtterances: {
+				imageUrl: string
+				abuseType: string
+				utteranceText: string
+			}[]
+			punishedUserId: number
+			punishmentTypeDescription: string
+		}>('https://usermoderation.roblox.com/v1/not-approved'),
+		86400000
+	);
 }

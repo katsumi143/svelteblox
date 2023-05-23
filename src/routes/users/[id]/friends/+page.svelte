@@ -65,10 +65,12 @@
 			{#each $sortDirection === SortDirection.Descending ? items : [...items].reverse() as item}
 				{#await presences.then(p => p.find(p => p.userId === item.id)) then presence}
 					<Friend
-						user={item}
+						id={item.id}
+						name={item.name}
 						avatar={friendAvatars.then(f => f.find(i => i.targetId === item.id))}
 						presence={presence}
 						experience={presenceExperiences.then(e => e.find(e => e.id === presence?.universeId))}
+						displayName={item.displayName}
 					/>
 				{/await}
 			{/each}

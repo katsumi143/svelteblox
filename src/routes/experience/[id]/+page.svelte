@@ -30,7 +30,7 @@
 	export let data: PageData;
 
 	$: votes = getExperienceVotes([data.id]);
-	$: rating = votes.then(([v]) => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
+	$: rating = votes.then(([v]) => Math.round(v[0] / (v[0] + v[1]) * 100));
 	$: socials = getExperienceSocials(data.id);
 	$: thumbnails = getExperienceThumbnails(data.id);
 	$: permissions = getExperiencePermissions(data.id);
@@ -120,8 +120,8 @@
 					<div class="rating" style={`--rating: ${rating}%;`}>
 						<div class="buttons">
 							{#await votes.then(v => v[0]) then votes}
-								<p><ThumbsUp size={24}/>{$t('number', [votes.upVotes])}</p>
-								<p>{$t('number', [votes.downVotes])}<ThumbsDown size={24}/></p>
+								<p><ThumbsUp size={24}/>{$t('number', [votes[0]])}</p>
+								<p>{$t('number', [votes[1]])}<ThumbsDown size={24}/></p>
 							{/await}
 						</div>
 						<div class="ratio"/>

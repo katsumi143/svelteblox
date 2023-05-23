@@ -1,11 +1,23 @@
-import type { SocialLinkType } from './enums';
+import type { PartialType, SocialLinkType, UserPresenceType, FriendshipStatus } from './enums';
 export interface GameListItem {
 	name: string
+	genre: string
 	placeId: number
+	creatorId: number
+	imageToken: string
 	universeId: number
+	minimumAge: number
+	creatorName: string
 	playerCount: number
+	creatorType: PartialType
+	nativeAdData: string
 	totalUpVotes: number
 	totalDownVotes: number
+	gameDescription: string
+	analyticsIdentifier: null
+	isShowSponsoredLabel: boolean
+	creatorHasVerifiedBadge: boolean
+	ageRecommendationDisplayName: string
 }
 export interface User {
 	id: number
@@ -32,16 +44,6 @@ export interface UserPresence {
 	lastLocation: string
 	userPresenceType: UserPresenceType
 }
-export enum UserPresenceType {
-	Offline,
-	Online,
-	InExperience,
-	InStudio
-}
-export enum UserPresenceLocation {
-	Unknown = '',
-	Website = 'Website'
-}
 export interface Friend {
 	id: number
 	name: string
@@ -59,12 +61,6 @@ export interface Friend {
 export interface Friendship {
 	id: number,
 	status: FriendshipStatus
-}
-export enum FriendshipStatus {
-	NotFriends,
-	Friends,
-	RequestSent,
-	RequestReceived
 }
 export interface Group {
 	id: number
@@ -94,7 +90,18 @@ export interface PartialUser2 {
 	displayName: string
 	hasVerifiedBadge: boolean
 }
-
+export interface PartialExperience {
+	id: number
+	name: string
+	votes?: [number, number]
+	creator: Partial
+	created?: string
+	updated?: string
+	rootPlaceId: number
+	playerCount?: number
+	description?: string | null
+	playerVisits?: number
+}
 export interface Experience {
 	id: number
 	name: string
@@ -176,11 +183,6 @@ export interface NamedPartial {
 	id: number
 	name: string
 	type: PartialType
-}
-export enum PartialType {
-	User = 'User',
-	Group = 'Group',
-	Place = 'Place'
 }
 
 export interface ImageData {

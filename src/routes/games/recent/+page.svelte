@@ -4,7 +4,7 @@
 	import { getExperienceIcons, getRecentExperiences } from '$lib/api/games';
 
 	const recentExperiences = getRecentExperiences();
-	const experienceIcons = recentExperiences.then(data => getExperienceIcons(data.map(i => i.universeId)));
+	const experienceIcons = recentExperiences.then(data => getExperienceIcons(data.map(i => i.id)));
 </script>
 
 <div class="experiences">
@@ -13,16 +13,12 @@
 		{#await recentExperiences then items}
 			{#each items as item}
 				<ExperienceItem
-					id={item.universeId}
+					id={item.id}
 					name={item.name}
-					icon={experienceIcons.then(i => i.find(i => i.targetId === item.universeId))}
-					voting={{
-						id: item.universeId,
-						upVotes: item.totalUpVotes,
-						downVotes: item.totalDownVotes
-					}}
+					icon={experienceIcons.then(i => i.find(i => i.targetId === item.id))}
+					voting={item.votes}
 					playing={item.playerCount}
-					rootPlaceId={item.placeId}
+					rootPlaceId={item.rootPlaceId}
 				/>
 			{/each}
 		{/await}

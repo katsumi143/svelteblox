@@ -2,7 +2,7 @@
 	import { t } from '$lib/localisation';
 	import { joinExperience } from '$lib/launch';
 	import ContextMenu, { Item } from 'svelte-contextmenu';
-	import type { ImageData, ExperienceVoting } from '$lib/api/types';
+	import type { ImageData, PartialExperience } from '$lib/api/types';
 	import { getExperienceIcons, getExperienceVotes } from '$lib/api/games';
 
 	import People from '$lib/icons/PeopleFill.svelte';
@@ -15,14 +15,14 @@
 	export let id: number;
 	export let name: string
 	export let icon: Promise<ImageData | undefined> | null = null;
-	export let voting: ExperienceVoting | null = null;
+	export let voting: PartialExperience['votes'] | null = null;
 	export let playing: number | null = null;
 	export let rootPlaceId: number;
 	let contextMenu: ContextMenu;
 
 	const voting2 = voting ? Promise.resolve(voting) :
 		getExperienceVotes([id]).then(v => v[0]);
-	const rating = voting2.then(v => Math.round(v.upVotes / (v.upVotes + v.downVotes) * 100));
+	const rating = voting2.then(v => Math.round(v[0] / (v[0] + v[1]) * 100));
 </script>
 
 <a class="experience" href={`/experience/${id}`} title={$t('experience.hover', [name, playing])} on:contextmenu={contextMenu.createHandler()}>

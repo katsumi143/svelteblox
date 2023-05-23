@@ -10,8 +10,7 @@
 	import type { LayoutData } from './$types';
 	import type { Friendship } from '$lib/api/types';
 	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
-	import { UserRole, ChangeDisplayNameResult } from '$lib/api/enums';
-	import { FriendshipStatus, UserPresenceType } from '$lib/api/types';
+	import { UserRole, UserPresenceType, FriendshipStatus, ChangeDisplayNameResult } from '$lib/api/enums';
 	import { getExperiences, getExperienceId, getExperienceIcons, getExperienceThumbnails } from '$lib/api/games';
 	import { user, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFavourites, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
@@ -387,10 +386,12 @@
 						{#each friends.slice(0, 20) as friend}
 							{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
 								<User
-									user={friend}
+									id={friend.id}
+									name={friend.name}
 									avatar={friendAvatars.then(f => f.find(i => i.targetId === friend.id))}
 									presence={presence}
 									experience={presenceExperiences.then(e => e.find(e => e.id === presence?.universeId))}
+									displayName={friend.displayName}
 								/>
 							{/await}
 						{/each}
@@ -410,7 +411,7 @@
 									id={item.id}
 									name={item.name}
 									icon={favouriteIcons.then(t => t.find(i => i.targetId === item.id))}
-									rootPlaceId={item.rootPlace.id}
+									rootPlaceId={item.rootPlaceId}
 								/>
 							{/each}
 						</div>

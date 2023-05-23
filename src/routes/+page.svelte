@@ -23,7 +23,7 @@
 	const favourites = getUserFavourites(user.id);
 	const recentExperiences = getRecentExperiences();
 	const experienceIcons = recentExperiences.then(recent => favourites.then(favourites =>
-		getExperienceIcons([...recent.map(i => i.universeId), ...favourites.map(i => i.id)])
+		getExperienceIcons([...recent.map(i => i.id), ...favourites.map(i => i.id)])
 	));
 
 	let contextMenu: ContextMenu;
@@ -49,10 +49,12 @@
 			{#each friends.slice(0, 20) as friend}
 				{#await presences.then(p => p.find(p => p.userId === friend.id)) then presence}
 					<Friend
-						user={friend}
+						id={friend.id}
+						name={friend.name}
 						avatar={friendAvatars.then(f => f.find(i => i.targetId === friend.id))}
 						presence={presence}
 						experience={presenceExperiences.then(e => e.find(e => e.id === presence?.universeId))}
+						displayName={friend.displayName}
 					/>
 				{/await}
 			{/each}
@@ -69,16 +71,12 @@
 			<div class="items">
 				{#each items as item}
 					<ExperienceItem
-						id={item.universeId}
+						id={item.id}
 						name={item.name}
-						icon={experienceIcons.then(i => i.find(i => i.targetId === item.universeId))}
-						voting={{
-							id: item.universeId,
-							upVotes: item.totalUpVotes,
-							downVotes: item.totalDownVotes
-						}}
+						icon={experienceIcons.then(i => i.find(i => i.targetId === item.id))}
+						voting={item.votes}
 						playing={item.playerCount}
-						rootPlaceId={item.placeId}
+						rootPlaceId={item.rootPlaceId}
 					/>
 				{/each}
 			</div>
@@ -99,7 +97,7 @@
 						id={item.id}
 						name={item.name}
 						icon={experienceIcons.then(i => i.find(i => i.targetId === item.id))}
-						rootPlaceId={item.rootPlace.id}
+						rootPlaceId={item.rootPlaceId}
 					/>
 				{/each}
 			</div>

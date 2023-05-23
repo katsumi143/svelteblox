@@ -7,11 +7,7 @@
 	import ExperienceItem from '$lib/components/ExperienceItem.svelte';
 	$: userId = $page.params.id;
 	$: favourites = getUserFavourites(userId).then(f => getExperiences(f.map(e => e.id)));
-	$: favouriteVotes = favourites.then(items => {
-		if (items.length === 0)
-			return [];
-		return getExperienceVotes(items.map(i => i.id));
-	});
+	$: favouriteVotes = favourites.then(items => items.length ? getExperienceVotes(items.map(i => i.id)) : []);
 </script>
 
 {#await favourites then items}

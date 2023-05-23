@@ -279,7 +279,7 @@ export default {
 		'home.friends': 'あなたの友人 ({0})',
 		'home.recent': '最近の経験',
 
-		'user.join': '{0.displayName} in {1.name} に参加',
+		'user.join': '{0} in {1} に参加',
 		'user.friends': '友達 ({0})',
 		'user.friends.count': '友達',
 		'user.followers': 'フォロワー',

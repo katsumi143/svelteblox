@@ -2,34 +2,38 @@
 	import { t } from '$lib/localisation';
 	import { joinUser } from '$lib/launch';
 	import type ContextMenu from 'svelte-contextmenu';
+	import { UserPresenceType } from '$lib/api/enums';
 	import type { ImageData, Experience, UserPresence } from '$lib/api/types';
 
 	import Avatar from './Avatar.svelte';
 	import UserMenu from './UserMenu.svelte';
 
-	export let user: { id: number, name: string, displayName: string };
+	export let id: number;
+	export let name: string;
+	export let displayName: string;
+
 	export let avatar: Promise<ImageData | undefined> | null = null;
 	export let presence: UserPresence | null = null;
 	export let experience: Promise<Experience | undefined> | null = null;
 
-	$: presenceType = presence?.userPresenceType ?? 0;
+	$: presenceType = presence?.userPresenceType ?? UserPresenceType.Offline;
 
 	let contextMenu: ContextMenu;
 </script>
 
-<a href={`/user/${user.name}`} class={`friend status-${presenceType}`} title={`${user.displayName} (@${user.name}) • ${$t(`user_status.${presenceType}`)}`} on:contextmenu={contextMenu.createHandler()}>
+<a href={`/user/${name}`} class={`friend status-${presenceType}`} title={`${displayName} (@${name}) • ${$t(`user_status.${presenceType}`)}`} on:contextmenu={contextMenu.createHandler()}>
 	<Avatar src={avatar?.then(i => i?.imageUrl)} size="md" circle/>
-	<p>{user.displayName}</p>
+	<p>{displayName}</p>
 	{#if presenceType > 0 && experience}
 		{#await experience then experience}
 			{#if experience}
-				<button class="status" type="button" title={$t('user.join', [user, experience])} on:click|preventDefault={() => joinUser(user.id)}>{experience.name}</button>
+				<button class="status" type="button" title={$t('user.join', [displayName, experience.name])} on:click|preventDefault={() => joinUser(id)}>{experience.name}</button>
 			{/if}
 		{/await}
 	{/if}
 </a>
 
-<UserMenu {...user} bind:contextMenu={contextMenu}/>
+<UserMenu id={id} name={name} displayName={displayName} bind:contextMenu={contextMenu}/>
 
 <style lang="scss">
 	.friend {

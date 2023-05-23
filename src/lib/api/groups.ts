@@ -10,7 +10,14 @@ export const GROUPS_BASE = 'https://groups.roblox.com/v1';
 export const GROUPS_CACHE = new Cache('groups');
 
 export function getGroup(groupId: string | number): Promise<Group> {
-	return GROUPS_CACHE.use(`group_${groupId}`, () => request<Group>(`${GROUPS_BASE}/groups/${groupId}`), 600000);
+	return GROUPS_CACHE.use(`group_${groupId}`, () =>
+		request<Group>(`${GROUPS_BASE}/groups/${groupId}`).then(group => {
+			GROUPS_CACHE.set(`group_name_${groupId}`, group.name, 86400000);
+			GROUPS_CACHE.set(`group_verified_${groupId}`, group.hasVerifiedBadge, 86400000);
+			return group;
+		}),
+		600000
+	);
 }
 export function getGroupIcon(groupId: string | number): Promise<ImageData | undefined> {
 	return GROUPS_CACHE.use(`group_icon_${groupId}`, () => getGroupIcons([groupId]).then(data => data[0]), 3600000);

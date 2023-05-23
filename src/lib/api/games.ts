@@ -5,7 +5,7 @@ import { locale } from '../settings';
 import { request } from '.';
 import { LOCALE_MAP } from '$lib/constants';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { Id, Badge, ImageData, SocialLink, ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PrivateExperienceServer } from './types';
+import type { Id, Badge, ImageData, SocialLink, ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PartialExperience, PrivateExperienceServer } from './types';
 export const GAMES_BASE = 'https://games.roblox.com/v';
 export const GAMES_BASE1 = GAMES_BASE + 1;
 export const GAMES_BASE2 = GAMES_BASE + 2;
@@ -21,16 +21,16 @@ export function getExperiences(experienceIds: (string | number)[]) {
 	return request<ApiDataList<Experience>>(`${GAMES_BASE1}/games?universeIds=${experienceIds.join(',')}`)
 		.then(data => data.data);
 }
-export function getExperienceVotes(experienceIds: (string | number)[]) {
+export function getExperienceVotes(experienceIds: (string | number)[]): Promise<[number, number][]> {
 	if (!experienceIds.length)
 		return Promise.resolve([]);
 
-	const ids2 = experienceIds.filter(id => !GAMES_CACHE.isValid(`votes_${id}`));
+	const ids2 = experienceIds.filter(id => !GAMES_CACHE.isValid(`experience_votes_${id}`));
 	if (ids2.length > 0)
 		return request<ApiDataList<ExperienceVoting>>(`${GAMES_BASE1}/games/votes?universeIds=${ids2.join(',')}`)
-			.then(data => data.data.map(data => GAMES_CACHE.set(`votes_${data.id}`, data, 600000)))
-			.then(data => [...data, ...experienceIds.filter(id => !ids2.includes(id)).map(id => GAMES_CACHE.get<ExperienceVoting>(`votes_${id}`)!)]);
-	return Promise.resolve(experienceIds.map(id => GAMES_CACHE.get<ExperienceVoting>(`votes_${id}`)!));
+			.then(data => data.data.map(data => GAMES_CACHE.set(`experience_votes_${data.id}`, [data.upVotes, data.downVotes] as [number, number], 600000)))
+			.then(data => [...data, ...experienceIds.filter(id => !ids2.includes(id)).map(id => GAMES_CACHE.get<[number, number]>(`experience_votes_${id}`)!)]);
+	return Promise.resolve(experienceIds.map(id => GAMES_CACHE.get<[number, number]>(`experience_votes_${id}`)!));
 }
 
 export function getExperienceId(placeId: string | number) {
@@ -107,7 +107,7 @@ export interface ServerListResponse<T = ExperienceServer> {
 	previousPageCursor: string | null
 }
 
-export function getRecentExperiences() {
+export function getRecentExperiences(): Promise<PartialExperience[]> {
 	return GAMES_CACHE.use('recent', () =>
 		request<{
 			sorts: {
@@ -118,7 +118,18 @@ export function getRecentExperiences() {
 			.then(data => request<{
 				games: GameListItem[]
 			}>(`https://games.roblox.com/v1/games/list?SortToken=${data.sorts.find(s => s.name === 'MyRecent')?.token}`))
-			.then(data => data.games),
+			.then(data => data.games.map(data => ({
+				id: data.universeId,
+				name: data.name,
+				votes: [data.totalUpVotes, data.totalDownVotes],
+				creator: {
+					id: data.creatorId,
+					type: data.creatorType
+				},
+				rootPlaceId: data.placeId,
+				playerCount: data.playerCount,
+				description: data.gameDescription
+			}))),
 		60000
 	);
 }
