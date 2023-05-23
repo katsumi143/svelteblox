@@ -13,7 +13,7 @@
 	export let hasVerifiedBadge = false;
 	let contextMenu: ContextMenu;
 
-	$: link = `/${type.toLowerCase()}/${name}`;
+	$: link = type === 'User' ? `/user/${name}` : `/groups/${id}`;
 </script>
 
 <a href={link} title={displayName ? `${displayName} (@${name})` : `@${name}`} on:contextmenu={contextMenu.createHandler()}>
