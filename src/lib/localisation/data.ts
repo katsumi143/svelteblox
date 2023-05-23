@@ -133,6 +133,7 @@ export default {
 		'experience.rating': '{0}% of players liked this experience',
 		'experience.rating2': '{0}% liked this',
 		'experience.unrated': 'Unrated',
+		'experience.unrated2': 'This experience is unrated',
 		'experience.hover': '{0}\n{1|number} Playing',
 		'experience.socials': 'Social Links',
 		'experience.friend_servers': 'Friend Servers ({0})',

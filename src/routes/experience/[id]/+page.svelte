@@ -125,7 +125,7 @@
 							{/await}
 						</div>
 						<div class="ratio"/>
-						<p>{$t('experience.rating', [rating])}</p>
+						<p>{$t(Number.isNaN(rating) ? 'experience.unrated2' : 'experience.rating', [rating])}</p>
 					</div>
 				{/await}
 			</div>

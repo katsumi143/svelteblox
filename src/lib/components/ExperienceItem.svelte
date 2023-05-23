@@ -32,7 +32,7 @@
 		<p>
 			<ThumbsUp/>
 			{#await rating then rating}
-				{isNaN(rating) ? 'Unrated' : `${rating}%`}
+				{Number.isNaN(rating) ? $t('experience.unrated') : `${rating}%`}
 			{/await}
 		</p>
 		{#if typeof playing === 'number'}
