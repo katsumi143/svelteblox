@@ -8,7 +8,12 @@
 
 	let pages: string[] = [];
 	$: if (!pages.includes(cursor))
-		pages.push(cursor);
+		pages = [...pages, cursor];
+
+	$: data.then(({ nextCursor }) => {
+		if (!pages.includes(nextCursor))
+			pages = [...pages, nextCursor];
+	});
 </script>
 
 <div class="pagination-container">
