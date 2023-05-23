@@ -11,7 +11,7 @@ export type Values = Iterable<any> | Record<string, any>
 
 const numFormatter = new Intl.NumberFormat();
 
-const ti = (id: number, val: number) => `time_in.${id}_${val === 1 ? 1 : 0}`;
+const ti = (id: number, val: number, val2: number) => `time_in.${id}_${val === 1 ? 1 : 0}_${val2 === 0 ? 0 : val2 === 1 ? 2 : 1}`;
 const ta = (id: number, val: number) => `time_ago.${id}_${val === 1 ? 1 : 0}`;
 const ns = (number: number) => {
 	const string = numFormatter.format(number).replace(',', '.');
@@ -74,26 +74,32 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 			const diff = Date.parse(finalValue) - Date.now();
 			const year = Math.round(diff / 31536000000);
 			if (year > 0)
-				return translate(locale, ti(5, year), [year]);
+				return translate(locale, ti(5, year, 0), [year]);
 
 			const month = Math.round(diff / 2628000000);
 			if (month > 0)
-				return translate(locale, ti(4, month), [month]);
+				return translate(locale, ti(4, month, 0), [month]);
 
-			const day = Math.round(diff / 86400000);
-			if (day > 0)
-				return translate(locale, ti(3, day), [day]);
-
+			const day = Math.floor(diff / 86400000);
 			const hour = Math.round(diff / 3600000);
-			if (hour > 0)
-				return translate(locale, ti(2, hour), [hour]);
+			if (day > 0) {
+				const hour2 = hour - (24 * day);
+				return translate(locale, ti(3, day, hour2), [day, hour2]);
+			}
 
-			const minute = Math.round(diff / 60000);
-			if (minute > 0)
-				return translate(locale, ti(1, minute), [minute]);
+			const minute = Math.floor(diff / 60000);
+			if (hour > 0) {
+				const minute2 = minute - (60 * hour);
+				return translate(locale, ti(2, hour, minute2), [hour, minute2]);
+			}
 
 			const second = Math.round(diff / 1000);
-			return translate(locale, ti(0, second), [second]);
+			if (minute > 0) {
+				const second2 = second - (60 * minute);
+				return translate(locale, ti(1, minute, second2), [minute, second2]);
+			}
+
+			return translate(locale, ti(0, second, 0), [second]);
 		}
 
 		return finalValue;
