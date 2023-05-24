@@ -99,6 +99,8 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 				return translate(locale, ti(1, minute, second2), [minute, second2]);
 			}
 
+			if (second <= 1)
+				return translate(locale, 'time_in.0_1_0', []);
 			return translate(locale, ti(0, second, 0), [second]);
 		}
 
