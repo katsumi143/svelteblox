@@ -3,19 +3,19 @@
 	import People from '$lib/icons/PeopleFill.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
+	import type { PartialExperience } from '$lib/api/types';
 	import { joinUser, joinExperience } from '$lib/launch';
 	import { getExperienceVotes, getExperienceThumbnails } from '$lib/api/games';
-	import type { MediaAsset, ExperienceCreator, PartialExperience } from '$lib/api/types';
 	export let id: number;
 	export let name: string;
 	export let votes: PartialExperience['votes'] | null = null;
 	export let playing: number;
-	export let creator: ExperienceCreator;
 	export let rootPlaceId: number;
+	export let creatorName: string | null = null;
 
 	export let friendId: number | null = null;
 	export let friendName: string | null = null;
-	export let thumbnail: Promise<MediaAsset | undefined> | undefined = undefined;
+	export let thumbnail: Promise<string | undefined> | undefined = undefined;
 
 	const voting = votes ? Promise.resolve(votes) : getExperienceVotes([id]).then(v => v[0]);
 	const rating = voting.then(v => Math.round(v[0] / (v[0] + v[1]) * 100));
@@ -24,13 +24,15 @@
 </script>
 
 <a class="experience" href={`/experience/${id}`}>
-	{#await thumbnail ?? getExperienceThumbnails(id).then(i => i[0]) then image}
-		<img src={image?.mediaAssetUrl} alt="experience thumbnail"/>
+	{#await thumbnail ?? getExperienceThumbnails(id).then(i => i[0]?.mediaAssetUrl) then image}
+		<img src={image} alt="experience thumbnail"/>
 	{/await}
 
 	<p class="name">{name}</p>
 	<div class="details">
-		<p>{$t('creator', [creator.name])}</p>
+		{#if creatorName}
+			<p>{$t('creator', [creatorName])}</p>
+		{/if}
 		<p>
 			<ThumbsUp/>
 			{#await rating then rating}
@@ -83,6 +85,7 @@
 			margin: 0 16px 16px;
 			z-index: 1;
 			display: flex;
+			white-space: nowrap;
 			p {
 				gap: 4px;
 				color: var(--color-secondary);
@@ -103,8 +106,9 @@
 			bottom: 40px;
 			cursor: pointer;
 			opacity: 0;
-			padding: 2px 4px 2px 16px;
+			z-index: 10;
 			display: flex;
+			padding: 2px 4px 2px 16px;
 			position: absolute;
 			font-size: .9em;
 			background: #00b06f;

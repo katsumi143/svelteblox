@@ -56,8 +56,8 @@ export function getExperienceThumbnails(experienceId: string | number) {
 			.then(({ data }) => (data.find(d => LOCALE_MAP[d.languageCode] === userLocale) ?? data[0]).mediaAssets)
 			.then(data => {
 				if (data.length === 0)
-					return getExperienceThumbnails2(experienceId)
-						.then(data => data.map(img => ({
+					return getExperienceThumbnails2([experienceId])
+						.then(data => data[0].thumbnails.map(img => ({
 							state: img.state,
 							targetId: experienceId,
 							mediaAssetId: '',
@@ -71,12 +71,12 @@ export function getExperienceThumbnails(experienceId: string | number) {
 			})
 	}, 7200000);
 }
-export function getExperienceThumbnails2(experienceId: string | number) {
+export function getExperienceThumbnails2(experienceIds: Id[]) {
 	return request<ApiDataList<{
 		universeId: number
 		thumbnails: ImageData[]
-	}>>(`${THUMBNAILS_BASE}/games/multiget/thumbnails?universeIds=${experienceId}&countPerUniverse=10&size=768x432&format=Png`)
-		.then(data => data.data[0].thumbnails);
+	}>>(`${THUMBNAILS_BASE}/games/multiget/thumbnails?universeIds=${experienceIds.join(',')}&countPerUniverse=10&size=768x432&format=Png`)
+		.then(data => data.data);
 }
 
 export function getExperienceServers(placeId: string | number) {

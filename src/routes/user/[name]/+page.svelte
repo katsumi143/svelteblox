@@ -6,12 +6,12 @@
 	import { t } from '$lib/localisation';
 	import * as toast from '$lib/toast';
 	import { getImages } from '$lib/api/images';
+	import type { PageData } from './$types';
 	import { getUserBadges } from '$lib/api/badges';
-	import type { LayoutData } from './$types';
 	import type { Friendship } from '$lib/api/types';
 	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
 	import { UserRole, UserPresenceType, FriendshipStatus, ChangeDisplayNameResult } from '$lib/api/enums';
-	import { getExperiences, getExperienceId, getExperienceIcons, getExperienceThumbnails } from '$lib/api/games';
+	import { getExperiences, getExperienceId, getExperienceIcons, getExperienceThumbnails2 } from '$lib/api/games';
 	import { user, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFavourites, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
 	import User from '$lib/components/User.svelte';
@@ -43,7 +43,7 @@
 	import PencilSquare from '$lib/icons/PencilSquare.svelte';
 	import RobloxStudio2 from '$lib/icons/RobloxStudio2.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
-	export let data: LayoutData;
+	export let data: PageData;
 
 	$: isSelf = data.id === user.id;
 
@@ -81,14 +81,7 @@
 	});
 
 	$: experiences = getUserProfileExperiences(data.id);
-	$: experienceThumbnails = experiences.then(async items => {
-		if (!items.length)
-			return [];
-		const images = [];
-		for (const item of items)
-			images.push((await getExperienceThumbnails(item.UniverseID))[0]);
-		return images;
-	});
+	$: experienceThumbnails = experiences.then(i => i.length ? getExperienceThumbnails2(i.map(e => e.UniverseID)) : []);
 
 	$: favourites = getUserFavourites(data.id);
 	$: favouriteIcons = favourites.then(items => {
@@ -359,11 +352,11 @@
 						<ExperienceCard
 							id={experience.id}
 							name={experience.name}
-							creator={experience.creator}
 							playing={experience.playing}
 							friendId={presence.userPresenceType === UserPresenceType.InExperience ? data.id : null}
 							friendName={data.displayName}
 							rootPlaceId={experience.rootPlaceId}
+							creatorName={experience.creator.name}
 						/>
 					{/await}
 				{/if}
@@ -428,15 +421,9 @@
 								name={item.Name}
 								votes={[item.TotalUpVotes, item.TotalDownVotes]}
 								playing={item.PlayerCount}
-								creator={{
-									id: data.id,
-									type: 'User',
-									name: data.displayName,
-									isRNVAccount: false,
-									hasVerifiedBadge: data.hasVerifiedBadge
-								}}
-								thumbnail={experienceThumbnails.then(t => t.find(i => i.targetId === item.UniverseID))}
+								thumbnail={experienceThumbnails.then(t => t.find(i => i.universeId === item.UniverseID)?.thumbnails[0]?.imageUrl)}
 								rootPlaceId={item.PlaceID}
+								creatorName={data.displayName}
 							/>
 						{/each}
 					</div>

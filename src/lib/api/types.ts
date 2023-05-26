@@ -1,4 +1,4 @@
-import type { PartialType, SocialLinkType, UserPresenceType, FriendshipStatus } from './enums';
+import type { PartialType, SocialLinkType, UserPresenceType, FriendshipStatus, GroupAuditLogType } from './enums';
 export interface GameListItem {
 	name: string
 	genre: string
@@ -77,6 +77,14 @@ export interface Group {
 	hasVerifiedBadge: boolean
 	isBuildersClubOnly: boolean
 	publicEntryAllowed: boolean
+}
+export interface GroupV2 {
+	id: number
+	name: string
+	owner: Partial
+	created: string
+	description: string
+	hasVerifiedBadge: boolean
 }
 export interface PartialUser {
 	userId: number
@@ -305,8 +313,8 @@ export interface Badge {
 
 export interface PagedResponse<T> {
 	data: T[]
-	nextCursor: string
-	prevCursor: string
+	nextCursor: string | null
+	prevCursor: string | null
 }
 export interface ApiPageResponse<T> {
 	data: T[]
@@ -398,5 +406,108 @@ export interface GuildedInvite {
 		profilePictureSm: string
 		profilePictureLg: string
 		profilePictureBlur: string
+	}
+}
+
+export interface GroupWallPost {
+	id: number
+	body: string
+	poster: {
+		user: PartialUser
+		role: {
+			id: number
+			name: string
+			rank: number
+			description: string
+			memberCount: number
+		}
+	} | null
+	created: string
+	updated: string
+}
+
+export interface GroupMembership {
+	groupId: number
+	userRole: {
+		user: PartialUser
+		role: PartialGroupRole
+	}
+	isPrimary: boolean
+	permissions: GroupPermissions
+	canConfigure: boolean
+	isPendingJoin: boolean
+	areEnemiesAllowed: boolean
+	areGroupGamesVisible: boolean
+	areGroupFundsVisible: boolean
+}
+
+export interface PartialGroupRole {
+	id: number
+	name: string
+	rank: number
+}
+
+export interface GroupRole extends PartialGroupRole {
+	description: string
+	memberCount: number
+}
+
+export interface GroupPermissions {
+	groupPostsPermissions: {
+		viewWall: boolean
+		postToWall: boolean
+		viewStatus: boolean
+		postToStatus: boolean
+		deleteFromWall: boolean
+	}
+	groupEconomyPermissions: {
+		createItems: boolean
+		manageItems: boolean
+		viewAnalytics: boolean
+		addGroupPlaces: boolean
+		advertiseGroup: boolean
+		spendGroupFunds: boolean
+		manageGroupGames: boolean
+		viewGroupPayouts: boolean
+	}
+	groupOpenCloudPermissions: {
+		useCloudAuthentication: boolean
+		administerCloudAuthentication: boolean
+	}
+	groupMembershipPermissions: {
+		changeRank: boolean
+		inviteMembers: boolean
+		removeMembers: boolean
+	}
+	groupManagementPermissions: {
+		manageClan: boolean
+		viewAuditLogs: boolean
+		manageRelationships: boolean
+	}
+}
+
+export interface BaseGroupAuditLog {
+	actor: {
+		user: PartialUser
+		role: PartialGroupRole
+	}
+	created: string
+	actionType: GroupAuditLogType
+	description: {}
+}
+
+export type GroupAuditLog = BaseGroupAuditLog & {
+	actionType: GroupAuditLogType.ChangeDescription
+	description: {
+		NewDescription: string
+	}
+} | BaseGroupAuditLog & {
+	actionType: GroupAuditLogType.UpdateRole
+	description: {
+		OldName: string
+		RoleSetId: number
+		RoleSetName: string
+		NewDescription: string
+		OldDescription: string
 	}
 }

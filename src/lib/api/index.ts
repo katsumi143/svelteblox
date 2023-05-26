@@ -19,13 +19,16 @@ export function fullRequest<T>(targetUrl: string, method: HttpMethod = 'GET', bo
 				if (url === targetUrl && rosvelteData) {
 					window.removeEventListener('message', listener);
 
-					const { data, status, headers, statusText } = rosvelteData;
+					const { data, status, statusText } = rosvelteData;
 					if (status < 200 || status > 299) {
 						if (status === 403) {
-							const token = headers['x-csrf-token'];
+							const token = rosvelteData.headers['x-csrf-token'];
 							if (token) {
 								console.warn('request failed, retrying with new token');
-								return fullRequest<T>(targetUrl, method, body, headers, extraOptions, ignoreErrors).then(resolve).catch(reject);
+								return fullRequest<T>(targetUrl, method, body, {
+									...headers,
+									'x-csrf-token': token
+								}, extraOptions, ignoreErrors).then(resolve).catch(reject);
 							}
 						} else if (!ignoreErrors) {
 							console.error('request failed', targetUrl, status, statusText, data, headers);
@@ -35,7 +38,7 @@ export function fullRequest<T>(targetUrl: string, method: HttpMethod = 'GET', bo
 					resolve({
 						data,
 						status,
-						headers: new Headers(headers),
+						headers: new Headers(rosvelteData.headers),
 						statusText: rosvelteData
 					});
 				}

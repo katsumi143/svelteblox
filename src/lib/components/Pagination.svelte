@@ -4,15 +4,14 @@
 	import CaretLeft from '../icons/CaretLeft.svelte';
 	import CaretRight from '../icons/CaretRight.svelte';
 	export let data: Promise<PagedResponse<any>>;
-	export let cursor: string;
+	export let cursor: string | null = null;
 
-	let pages: string[] = [];
-	$: if (!pages.includes(cursor))
-		pages = [...pages, cursor];
-
+	let pages: (string | null)[] = [cursor];
 	$: data.then(({ nextCursor }) => {
 		if (!pages.includes(nextCursor))
 			pages = [...pages, nextCursor];
+		if (!nextCursor && !cursor && pages.length > 1)
+			pages = [cursor];
 	});
 </script>
 

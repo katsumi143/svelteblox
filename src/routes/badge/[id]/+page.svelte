@@ -107,8 +107,8 @@
 					id={experience.id}
 					name={experience.name}
 					playing={experience.playing}
-					creator={experience.creator}
 					rootPlaceId={experience.rootPlaceId}
+					creatorName={experience.creator.name}
 				/>
 			{/if}
 		{/await}

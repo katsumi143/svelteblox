@@ -20,7 +20,7 @@
 	let contextMenu: ContextMenu;
 </script>
 
-<a class="group" href={`/groups/${id}`} title={$t('group.hover', [name, memberCount])} on:contextmenu={contextMenu.createHandler()}>
+<a class="group" href={`/group/${id}`} title={$t('group.hover', [name, memberCount])} on:contextmenu={contextMenu.createHandler()}>
 	<Avatar src={(icon ?? getGroupIcon(id)).then(i => i?.imageUrl)} size="lg2"/>
 	<p class="name">
 		{name}

@@ -58,3 +58,8 @@ export enum PartialType {
 	Group = 'Group',
 	Place = 'Place'
 }
+
+export enum GroupAuditLogType {
+	ChangeDescription = 'Change Description',
+	UpdateRole = 'Update Roleset Data'
+}

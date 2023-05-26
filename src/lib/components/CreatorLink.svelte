@@ -13,7 +13,7 @@
 	export let hasVerifiedBadge = false;
 	let contextMenu: ContextMenu;
 
-	$: link = type === 'User' ? `/user/${name}` : `/groups/${id}`;
+	$: link = type === 'User' ? `/user/${name}` : `/group/${id}`;
 </script>
 
 <a href={link} title={displayName ? `${displayName} (@${name})` : `@${name}`} on:contextmenu={contextMenu.createHandler()}>

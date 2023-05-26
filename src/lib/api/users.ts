@@ -313,8 +313,18 @@ export function getModerationNotice() {
 				utteranceText: string
 			}[]
 			punishedUserId: number
-			punishmentTypeDescription: string
+			punishmentTypeDescription: 'Ban 3 Days'
 		}>('https://usermoderation.roblox.com/v1/not-approved'),
 		86400000
 	);
+}
+
+export async function reactiveAccount() {
+	return fullRequest('https://usermoderation.roblox.com/v1/not-approved/reactive', 'POST', null, {
+		'x-csrf-token': await getCsrfToken()
+	})
+		.then(response => {
+			if (response.status !== 200)
+				throw new Error(`${response.status} ${response.statusText}`);
+		});
 }

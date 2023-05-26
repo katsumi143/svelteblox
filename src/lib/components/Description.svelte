@@ -26,7 +26,7 @@
 				if (groupId) {
 					const group = await getGroup(groupId);
 					const icon = await getGroupIcon(groupId);
-					return `<a class="cool-link" href="/groups/${groupId}"><img src="${icon?.imageUrl}" width="25" height="25"/>${group.name}${group.hasVerifiedBadge ? verifiedBadge : ''}</a>`;
+					return `<a class="cool-link" href="/group/${groupId}"><img src="${icon?.imageUrl}" width="25" height="25"/>${group.name}${group.hasVerifiedBadge ? verifiedBadge : ''}</a>`;
 				}
 
 				const placeId = url.match(/(?:https:\/\/)(?:(?:www|web)\.)?roblox\.com\/games\/(\d*).*/)?.[1];

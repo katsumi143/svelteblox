@@ -12,7 +12,7 @@
 	export let userRole: [string, string] | null = null;
 </script>
 
-<a class="group focusable" href={`/groups/${group.id}`} title={group.name}>
+<a class="group focusable" href={`/group/${group.id}`} title={group.name}>
 	<Avatar src={icon?.then(i => i?.imageUrl)} size="md"/>
 	<div class="header">
 		<h1>

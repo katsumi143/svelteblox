@@ -1,6 +1,6 @@
 import { error, redirect } from '@sveltejs/kit';
 
-import type { LayoutLoad } from './$types';
+import type { PageLoad } from './$types';
 import { getUser, USERS_CACHE, getUserIdFromUsername } from '$lib/api/users';
 export const load = (async ({ url, params: { name } }) => {
 	const userId = parseInt(name);
@@ -12,4 +12,4 @@ export const load = (async ({ url, params: { name } }) => {
 	}
 	return getUser(await getUserIdFromUsername(name))
 		.catch(() => { throw error(404) });
-}) satisfies LayoutLoad;
+}) satisfies PageLoad;

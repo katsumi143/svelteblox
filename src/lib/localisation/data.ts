@@ -3,6 +3,8 @@ export default {
 		'action.save': 'Save',
 		'action.edit': 'Edit',
 		'action.undo': 'Undo',
+		'action.post': 'Post',
+		'action.agree': 'Agree',
 		'action.close': 'Close',
 		'action.cancel': 'Cancel',
 		'action.preview': 'Preview',
@@ -18,6 +20,7 @@ export default {
 		'action.view_talent': 'View on Talent Hub',
 		'action.view_devforum': 'View on DevForum',
 		'action.copy_place_id': 'Copy Place ID',
+		'action.view_creations': 'View Creations',
 		'action.configure_place': 'Configure Place',
 		'action.copy_universe_id': 'Copy Experience ID',
 		'action.configure_universe': 'Configure Experience',
@@ -105,14 +108,20 @@ export default {
 		'groups': 'Groups',
 		'groups.list': 'Your Groups',
 
-		'group.members': '{0|number} members',
-		'group.join': 'Join Group',
+		'group.owner': 'Owned by',
+		'group.members': 'Members',
+		'group.members.count': '{0|number} members',
+		'group.join.true': 'Join Group',
+		'group.join.false': 'Request Membership',
 		'group.about': 'About',
+		'group.wall': 'Discussion',
 		'group.experiences': 'Experiences',
 		'group.related_groups': 'Affiliates',
+		'group.audit': 'Audit Log',
 		'group.shout': 'Group Shout',
 		'group.shout.time': 'Posted {0|time_ago}',
 		'group.hover': '{0}\n{1} Member(s)',
+		'group.id': 'Group ID: {0}',
 
 		'group.role': 'Your Role: {0}',
 		'group.user_role': '{0}\'s Role: {1}',
@@ -122,6 +131,31 @@ export default {
 
 		'group_relationship.Allies': 'Allies',
 		'group_relationship.Enemies': 'Enemies',
+
+		'group_post.name': 'posted {0|time_ago}',
+		'group_post.moderated': 'This post has been removed by a moderator.',
+		'group_post.delete': 'Delete Post',
+		
+		'group_wall.input': 'Share something with the group!',
+		'group_wall.input.disabled': 'You do not have permission to create posts.',
+		'group_wall.disabled': 'You do not have permission to view posts.',
+		'group_wall.disabled.full': 'You do not have permission to create or view posts.',
+
+		'group_users.select': 'Group Roles',
+		'group_users.role': '{0} • {1|number} user{1!s}',
+
+		'group_audit.action.Delete Post': 'removed a post from the group wall {0|time_ago}',
+		'group_audit.action.Change Rank': 'set {1.TargetName}\'s role to “{1.NewRoleSetName}” {0|time_ago}',
+		'group_audit.action.Change Owner': 'gave ownership of the group to {1.NewOwnerName} {0|time_ago}',
+		'group_audit.action.Publish Place': 'published a new version of “{1.AssetName}” {0|time_ago}',
+		'group_audit.action.Create Group Asset': 'created a new asset named “{1.AssetName}” {0|time_ago}',
+		'group_audit.action.Update Group Asset': 'published a new version of “{1.AssetName}” {0|time_ago}',
+		'group_audit.action.Change Description': 'changed the group description {0|time_ago}',
+		'group_audit.action.Update Roleset Rank': 'set the rank of “{1.RoleSetName}” to {1.NewRank} {0|time_ago}',
+		'group_audit.action.Update Roleset Data': 'updated a role {0|time_ago}',
+		'group_audit.action.Configure Group Game': 'updated an experience {0|time_ago}',
+		'group_audit.action.Configure Group Asset': 'updated an asset {0|time_ago}',
+		'group_audit.summary': 'No further information available.',
 
 		'experience.play': 'Quick Play',
 		'experience.play2': 'Play {0}',
@@ -135,7 +169,7 @@ export default {
 		'experience.unrated': 'Unrated',
 		'experience.unrated2': 'This experience is unrated',
 		'experience.hover': '{0}\n{1|number} Playing',
-		'experience.socials': 'Social Links',
+		'experience.socials': 'Socials',
 		'experience.friend_servers': 'Friend Servers ({0})',
 		'experience.private_servers': 'Private Servers ({0})',
 
@@ -191,6 +225,8 @@ export default {
 		'sort_direction.0': 'Descending',
 		'sort_direction.1': 'Ascending',
 
+		'modal.wait': 'Before you continue...',
+
 		'badge.verified': 'Verified Badge',
 		'badge.verified.summary': 'This badge verifies that the holder is a notable and authentic creator, brand, or public figure.',
 
@@ -209,7 +245,11 @@ export default {
 		'mod_notice.reviewed': 'Reviewed {0|time_ago}.',
 		'mod_notice.ends': 'You can re-active your account {0|time_in}.',
 		'mod_notice.details': 'More Information',
+		'mod_notice.terms': 'Roblox Terms of Use',
 		'mod_notice.guidelines': 'Roblox Community Guidelines',
+		'mod_notice.reactive': 'Re-active Account',
+		'mod_notice.modal': 'Before re-activating your account, please read & agree to the Roblox Terms of Use, and Community Guidelines.',
+		'mod_notice.agree': 'Agree & Re-active',
 
 		'number': '{0|number}',
 		'number_small': '{0|number_small}',

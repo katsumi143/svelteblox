@@ -26,11 +26,15 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 	text = text.replaceAll(/{(.*?)}/g, (t: string, k: string) => {
 		const split = k.split('|');
 		const split2 = split[0].split('??');
+		const split3 = split2[0].split('!');
 		const formatType = split[1];
 
 		let value = values as any;
-		for (const name of split2[0].split('.'))
+		for (const name of split3[0].split('.'))
 			value = value[name];
+
+		if (split3[1])
+			return value !== 1 ? split3[1] : '';
 		
 		let finalValue: string = value ?? split2[1] ?? t;
 		if (formatType === 'number')
@@ -69,6 +73,8 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 				return translate(locale, ta(1, minute), [minute]);
 
 			const second = Math.round(diff / 1000);
+			if (second <= 1)
+				return translate(locale, 'time_ago.0_1', []);
 			return translate(locale, ta(0, second), [second]);
 		} else if (formatType === 'time_in') {
 			const diff = Date.parse(finalValue) - Date.now();
@@ -81,7 +87,7 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 				return translate(locale, ti(4, month, 0), [month]);
 
 			const day = Math.floor(diff / 86400000);
-			const hour = Math.round(diff / 3600000);
+			const hour = Math.floor(diff / 3600000);
 			if (day > 0) {
 				const hour2 = hour - (24 * day);
 				return translate(locale, ti(3, day, hour2), [day, hour2]);

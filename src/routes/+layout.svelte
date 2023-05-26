@@ -9,20 +9,16 @@
 	import { t } from '$lib/localisation';
 	import { theme } from '$lib/settings';
 	import { lockPin, pinLocked } from '$lib/api/auth';
-	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
-	import { user, getRobux, getUserIcon, getModerationNotice } from '$lib/api/users';
+	import { user, getRobux, getUserIcon } from '$lib/api/users';
+	import { getGroupIcon, getPrimaryGroup, getSelfGroupRoles } from '$lib/api/groups';
 
 	import Logo from '$lib/components/TextLogo.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
-	import Description from '$lib/components/Description.svelte';
+	import AccountNotice from '$lib/components/AccountNotice.svelte';
 	import UnlockPinModal from '$lib/components/UnlockPinModal.svelte';
 
-	import Search from '$lib/icons/Search.svelte';
-	import Question from '$lib/icons/Question.svelte';
 	import CaretDown from '$lib/icons/CaretDown.svelte';
-	import Hourglass from '$lib/icons/Hourglass.svelte';
-	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	import ExclamationTriangle from '$lib/icons/ExclamationTriangle.svelte';
 	onMount(async () => {
 		if (pwaInfo) {
@@ -65,21 +61,29 @@
 	}
 
 	const banned = !!(user as any).errors;
-	const notice = banned ? getModerationNotice() : null;
 
 	const robux = banned ? 0 : getRobux();
 	const avatar = banned ? null : getUserIcon(user.id);
+	const groups = banned ? Promise.resolve([]) : getSelfGroupRoles();
 	const primaryGroup = banned ? null : getPrimaryGroup(user.id);
 	const primaryGroupIcon = banned ? null : primaryGroup!.then(group => group ? getGroupIcon(group[0].id) : null);
 
+	let groupId: number;
 	let userMenuTrigger: () => void;
+
+	primaryGroup?.then(group => {
+		if (group)
+			groupId = group[0].id;
+		else
+			groups.then(g => groupId = g[0].group.id);
+	});
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
 	<Header>
 		<a href="/" class="logo"><Logo/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
-		<a href="/groups" class="nav-link">{$t('groups')}</a>
+		<a href={`/group/${groupId}`} class="nav-link">{$t('groups')}</a>
 		<a href="https://create.roblox.com" class="nav-link">{$t('create')}</a>
 
 		{#if !banned}
@@ -119,7 +123,7 @@
 					{#if group}
 						<div class="separator"/>
 						<p>{$t('user_action.group')}</p>
-						<a href={`/groups/${group[0].id}`}>
+						<a href={`/group/${group[0].id}`}>
 							<Avatar src={primaryGroupIcon?.then(i => i?.imageUrl)} size="xs" transparent/>
 							{group[0].name}
 						</a>
@@ -133,31 +137,8 @@
 		{/if}
 	</Header>
 	<main class="app-content">
-		{#if notice}
-			<div class="notice">
-				{#await notice then notice}
-					<h1>{$t(`mod_notice.title.${notice.punishmentTypeDescription}`)}</h1>
-					<Description input={notice.messageToUser} disableEmbeds/>
-					<div class="separator"/>
-					<div class="detail">
-						<Search/>
-						<p>{$t('mod_notice.reviewed', [notice.beginDate])}</p>
-					</div>
-					<div class="detail">
-						<Hourglass/>
-						<p>{$t('mod_notice.ends', [notice.endDate])}</p>
-					</div>
-					<div class="separator"/>
-					<a class="link" href="https://www.roblox.com/not-approved" target="_blank">
-						<Question/>
-						{$t('mod_notice.details')}
-					</a>
-					<a class="link" href="https://www.roblox.com/info/community-guidelines" target="_blank">
-						<RobloxIcon/>
-						{$t('mod_notice.guidelines')}
-					</a>
-				{/await}
-			</div>
+		{#if banned}
+			<AccountNotice/>
 		{:else}
 			<slot/>
 		{/if}
@@ -376,49 +357,6 @@
 		border: none;
 		margin: 4px 0;
 		background: var(--background-tertiary);
-	}
-
-	.notice {
-		width: 75%;
-		margin: auto;
-		padding: 24px;
-		background: var(--background-secondary);
-		border-radius: 16px;
-		h1 {
-			margin: 0;
-			font-size: 2.5em;
-		}
-		:global(.description) {
-			margin-top: 16px;
-		}
-		.separator {
-			width: 100%;
-			height: 1px;
-			margin: 16px 0;
-			background: var(--border-secondary);
-		}
-		.detail {
-			gap: 12px;
-			width: fit-content;
-			display: flex;
-			position: relative;
-			align-items: end;
-			margin-bottom: 12px;
-			p {
-				color: var(--color-tertiary);
-				margin: 0;
-				white-space: nowrap;
-			}
-		}
-		.link {
-			gap: 8px;
-			display: flex;
-			align-items: center;
-			margin-bottom: 8px;
-			&:last-child {
-				margin: 0;
-			}
-		}
 	}
 
 	footer {

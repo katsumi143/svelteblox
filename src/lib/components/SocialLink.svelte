@@ -32,7 +32,7 @@
 		getGroupName(groupId).then(value => name = value);
 		getGroupVerified(groupId).then(value => verified = value);
 
-		url = `/groups/${groupId}`;
+		url = `/group/${groupId}`;
 		icon = getGroupIcon(groupId).then(i => i?.imageUrl);
 	} else
 		icon = Promise.resolve(`/social-link/${data.type}.svg`);
