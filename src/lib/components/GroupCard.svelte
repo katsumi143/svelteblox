@@ -25,7 +25,7 @@
 	</div>
 	<div class="details">
 		<p><Eye/>{$t(`group_entry.${group.publicEntryAllowed}`)}</p>
-		<p><People/>{$t('group.members', [group.memberCount])}</p>
+		<p><People/>{$t('group.members.count', [group.memberCount])}</p>
 		{#if userRole}
 			<p class="role">{$t('group.user_role', userRole)}</p>
 		{/if}
