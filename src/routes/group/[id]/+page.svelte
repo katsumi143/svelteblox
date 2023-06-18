@@ -60,7 +60,7 @@
 	<div class="cards">
 		<div class="card">
 			<div class="header">
-				<Avatar src={icons.then(i => i[0]?.imageUrl)}/>
+				<Avatar src={icons.then(i => i[0]?.imageUrl)} hover/>
 				<h1>
 					{group.name}
 					{#if group.hasVerifiedBadge}
@@ -128,7 +128,7 @@
 		{#if group.shout?.body}
 			<div class="shout">
 				<div class="user">
-					<Avatar src={shouterIcon?.then(i => i?.imageUrl)} size="sm2" circle/><p class="name">
+					<Avatar src={shouterIcon?.then(i => i?.imageUrl)} size="sm2" hover circle/><p class="name">
 						<a href={`/user/${shouter?.username}`}>{shouter?.displayName}</a>
 						{$t('group_post.name', [group.shout.updated])}
 					</p>
@@ -291,8 +291,6 @@
 				align-items: center;
 				margin-bottom: 8px;
 				:global(.avatar) {
-					box-shadow: 0 8px 16px 2px #00000040;
-					background: var(--background-tertiary);
 					--avatar-size: 64px;
 				}
 				.name {

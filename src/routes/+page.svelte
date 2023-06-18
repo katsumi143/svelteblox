@@ -31,7 +31,7 @@
 
 <div class="landing">
 	<a href={`/user/${user.name}`} on:contextmenu={contextMenu.createHandler()}>
-		<Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)} circle/>
+		<Avatar src={getUserIcon(user.id).then(img => img?.imageUrl)} hover circle/>
 		<UserMenu {...user} bind:contextMenu={contextMenu}/>
 	</a>
 	<div class="greeting">

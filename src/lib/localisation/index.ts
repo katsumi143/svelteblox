@@ -51,7 +51,8 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 				return translate(locale, 'number_small.0', ns(number));
 			return translate(locale, 'number', [finalValue]);
 		} else if (formatType === 'time_ago') {
-			const diff = Date.now() - Date.parse(finalValue);
+			const date = new Date(finalValue);
+			const diff = Date.now() - date.getTime();
 			const year = Math.round(diff / 31536000000);
 			if (year > 0)
 				return translate(locale, ta(5, year), [year]);
@@ -61,8 +62,11 @@ export function translate(locale: Locale, key: Key | string, values: Values) {
 				return translate(locale, ta(4, month), [month]);
 
 			const day = Math.round(diff / 86400000);
-			if (day > 0)
-				return translate(locale, ta(3, day), [day]);
+			if (day > 0) {
+				const hrs = date.getHours();
+				const mins = date.getMinutes();
+				return translate(locale, ta(3, day), [day, (hrs % 12) + 1, mins > 9 ? mins : `0${mins}`, hrs > 11 ? 'PM' : 'AM']);
+			}
 
 			const hour = Math.round(diff / 3600000);
 			if (hour > 0)

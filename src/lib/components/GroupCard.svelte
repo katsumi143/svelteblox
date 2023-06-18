@@ -13,7 +13,7 @@
 </script>
 
 <a class="group focusable" href={`/group/${group.id}`} title={group.name}>
-	<Avatar src={icon?.then(i => i?.imageUrl)} size="md"/>
+	<Avatar src={icon?.then(i => i?.imageUrl)} size="md" hover/>
 	<div class="header">
 		<h1>
 			{group.name}

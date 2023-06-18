@@ -156,7 +156,7 @@
 <div class="main">
 	<div class="card">
 		<div class="header">
-			<Avatar src={avatar.then(i => i?.imageUrl)} circle/>
+			<Avatar src={avatar.then(i => i?.imageUrl)} hover circle/>
 			<div class="name">
 				<h1>
 					{editName}

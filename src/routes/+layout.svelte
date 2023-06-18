@@ -18,7 +18,11 @@
 	import AccountNotice from '$lib/components/AccountNotice.svelte';
 	import UnlockPinModal from '$lib/components/UnlockPinModal.svelte';
 
+	import GearFill from '$lib/icons/GearFill.svelte';
 	import CaretDown from '$lib/icons/CaretDown.svelte';
+	import PersonFill from '$lib/icons/PersonFill.svelte';
+	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
+	import RobloxStudio2 from '$lib/icons/RobloxStudio2.svelte';
 	import ExclamationTriangle from '$lib/icons/ExclamationTriangle.svelte';
 	onMount(async () => {
 		if (pwaInfo) {
@@ -117,8 +121,12 @@
 					</button>
 				{/if}
 				<p>{user.displayName}</p>
-				<a href={`/user/${user.name}`}>{$t('user_action.user.profile')}</a>
-				<a href="https://create.roblox.com/dashboard/creations">{$t('user_action.user.creations')}</a>
+				<a href={`/user/${user.name}`}>
+					<PersonFill/>{$t('user_action.user.profile')}
+				</a>
+				<a href="https://create.roblox.com/dashboard/creations">
+					<RobloxStudio2/>{$t('user_action.user.creations')}
+				</a>
 				{#await primaryGroup then group}
 					{#if group}
 						<div class="separator"/>
@@ -130,9 +138,13 @@
 					{/if}
 				{/await}
 				<div class="separator"/>
-				<a href="/settings">{$t('user_action.settings.settings')}</a>
+				<a href="/settings">
+					<GearFill/>{$t('user_action.settings.settings')}
+				</a>
 				<div class="separator"/>
-				<a href="/">{$t('user_action.other.logout')}</a>
+				<a href="/">
+					<BoxArrowRight/>{$t('user_action.other.logout')}
+				</a>
 			</DropdownMenu>
 		{/if}
 	</Header>

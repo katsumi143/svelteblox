@@ -74,7 +74,7 @@
 		{:then { data }}
 			{#each data as item}
 				<div class="post">
-					<Avatar src={icons.then(i => i.find(i => i.targetId === item.poster?.user.userId)?.imageUrl)} size="sm" circle/>
+					<Avatar src={icons.then(i => i.find(i => i.targetId === item.poster?.user.userId)?.imageUrl)} size="sm" hover circle/>
 					{#if item.poster && item.body !== '[ Content Deleted ]'}
 						<div>
 							<p class="name">
@@ -121,9 +121,6 @@
 		position: relative;
 		background: var(--background-secondary);
 		border-radius: 16px;
-		:global(.avatar) {
-			background: var(--background-tertiary);
-		}
 		div {
 			margin-top: 8px;
 			.name {
