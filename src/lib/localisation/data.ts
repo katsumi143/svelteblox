@@ -45,7 +45,7 @@ export default {
 		'home.recent': 'Recent Experiences',
 		'home.favourites': 'Your Favourite Experiences',
 
-		'user.join': 'Join {0.displayName} in {1.name}',
+		'user.join': 'Click to join {0} in {1}',
 		'user.friends': 'Friends ({0})',
 		'user.friends.count': 'friends',
 		'user.followers': 'followers',
