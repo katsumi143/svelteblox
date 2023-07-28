@@ -1,7 +1,8 @@
 import { get, derived, writable } from 'svelte/store';
 
-import { PinUnlockResult } from './enums';
 import { request, fullRequest } from '.';
+import type { QuickLoginResult } from './types';
+import { PinUnlockResult, StartQuickLoginResult } from './enums';
 export const AUTH_BASE = 'https://auth.roblox.com/v1';
 
 let csrfToken: string;
@@ -57,4 +58,22 @@ export function getPinState() {
 		isEnabled: boolean
 		unlockedUntil: number | null
 	}>(`${AUTH_BASE}/account/pin`);
+}
+
+export async function startQuickLogin(code: string): Promise<{ data: QuickLoginResult, result: StartQuickLoginResult.Success } | { data: null, result: StartQuickLoginResult }> {
+	return fullRequest('https://apis.roblox.com/auth-token-service/v1/login/enterCode', 'POST', { code }, {
+		'x-csrf-token': await getCsrfToken()
+	}, undefined, true).then(({ data, status }) => {
+		if (status === 429)
+			return { data: null, result: StartQuickLoginResult.Ratelimited };
+		else if (status === 200)
+			return { data: data as any, result: StartQuickLoginResult.Success };
+		return { data: null, result: StartQuickLoginResult.InvalidCode };
+	});
+}
+
+export async function confirmQuickLogin(code: string) {
+	return fullRequest('https://apis.roblox.com/auth-token-service/v1/login/validateCode', 'POST', { code }, {
+		'x-csrf-token': await getCsrfToken()
+	}, undefined, true).then(({ status }) => status === 200);
 }

@@ -33,6 +33,7 @@ export default {
 
 		'user_action.user.profile': 'Your Profile',
 		'user_action.user.creations': 'Your Creations',
+		'user_action.quick_login': 'Quick Log-in',
 		'user_action.group': 'Your Primary Group',
 		'user_action.settings.settings': 'Website Settings',
 		'user_action.other.logout': 'Sign out',
@@ -93,6 +94,13 @@ export default {
 		'unlock_pin.placeholder': '1234',
 		'unlock_pin.incorrect': 'The PIN you entered is incorrect, please try again.',
 		'unlock_pin.ratelimited': 'You are being rate-limited, please try again later.',
+
+		'quick_login': 'Quick Log-in',
+		'quick_login.summary': 'With Quick Log-in, you can instantly log-in on another device using a code, but never use codes from strangers!',
+		'quick_login.placeholder': 'ABCDEF',
+		'quick_login.confirm': 'Please confirm that the location & device shown below matches your request.',
+		'quick_login.error.1': 'The code you entered is invalid, did you type it correctly?',
+		'quick_login.error.2': 'You are being rate-limited, please try again later.',
 
 		'name_change_result.0': '',
 		'name_change_result.1': 'This name has been deemed inappropriate.',
@@ -311,7 +319,8 @@ export default {
 		'toast.client_play2': 'Joining Server...',
 		'toast.client_launched': 'The Roblox Player should open in a few seconds.',
 		'toast.studio_edit': 'Starting Edit Session...',
-		'toast.studio_launched': 'Roblox Studio should open in a few seconds.'
+		'toast.studio_launched': 'Roblox Studio should open in a few seconds.',
+		'toast.quick_login_success': 'You should now be logged-in on your other device.'
 	},
 	'ja-JP': {
 		'action.copy_id': 'IDをコピー',

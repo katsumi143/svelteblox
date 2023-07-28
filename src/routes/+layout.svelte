@@ -3,23 +3,30 @@
 	import { onMount } from 'svelte';
 	import { pwaInfo } from 'virtual:pwa-info';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
-	import { Header, DropdownMenu } from '@voxelified/voxeliface';
 	import { Settings, defaultSettings } from 'svelte-contextmenu';
+	import { Button, Header, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import { theme } from '$lib/settings';
-	import { lockPin, pinLocked } from '$lib/api/auth';
+	import * as toast from '$lib/toast';
+	import { StartQuickLoginResult } from '$lib/api/enums';
+	import type { QuickLoginResult } from '$lib/api/types';
 	import { user, getRobux, getUserIcon } from '$lib/api/users';
 	import { getGroupIcon, getPrimaryGroup, getSelfGroupRoles } from '$lib/api/groups';
+	import { lockPin, pinLocked, startQuickLogin, confirmQuickLogin } from '$lib/api/auth';
 
 	import Logo from '$lib/components/TextLogo.svelte';
+	import Modal from '$lib/components/Modal.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
 	import AccountNotice from '$lib/components/AccountNotice.svelte';
 	import UnlockPinModal from '$lib/components/UnlockPinModal.svelte';
 
+	import X from '$lib/icons/X.svelte';
+	import Check from '$lib/icons/Check.svelte';
 	import GearFill from '$lib/icons/GearFill.svelte';
 	import CaretDown from '$lib/icons/CaretDown.svelte';
+	import PhoneFill from '$lib/icons/PhoneFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	import RobloxStudio2 from '$lib/icons/RobloxStudio2.svelte';
@@ -81,6 +88,36 @@
 		else
 			groups.then(g => groupId = g[0].group.id);
 	});
+
+	let quickLogging = false;
+	let quickLoginCode = '';
+	let quickLoginError: StartQuickLoginResult | null = null;
+	let quickLoginResult: QuickLoginResult | null = null;
+
+	let quickLoginClose: () => void;
+	let quickLoginTrigger: () => void;
+	$: quickLoginCode = quickLoginCode.toUpperCase().slice(0, 6);
+
+	const quickLogin = () => {
+		quickLogging = !(quickLoginError = null);
+		startQuickLogin(quickLoginCode).then(({ data, result }) => {
+			if (result === StartQuickLoginResult.Success)
+				quickLogging = !!(quickLoginResult = data);
+			else
+				quickLoginError = result;
+			quickLogging = false;
+		});
+	};
+	const finishQuickLogin = () => {
+		quickLogging = true;
+		confirmQuickLogin(quickLoginCode).then(() => {
+			quickLogging = !!(quickLoginCode = '');
+			quickLoginResult = null;
+			quickLoginClose();
+
+			toast.success($t('toast.success'), $t('toast.quick_login_success'));
+		});
+	};
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
@@ -127,6 +164,10 @@
 				<a href="https://create.roblox.com/dashboard/creations">
 					<RobloxStudio2/>{$t('user_action.user.creations')}
 				</a>
+				<div class="separator"/>
+				<button type="button" on:click={quickLoginTrigger}>
+					<PhoneFill/>{$t('user_action.quick_login')}
+				</button>
 				{#await primaryGroup then group}
 					{#if group}
 						<div class="separator"/>
@@ -161,6 +202,41 @@
 	</main>
 	<div id="captcha"/>
 	<div id="context-menu-portal"/>
+	<Modal bind:close={quickLoginClose} bind:trigger={quickLoginTrigger}>
+		<h1>{$t('quick_login')}</h1>
+		{#if quickLoginResult}
+			<p>{$t('quick_login.confirm')}</p>
+			<p class="quick-login-device"><PhoneFill/>{quickLoginResult.deviceInfo} in {quickLoginResult.location}</p>
+
+			<div class="quick-login-buttons">
+				<Button on:click={finishQuickLogin} disabled={quickLogging}>
+					<Check/>{$t('action.continue')}
+				</Button>
+				<form method="dialog">
+					<Button on:click={() => (quickLoginCode = '', quickLoginResult = null)} disabled={quickLogging}>
+						<X/>{$t('action.cancel')}
+					</Button>
+				</form>
+			</div>
+		{:else}
+			<p>{$t('quick_login.summary')}</p>
+			{#if quickLoginError}
+				<p class="error">{$t(`quick_login.error.${quickLoginError}`)}</p>
+			{/if}
+			<TextInput bind:value={quickLoginCode} placeholder={$t('quick_login.placeholder')}/>
+
+			<div class="quick-login-buttons">
+				<Button on:click={quickLogin} disabled={quickLogging || quickLoginCode.length !== 6}>
+					<Check/>{$t('action.continue')}
+				</Button>
+				<form method="dialog">
+					<Button on:click={() => quickLoginCode = ''} disabled={quickLogging}>
+						<X/>{$t('action.cancel')}
+					</Button>
+				</form>
+			</div>
+		{/if}
+	</Modal>
 	<UnlockPinModal/>
 	<SvelteToast options={{
 		pausable: true,
@@ -371,6 +447,22 @@
 		background: var(--background-tertiary);
 	}
 
+	.quick-login-device {
+		gap: 8px;
+		color: var(--color-primary);
+		display: flex;
+		align-items: center;
+	}
+	.quick-login-buttons {
+		gap: 8px;
+		display: flex;
+		margin-top: 16px;
+	}
+	.error {
+		color: #e98686;
+		font-size: .9em;
+		margin-bottom: 8px;
+	}
 	footer {
 		gap: 4px;
 		color: var(--color-secondary);

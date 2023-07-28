@@ -18,6 +18,12 @@ export enum PinUnlockResult {
 	Ratelimited
 }
 
+export enum StartQuickLoginResult {
+	Success,
+	InvalidCode,
+	Ratelimited
+}
+
 export enum ChangeDisplayNameResult {
 	Success,
 	InvalidName,

@@ -511,3 +511,8 @@ export type GroupAuditLog = BaseGroupAuditLog & {
 		OldDescription: string
 	}
 }
+
+export interface QuickLoginResult {
+	location: string
+	deviceInfo: string
+}
