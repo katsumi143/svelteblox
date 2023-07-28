@@ -13,12 +13,13 @@
 	export let groupId: number;
 
 	$: roles = getGroupRoles(groupId).then(data => data.slice(1));
-	$: users = roles.then(roles => getGroupMembers(groupId, roles[$value].id, 50, cursor));
+	$: users = roles.then(roles => getGroupMembers(groupId, roles[value].id, 50, cursor));
 	$: userIcons = users.then(users => getUserIcons(users.data.map(u => u.userId)));
 
-	let value = writable(0);
+	let value = 0;
 	let cursor: string | null = null;
-	onDestroy(value.subscribe(() => cursor = null));
+	$: if (value >= 0)
+		cursor = null;
 </script>
 
 <div class="members">

@@ -95,11 +95,11 @@
 
 	let saving = false;
 	let editing = false;
+	let tabValue = 0;
 	let friending = false;
 	let viewBadges = false;
 	let nameResult = ChangeDisplayNameResult.Success;
 	let menuTrigger: () => void;
-	const tabValue = writable(0);
 	const saveProfile = async () => {
 		saving = true;
 		if (editName !== data.displayName) {
@@ -343,7 +343,7 @@
 			</div>
 		{/if}
 	</div>
-	<Tabs.Root value={tabValue}>
+	<Tabs.Root bind:value={tabValue}>
 		<Tabs.Item value={0} title={$t('profile.overview')}>
 			{#await experience then experience}
 				{#if experience}

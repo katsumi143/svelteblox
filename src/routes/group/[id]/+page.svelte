@@ -43,7 +43,7 @@
 	$: selfRole = data.membership.userRole.role;
 
 	let joining = false;
-	let tabValue = writable(0);
+	let tabValue = 0;
 	let menuTrigger: () => void;
 	const join = () => {
 		joining = true;
@@ -145,7 +145,7 @@
 			{/each}
 		</div>
 	</div>
-	<Tabs.Root value={tabValue}>
+	<Tabs.Root bind:value={tabValue}>
 		<Tabs.Item value={0} title={$t('profile.overview')}>
 			{#if group.description}
 				<Description input={group.description}/>
