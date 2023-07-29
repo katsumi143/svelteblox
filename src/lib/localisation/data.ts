@@ -77,6 +77,8 @@ export default {
 		'profile.creations': 'Creations',
 		'profile.creations.experiences': 'Pinned Experiences',
 
+		'asset.id': 'Asset ID: {0}',
+
 		'badge.id': 'Badge ID:',
 		'badge.enabled.true': 'Obtainable',
 		'badge.enabled.false': 'Unobtainable',

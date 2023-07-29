@@ -516,3 +516,45 @@ export interface QuickLoginResult {
 	location: string
 	deviceInfo: string
 }
+
+export interface AssetDetails {
+	asset: {
+		id: number
+		name: string
+		typeId: number // TODO: enumify
+		duration: number
+		createdUtc: string
+		updatedUtc: string
+		hasScripts: boolean
+		isEndorsed: boolean
+		description: string
+		assetGenres: string[] // TODO: enumify
+		audioDetails: unknown
+		assetSubTypes: unknown[]
+		creatingUniverseId: number | null
+		isAssetHashApproved: boolean
+	}
+	voting: {
+		upVotes: number
+		canVote: boolean
+		hasVoted: boolean
+		userVote: unknown
+		downVotes: number
+		voteCount: number
+		showVotes: boolean
+		upVotePercent: number
+	}
+	product: {
+		price: number
+		productId: number
+		isForSaleOrIsPublicDomain: boolean
+	}
+	creator: {
+		id: number
+		name: string
+		type: number
+		isVerifiedCreator: boolean
+		latestGroupUpdaterUserId: number | null
+		latestGroupUpdaterUserName: string | null
+	}
+}

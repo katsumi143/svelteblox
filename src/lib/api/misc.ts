@@ -1,4 +1,4 @@
-import Cache from '$lib/cache';
+import Cache from '../cache';
 import { request } from '.';
 import type { DiscordInvite, GuildedInvite } from './types';
 export const MISC_CACHE = new Cache('misc');
