@@ -9,6 +9,7 @@
 	import { t } from '$lib/localisation';
 	import { theme } from '$lib/settings';
 	import * as toast from '$lib/toast';
+	import { COLOUR_THEME_HUES } from '$lib/constants';
 	import { StartQuickLoginResult } from '$lib/api/enums';
 	import type { QuickLoginResult } from '$lib/api/types';
 	import { user, getRobux, getUserIcon } from '$lib/api/users';
@@ -50,10 +51,6 @@
 	});
 
 	$: [themeName, themeColour] = $theme.split('_');
-	const themeHues: Record<string, number> = {
-		purple: 280
-	};
-
 	$: defaultSettings.update(() => {
 		const settings = new Settings();
 		settings.Menu.Class = ['contextmenu', `theme-${themeName}`];
@@ -64,10 +61,10 @@
 
 	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : '';
 	function themeHue(node: HTMLDivElement, color: string) {
-		node.style.setProperty('--theme-hue', themeHues[color]?.toString());
+		node.style.setProperty('--theme-hue', COLOUR_THEME_HUES[color]?.toString());
 		return {
 			update: (color: string) =>
-				node.style.setProperty('--theme-hue', themeHues[color]?.toString())
+				node.style.setProperty('--theme-hue', COLOUR_THEME_HUES[color]?.toString())
 		}
 	}
 
@@ -179,7 +176,7 @@
 					{/if}
 				{/await}
 				<div class="separator"/>
-				<a href="/settings">
+				<a href="/settings/account">
 					<GearFill/>{$t('user_action.settings.settings')}
 				</a>
 				<div class="separator"/>

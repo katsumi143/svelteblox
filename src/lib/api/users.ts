@@ -7,7 +7,7 @@ import { getCsrfToken } from './auth';
 import { promptPinUnlock } from '$lib/store';
 import { request, fullRequest } from '.';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import { UserRole, FriendshipStatus, ChangeDisplayNameResult } from './enums';
+import { UserRole, FriendshipStatus, ChangeUsernameResult, ChangeDisplayNameResult } from './enums';
 import type { User, Friend, ImageData, UserBadge, Friendship, RobloxBadge, ApiDataList, CurrentUser, ProfileAsset, ExperienceV2, UserPresence, ProfileExperience, PartialExperience } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
 export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
@@ -338,5 +338,26 @@ export async function reactiveAccount() {
 		.then(response => {
 			if (response.status !== 200)
 				throw new Error(`${response.status} ${response.statusText}`);
+		});
+}
+
+export async function changeUsername(newValue: string, password: string) {
+	if (get(pinLocked))
+		if (!await promptPinUnlock())
+			return ChangeUsernameResult.Cancelled;
+	return fullRequest('https://auth.roblox.com/v2/username', 'POST', {
+		password,
+		username: newValue
+	}, {
+		'x-csrf-token': await getCsrfToken()
+	})
+		.then(response => {
+			if (response.status === 403)
+				return ChangeUsernameResult.InvalidPassword;
+			if (response.status === 429)
+				return ChangeUsernameResult.Ratelimited;
+			if (response.status === 200)
+				return ChangeUsernameResult.Success;
+			return ChangeUsernameResult.Inappropriate;
 		});
 }

@@ -24,6 +24,19 @@ export enum StartQuickLoginResult {
 	Ratelimited
 }
 
+export enum ChangeUsernameResult {
+	Success,
+	Cancelled,
+	Inappropriate,
+	InvalidPassword,
+	TooShort,
+	UnderscoreAtStartOrEnd,
+	TooManyUnderscores,
+	InvalidUsername,
+	MissingRobux,
+	Ratelimited
+}
+
 export enum ChangeDisplayNameResult {
 	Success,
 	InvalidName,

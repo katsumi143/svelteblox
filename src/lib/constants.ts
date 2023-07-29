@@ -9,3 +9,7 @@ export const LOCALE_MAP: Record<string, string> = {
 	ru: 'ru-RU',
 	ja_jp: 'ja-JP'
 };
+
+export const COLOUR_THEME_HUES: Record<string, number> = {
+	purple: 280
+};
