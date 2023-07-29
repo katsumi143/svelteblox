@@ -577,6 +577,15 @@ export interface AssetDetails {
 	}
 }
 
+export interface GroupRole2 {
+	role: {
+		id: number
+		name: string
+		rank: number
+	}
+	group: Group
+}
+
 export interface ExperienceThumbnails {
 	universeId: number
 	thumbnails: ImageData[]

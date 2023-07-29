@@ -75,6 +75,7 @@ export default {
 		'profile.about.placeholder': 'Tell the Roblox community about what you like to make, build, and explore...',
 		'profile.overview': 'Overview',
 		'profile.overview.experiences': 'Favourite Experiences',
+		'profile.groups': 'Groups',
 		'profile.creations': 'Creations',
 		'profile.creations.experiences': 'Pinned Experiences',
 		'profile.creations.models': 'Recent Models & Packages',

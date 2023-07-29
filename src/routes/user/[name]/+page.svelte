@@ -7,10 +7,10 @@
 	import { getImages } from '$lib/api/images';
 	import type { PageData } from './$types';
 	import { getUserBadges } from '$lib/api/badges';
-	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
+	import { getGroupIcon, getPrimaryGroup, getGroupIcons, getUserGroupRoles } from '$lib/api/groups';
 	import { UserRole, UserPresenceType, FriendshipStatus, ChangeDisplayNameResult } from '$lib/api/enums';
-	import type { Friendship, ProfileAsset, ProfileExperience, ExperienceThumbnails } from '$lib/api/types';
 	import { getExperiences, getExperienceId, getExperienceIcons, getExperienceThumbnails2 } from '$lib/api/games';
+	import type { ImageData, Friendship, GroupRole2, ProfileAsset, ProfileExperience, ExperienceThumbnails } from '$lib/api/types';
 	import { user, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFavourites, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserProfileAssets, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
 	import User from '$lib/components/User.svelte';
@@ -18,6 +18,7 @@
 	import Avatar from '$lib/components/Avatar.svelte';
 	import AssetItem from '$lib/components/AssetItem.svelte';
 	import GroupCard from '$lib/components/GroupCard.svelte';
+	import GroupItem from '$lib/components/GroupItem.svelte';
 	import BadgeList from '$lib/components/BadgeList.svelte';
 	import Description from '$lib/components/Description.svelte';
 	import PremiumBadge from '$lib/components/PremiumBadge.svelte';
@@ -87,20 +88,28 @@
 		return getExperienceIcons(items.map(i => i.id));
 	});
 
+	let groupIcons: ImageData[] | null = null;
+	let groupRoles: GroupRole2[] | null = null;
+	$: if (tabValue === 1 && !groupRoles)
+		getUserGroupRoles(data.id)
+			.then(items => groupRoles = items.sort((a, b) => a.group.name.localeCompare(b.group.name)))
+			.then(items => getGroupIcons(items.map(item => item.group.id)))
+			.then(items => groupIcons = items);
+
 	let experiences: ProfileExperience[] | null = null;
 	let experienceThumbnails: ExperienceThumbnails[] | null = null;
-	$: if (tabValue && !experiences)
+	$: if (tabValue === 2 && !experiences)
 		getUserProfileExperiences(data.id)
 			.then(items => experiences = items)
-			.then(items => getExperienceThumbnails2(items.map(e => e.UniverseID)))
+			.then(items => getExperienceThumbnails2(items.map(item => item.UniverseID)))
 			.then(items => experienceThumbnails = items);
 
 	let recentModels: ProfileAsset[] | null = null;
-	$: if (tabValue && !recentModels)
+	$: if (tabValue === 2 && !recentModels)
 		getUserProfileAssets(data.id, 10).then(items => recentModels = items);
 
 	let recentClothing: ProfileAsset[] | null = null;
-	$: if (tabValue && !recentClothing)
+	$: if (tabValue === 2 && !recentClothing)
 		getUserProfileAssets(data.id, 11).then(items => recentClothing = items);
 
 	let editName = data.displayName;
@@ -423,7 +432,16 @@
 				{/if}
 			{/await}
 		</Tabs.Item>
-		<Tabs.Item value={1} title={$t('profile.creations')}>
+		<Tabs.Item value={1} title={$t('profile.groups')}>
+			{#if groupRoles?.length}
+				<div class="groups">
+					{#each groupRoles as { group }}
+						<GroupItem id={group.id} name={group.name} icon={Promise.resolve(groupIcons?.find(item => item.targetId === group.id))} owner={group.owner} verified={group.hasVerifiedBadge} memberCount={group.memberCount}/>
+					{/each}
+				</div>
+			{/if}
+		</Tabs.Item>
+		<Tabs.Item value={2} title={$t('profile.creations')}>
 			{#if experiences?.length}
 				<p class="text-header">{$t('profile.creations.experiences')}</p>
 				<div class="experiences">
@@ -627,6 +645,12 @@
 			width: 100%;
 			overflow: hidden;
 			margin-left: 32px;
+		}
+		.groups {
+			gap: 16px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
 		}
 		.experiences {
 			gap: 8px;

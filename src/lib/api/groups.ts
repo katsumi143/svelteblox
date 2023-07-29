@@ -4,7 +4,7 @@ import { getThumbnails } from './images';
 import { getExperiences } from './games';
 import { request, fullRequest } from '.';
 import type { GroupRelationship } from './enums';
-import type { Id, Group, GroupV2, GroupRole, ImageData, SocialLink, ApiDataList, PartialUser, ExperienceV2, PagedResponse, GroupWallPost, GroupAuditLog, ApiPageResponse, GroupMembership } from './types';
+import type { Id, Group, GroupV2, GroupRole, ImageData, GroupRole2, SocialLink, ApiDataList, PartialUser, ExperienceV2, PagedResponse, GroupWallPost, GroupAuditLog, ApiPageResponse, GroupMembership } from './types';
 export const GROUPS_BASE = 'https://groups.roblox.com/v1';
 
 export const GROUPS_CACHE = new Cache('groups');
@@ -127,15 +127,12 @@ export function deleteGroupPost(groupId: Id, postId: Id) {
 }
 
 export function getSelfGroupRoles() {
-	return GROUPS_CACHE.use('roles', () =>
-		request<ApiDataList<{
-			role: {
-				id: number
-				name: string
-				rank: number
-			}
-			group: Group
-		}>>(`${GROUPS_BASE}/users/${user.id}/groups/roles`).then(data => data.data),
+	return getUserGroupRoles(user.id);
+}
+
+export function getUserGroupRoles(userId: Id) {
+	return GROUPS_CACHE.use(`user/${userId}/group-roles`, () =>
+		request<ApiDataList<GroupRole2>>(`${GROUPS_BASE}/users/${userId}/groups/roles`).then(data => data.data),
 		600000
 	);
 }
