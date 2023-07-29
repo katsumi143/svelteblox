@@ -1,8 +1,8 @@
 import { get, derived, writable } from 'svelte/store';
 
 import { request, fullRequest } from '.';
-import type { QuickLoginResult } from './types';
 import { PinUnlockResult, StartQuickLoginResult } from './enums';
+import type { QuickLoginResult, GetActiveSessionsResponse } from './types';
 export const AUTH_BASE = 'https://auth.roblox.com/v1';
 
 let csrfToken: string;
@@ -76,4 +76,19 @@ export async function confirmQuickLogin(code: string) {
 	return fullRequest('https://apis.roblox.com/auth-token-service/v1/login/validateCode', 'POST', { code }, {
 		'x-csrf-token': await getCsrfToken()
 	}, undefined, true).then(({ status }) => status === 200);
+}
+
+export function getActiveSessions() {
+	return request<GetActiveSessionsResponse>('https://apis.roblox.com/token-metadata-service/v1/sessions?desiredLimit=500')
+		.then(response => response.sessions);
+}
+
+export function revokeSession(sessionToken: string) {
+	return request('https://apis.roblox.com/token-metadata-service/v1/logout', 'POST', {
+		token: sessionToken
+	});
+}
+
+export function revokeOtherSessions() {
+	return request('https://auth.roblox.com/v1/logoutfromallsessionsandreauthenticate', 'POST');
 }

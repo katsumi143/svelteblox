@@ -590,3 +590,27 @@ export interface ExperienceThumbnails {
 	universeId: number
 	thumbnails: ImageData[]
 }
+
+export interface ActiveSession {
+	token: string
+	agent: {
+		os: 'iOS' | 'Android' | 'Windows' // TODO: add other values
+		type: 'App' | 'Studio' | 'Browser' // TODO: add other values, and localise?
+		value: 'Edge' | null // TODO: add other values, and localise?
+	}
+	location: {
+		city: string
+		country: string
+		subdivision: string
+	}
+	lastAccessedIp: string
+	isCurrentSession: boolean
+	parentSessionToken: unknown
+	lastAccessedTimestampEpochMilliseconds: string
+}
+
+export interface GetActiveSessionsResponse {
+	hasMore: boolean
+	sessions: ActiveSession[]
+	nextCursor: string
+}

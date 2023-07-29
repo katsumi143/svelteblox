@@ -6,6 +6,7 @@
 	import Display from '$lib/icons/Display.svelte';
 	import BrushFill from '$lib/icons/BrushFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
+	import BroadcastPin from '$lib/icons/BroadcastPin.svelte';
 </script>
 
 <div class="settings">
@@ -13,6 +14,11 @@
 		<p>{$t('settings.account')}</p>
 		<SideNavigationItem id="settings.account" path="/settings/account">
 			<PersonFill/>
+		</SideNavigationItem>
+
+		<p>{$t('settings.access')}</p>
+		<SideNavigationItem id="settings.access.sessions" path="/settings/access/sessions">
+			<BroadcastPin/>
 		</SideNavigationItem>
 
 		<p>{$t('settings.website')}</p>
