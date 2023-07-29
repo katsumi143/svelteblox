@@ -138,7 +138,7 @@
 		{/if}
 		<div class="groups">
 			<p class="list-header">{$t('groups.list')}</p>
-			{#each data.groups as item}
+			{#each data.groups.sort((a, b) => a.group.name.localeCompare(b.group.name)) as item}
 				<a href={`/group/${item.group.id}`} title={item.group.name}>
 					<Avatar src={icons.then(i => i.find(i => i.targetId === item.group.id)?.imageUrl)} size="sm2"/>
 				</a>
