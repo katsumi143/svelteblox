@@ -8,7 +8,7 @@ import { promptPinUnlock } from '$lib/store';
 import { request, fullRequest } from '.';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
 import { UserRole, FriendshipStatus, ChangeDisplayNameResult } from './enums';
-import type { User, Friend, ImageData, UserBadge, Friendship, RobloxBadge, ApiDataList, CurrentUser, ExperienceV2, UserPresence, ProfileExperience, PartialExperience } from './types';
+import type { User, Friend, ImageData, UserBadge, Friendship, RobloxBadge, ApiDataList, CurrentUser, ProfileAsset, ExperienceV2, UserPresence, ProfileExperience, PartialExperience } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
 export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
 
@@ -226,6 +226,18 @@ export function getUserPresences(userIds: (string | number)[]) {
 	}>(`https://presence.roblox.com/v1/presence/users`, 'POST', { userIds })
 		.then(data => data.userPresences);
 }
+
+export function getUserProfileAssets(userId: string | number, assetType: number) {
+	return request<{
+		Title: string
+		Label: string
+		Assets: ProfileAsset[]
+		ModalAssetViewType: number
+		MaxNumberOfVisibleAssets: number
+	}>(`https://www.roblox.com/users/profile/playerassets-json?assetTypeId=${assetType}&userId=${userId}`)
+		.then(data => data.Assets);
+}
+
 
 export function getUserProfileExperiences(userId: string | number) {
 	return request<{

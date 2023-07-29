@@ -3,7 +3,7 @@
 	import Blocked from '$lib/icons/Blocked.svelte';
 	import Question from '$lib/icons/Question.svelte';
 	import Hourglass from '$lib/icons/Hourglass.svelte';
-	export let src: Promise<string | undefined> | null = null;
+	export let src: Promise<string | null | undefined> | string | null = null;
 	export let size: 'xs' | 'sm' | 'sm2' | 'sm3' | 'md' | 'lg' | 'lg2' | 'xl' = 'lg';
 	export let hover = false;
 	export let circle = false;

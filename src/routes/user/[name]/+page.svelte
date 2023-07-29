@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Time from 'svelte-time';
-	import { writable } from 'svelte/store';
 	import { Tabs, Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
@@ -8,15 +7,16 @@
 	import { getImages } from '$lib/api/images';
 	import type { PageData } from './$types';
 	import { getUserBadges } from '$lib/api/badges';
-	import type { Friendship } from '$lib/api/types';
 	import { getGroupIcon, getPrimaryGroup } from '$lib/api/groups';
 	import { UserRole, UserPresenceType, FriendshipStatus, ChangeDisplayNameResult } from '$lib/api/enums';
+	import type { Friendship, ProfileAsset, ProfileExperience, ExperienceThumbnails } from '$lib/api/types';
 	import { getExperiences, getExperienceId, getExperienceIcons, getExperienceThumbnails2 } from '$lib/api/games';
-	import { user, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFavourites, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
+	import { user, hasPremium, USERS_CACHE, sortFriends, getUserIcon, getUserIcons, getUserRoles, getUserSocials, setDescription, getUserFriends, getUserPresences, removeFriendship, changeDisplayName, requestFriendship, getUserFavourites, getUserFollowerCount, acceptFriendRequest, declineFriendRequest, getUserProfileAssets, getUserFollowingCount, getFriendshipStatuses, getUserProfileExperiences } from '$lib/api/users';
 
 	import User from '$lib/components/User.svelte';
 	import Badge from '$lib/components/Badge.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+	import AssetItem from '$lib/components/AssetItem.svelte';
 	import GroupCard from '$lib/components/GroupCard.svelte';
 	import BadgeList from '$lib/components/BadgeList.svelte';
 	import Description from '$lib/components/Description.svelte';
@@ -80,15 +80,28 @@
 			return getExperienceId(placeId).then(id => id ? getExperiences([id]).then(e => e[0]) : null);
 	});
 
-	$: experiences = getUserProfileExperiences(data.id);
-	$: experienceThumbnails = experiences.then(i => i.length ? getExperienceThumbnails2(i.map(e => e.UniverseID)) : []);
-
 	$: favourites = getUserFavourites(data.id);
 	$: favouriteIcons = favourites.then(items => {
 		if (!items.length)
 			return [];
 		return getExperienceIcons(items.map(i => i.id));
 	});
+
+	let experiences: ProfileExperience[] | null = null;
+	let experienceThumbnails: ExperienceThumbnails[] | null = null;
+	$: if (tabValue && !experiences)
+		getUserProfileExperiences(data.id)
+			.then(items => experiences = items)
+			.then(items => getExperienceThumbnails2(items.map(e => e.UniverseID)))
+			.then(items => experienceThumbnails = items);
+
+	let recentModels: ProfileAsset[] | null = null;
+	$: if (tabValue && !recentModels)
+		getUserProfileAssets(data.id, 10).then(items => recentModels = items);
+
+	let recentClothing: ProfileAsset[] | null = null;
+	$: if (tabValue && !recentClothing)
+		getUserProfileAssets(data.id, 11).then(items => recentClothing = items);
 
 	let editName = data.displayName;
 	let editAbout = data.description;
@@ -411,24 +424,46 @@
 			{/await}
 		</Tabs.Item>
 		<Tabs.Item value={1} title={$t('profile.creations')}>
-			{#await experiences then items}
-				{#if items.length}
-					<p class="text-header">{$t('profile.creations.experiences')}</p>
-					<div class="experiences">
-						{#each items as item}
-							<ExperienceCard
-								id={item.UniverseID}
-								name={item.Name}
-								votes={[item.TotalUpVotes, item.TotalDownVotes]}
-								playing={item.PlayerCount}
-								thumbnail={experienceThumbnails.then(t => t.find(i => i.universeId === item.UniverseID)?.thumbnails[0]?.imageUrl)}
-								rootPlaceId={item.PlaceID}
-								creatorName={data.displayName}
-							/>
-						{/each}
-					</div>
-				{/if}
-			{/await}
+			{#if experiences?.length}
+				<p class="text-header">{$t('profile.creations.experiences')}</p>
+				<div class="experiences">
+					{#each experiences as item}
+						<ExperienceCard
+							id={item.UniverseID}
+							name={item.Name}
+							votes={[item.TotalUpVotes, item.TotalDownVotes]}
+							playing={item.PlayerCount}
+							thumbnail={experienceThumbnails?.find(i => i.universeId === item.UniverseID)?.thumbnails[0]?.imageUrl}
+							rootPlaceId={item.PlaceID}
+							creatorName={data.displayName}
+						/>
+					{/each}
+				</div>
+			{/if}
+			{#if recentModels?.length}
+				<p class="text-header">{$t('profile.creations.models')}</p>
+				<div class="assets">
+					{#each recentModels as item}
+						<AssetItem
+							id={item.Id}
+							name={item.Name}
+							icon={item.Thumbnail.Url}
+						/>
+					{/each}
+				</div>
+			{/if}
+			{#if recentClothing?.length}
+				<p class="text-header">{$t('profile.creations.clothing')}</p>
+				<div class="assets">
+					{#each recentClothing as item}
+						<AssetItem
+							id={item.Id}
+							name={item.Name}
+							icon={item.Thumbnail.Url}
+						/>
+					{/each}
+				</div>
+			{/if}
 		</Tabs.Item>
 	</Tabs.Root>
 </div>
@@ -601,6 +636,11 @@
 				flex: 1 1 calc(50% - 8px);
 				width: unset;
 			}
+		}
+		.assets {
+			gap: 8px;
+			display: flex;
+			overflow: hidden;
 		}
 		.experiences2 {
 			margin-top: 24px;

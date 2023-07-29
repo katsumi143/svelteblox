@@ -18,6 +18,7 @@ export default {
 		'action.edit_studio': 'Edit in Studio',
 		'action.view_roblox': 'View on Roblox',
 		'action.view_talent': 'View on Talent Hub',
+		'action.view_creator': 'View on Creator Hub',
 		'action.view_devforum': 'View on DevForum',
 		'action.copy_place_id': 'Copy Place ID',
 		'action.view_creations': 'View Creations',
@@ -76,6 +77,8 @@ export default {
 		'profile.overview.experiences': 'Favourite Experiences',
 		'profile.creations': 'Creations',
 		'profile.creations.experiences': 'Pinned Experiences',
+		'profile.creations.models': 'Recent Models & Packages',
+		'profile.creations.clothing': 'Recent Clothing',
 
 		'asset.id': 'Asset ID: {0}',
 

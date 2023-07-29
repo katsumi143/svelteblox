@@ -15,7 +15,7 @@
 
 	export let friendId: number | null = null;
 	export let friendName: string | null = null;
-	export let thumbnail: Promise<string | undefined> | undefined = undefined;
+	export let thumbnail: Promise<string | undefined> | string | undefined = undefined;
 
 	const voting = votes ? Promise.resolve(votes) : getExperienceVotes([id]).then(v => v[0]);
 	const rating = voting.then(v => Math.round(v[0] / (v[0] + v[1]) * 100));

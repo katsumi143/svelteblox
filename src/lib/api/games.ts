@@ -5,7 +5,7 @@ import { locale } from '../settings';
 import { request } from '.';
 import { LOCALE_MAP } from '$lib/constants';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
-import type { Id, Badge, ImageData, SocialLink, ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PartialExperience, PrivateExperienceServer } from './types';
+import type { Id, Badge, SocialLink, ApiDataList, MediaAsset, Experience, ExperienceId, GameListItem, ExperienceVoting, ExperienceServer, PartialExperience, ExperienceThumbnails, PrivateExperienceServer } from './types';
 export const GAMES_BASE = 'https://games.roblox.com/v';
 export const GAMES_BASE1 = GAMES_BASE + 1;
 export const GAMES_BASE2 = GAMES_BASE + 2;
@@ -72,10 +72,9 @@ export function getExperienceThumbnails(experienceId: string | number) {
 	}, 7200000);
 }
 export function getExperienceThumbnails2(experienceIds: Id[]) {
-	return request<ApiDataList<{
-		universeId: number
-		thumbnails: ImageData[]
-	}>>(`${THUMBNAILS_BASE}/games/multiget/thumbnails?universeIds=${experienceIds.join(',')}&countPerUniverse=10&size=768x432&format=Png`)
+	if (!experienceIds.length)
+		return Promise.resolve([]);
+	return request<ApiDataList<ExperienceThumbnails>>(`${THUMBNAILS_BASE}/games/multiget/thumbnails?universeIds=${experienceIds.join(',')}&countPerUniverse=10&size=768x432&format=Png`)
 		.then(data => data.data);
 }
 

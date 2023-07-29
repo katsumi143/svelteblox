@@ -209,6 +209,24 @@ export interface RobloxBadge {
 	description: string
 }
 
+export interface ProfileAsset {
+	Id: number
+	Name: string
+	Thumbnail: {
+		Url: string
+		Final: boolean
+		UserId: number
+		RetryUrl: string | null
+		EndpointType: string
+	}
+	FormatName: string
+	Description: string
+	AssetSeoUrl: string
+	AssetAttribution: null
+	HasPremiumBenefit: boolean
+	AssetRestrictionIcon: null
+}
+
 export interface ProfileExperience {
 	Name: string
 	Plays: number
@@ -557,4 +575,9 @@ export interface AssetDetails {
 		latestGroupUpdaterUserId: number | null
 		latestGroupUpdaterUserName: string | null
 	}
+}
+
+export interface ExperienceThumbnails {
+	universeId: number
+	thumbnails: ImageData[]
 }
