@@ -60,7 +60,7 @@
 	<div class="cards">
 		<div class="card">
 			<div class="header">
-				<Avatar src={icons.then(i => i[0]?.imageUrl)} hover/>
+				<Avatar src={icons.then(i => i.find(image => image.targetId === group.id)?.imageUrl)} hover/>
 				<h1>
 					{group.name}
 					{#if group.hasVerifiedBadge}
