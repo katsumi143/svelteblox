@@ -3,23 +3,41 @@
 	
 	import SideNavigationItem from '$lib/components/SideNavigationItem.svelte';
 
+	import Eye from '$lib/icons/Eye.svelte';
 	import Display from '$lib/icons/Display.svelte';
+	import GridFill from '$lib/icons/GridFill.svelte';
 	import BrushFill from '$lib/icons/BrushFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
+	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import BroadcastPin from '$lib/icons/BroadcastPin.svelte';
 	import XDiamondFill from '$lib/icons/XDiamondFill.svelte';
+	import CreditCardFill from '$lib/icons/CreditCardFill.svelte';
 </script>
 
 <div class="settings">
 	<div class="navigation">
 		<p>{$t('settings.account')}</p>
-		<SideNavigationItem id="settings.account" path="/settings/account">
+		<SideNavigationItem id="settings.account.account" path="/settings/account">
 			<PersonFill/>
+		</SideNavigationItem>
+		<SideNavigationItem id="settings.account.privacy" path="https://www.roblox.com/my/account#!/privacy">
+			<Eye/>
 		</SideNavigationItem>
 
 		<p>{$t('settings.access')}</p>
+		<SideNavigationItem id="settings.access.billing" path="https://www.roblox.com/my/account#!/billing">
+			<CreditCardFill/>
+		</SideNavigationItem>
+		<SideNavigationItem id="settings.access.parental" path="https://www.roblox.com/my/account#!/parental-controls">
+			<PeopleFill/>
+		</SideNavigationItem>
 		<SideNavigationItem id="settings.access.sessions" path="/settings/access/sessions">
 			<BroadcastPin/>
+		</SideNavigationItem>
+
+		<p>{$t('settings.integrations')}</p>
+		<SideNavigationItem id="settings.integrations.apps" path="https://www.roblox.com/my/account#!/app-permissions">
+			<GridFill/>
 		</SideNavigationItem>
 
 		<p>{$t('settings.website')}</p>
