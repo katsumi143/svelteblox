@@ -313,7 +313,7 @@ export default {
 		'toast.friend_decline': 'You have declined <b>{0}</b>\'s friend request.', 
 		'toast.friend_request': 'You have sent a friend request to <b>{0}</b>.',
 		'toast.friend_removed': 'You have ended your friendship with <b>{0}</b>.',
-		'toast.client_join': 'Joining Friend...',
+		'toast.client_join': 'Joining User...',
 		'toast.client_join2': 'Joining Private Server...',
 		'toast.client_play': 'Joining Experience...',
 		'toast.client_play2': 'Joining Server...',
