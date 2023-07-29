@@ -9,9 +9,9 @@
 <div class="main">
 	<h1>{$t('settings.advanced.client')}</h1>
 
-	<p class="input-label">{$t('settings.advanced.channel')}</p>
+	<p class="input-label">{$t('settings.advanced.client.channel')}</p>
 	<Select.Root bind:value={$clientChannel}>
-		<p>{$t('settings.advanced.channel.category')}</p>
+		<p>{$t('settings.advanced.client.channel.category')}</p>
 		{#each CLIENT_CHANNELS as item}
 			<Select.Item value={item}>
 				{$t(`client_channel.${item}`)} • {item}

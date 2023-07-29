@@ -7,6 +7,7 @@
 	import BrushFill from '$lib/icons/BrushFill.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import BroadcastPin from '$lib/icons/BroadcastPin.svelte';
+	import XDiamondFill from '$lib/icons/XDiamondFill.svelte';
 </script>
 
 <div class="settings">
@@ -27,6 +28,9 @@
 		</SideNavigationItem>
 
 		<p>{$t('settings.advanced')}</p>
+		<SideNavigationItem id="settings.advanced.beta" path="/settings/advanced/beta">
+			<XDiamondFill/>
+		</SideNavigationItem>
 		<SideNavigationItem id="settings.advanced.client" path="/settings/advanced/client">
 			<Display/>
 		</SideNavigationItem>

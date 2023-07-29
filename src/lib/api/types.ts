@@ -614,3 +614,21 @@ export interface GetActiveSessionsResponse {
 	sessions: ActiveSession[]
 	nextCursor: string
 }
+
+export interface GetVoiceChatSettingsResponse {
+	isBanned: boolean
+	isUserOptIn: boolean
+	bannedUntil: string | null
+	denialReason: number
+	hasEverOpted: boolean
+	isVoiceEnabled: boolean
+	isUserEligible: boolean
+	isOptInDisabled: boolean
+	isVerifiedForVoice: boolean
+	isAvatarVideoOptIn: boolean
+	canVerifyAgeForVoice: boolean
+	isAvatarVideoEnabled: boolean
+	isAvatarVideoEligible: boolean
+	hasEverOptedAvatarVideo: boolean
+	isAvatarVideoOptInDisabled: boolean
+}
