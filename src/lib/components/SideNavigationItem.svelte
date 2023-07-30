@@ -1,6 +1,8 @@
 <script lang="ts">
 	import { t } from '../localisation';
 	import { page } from '$app/stores';
+
+	import BoxArrowUpRight from '$lib/icons/BoxArrowUpRight.svelte';
 	export let id: string;
 	export let path: string;
 	export let footer = false;
@@ -11,6 +13,9 @@
 <a href={path} class="focusable" target={path.startsWith('/') ? '_self' : '_blank'} class:active class:footer>
 	<slot/>
 	{$t(id)}
+	{#if !path.startsWith('/')}
+		<BoxArrowUpRight/>
+	{/if}
 </a>
 
 <style lang="scss">
@@ -30,6 +35,9 @@
 		}
 		&.footer {
 			margin-top: auto;
+		}
+		:global(.icon-box-arrow-up-right) {
+			margin-left: auto;
 		}
 	}
 </style>
