@@ -7,6 +7,7 @@
 	import Display from '$lib/icons/Display.svelte';
 	import GridFill from '$lib/icons/GridFill.svelte';
 	import BrushFill from '$lib/icons/BrushFill.svelte';
+	import RobuxIcon from '$lib/icons/RobuxIcon.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import PeopleFill from '$lib/icons/PeopleFill.svelte';
 	import BroadcastPin from '$lib/icons/BroadcastPin.svelte';
@@ -22,6 +23,9 @@
 		</SideNavigationItem>
 		<SideNavigationItem id="settings.account.privacy" path="https://www.roblox.com/my/account#!/privacy">
 			<Eye/>
+		</SideNavigationItem>
+		<SideNavigationItem id="settings.account.devex" path="https://create.roblox.com/dashboard/devex">
+			<RobuxIcon/>
 		</SideNavigationItem>
 
 		<p>{$t('settings.access')}</p>
@@ -62,8 +66,9 @@
 		min-height: 100%;
 		.navigation {
 			width: 25%;
-			margin: 16px 0 16px 16px;
 			display: flex;
+			padding: 16px 0 16px 16px;
+			overflow: auto;
 			min-width: 25%;
 			flex-direction: column;
 			p {

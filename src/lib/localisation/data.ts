@@ -248,6 +248,7 @@ export default {
 		'settings.account.account.name.placeholder': 'Enter Username',
 		'settings.account.account.name.change': 'Pay 1000 Robux',
 		'settings.account.privacy': 'Privacy',
+		'settings.account.devex': 'Developer Exchange',
 		'settings.access': 'Access',
 		'settings.access.billing': 'Billing',
 		'settings.access.parental': 'Parental Controls',
