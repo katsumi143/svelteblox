@@ -21,7 +21,7 @@ export function getGroup(groupId: Id) {
 }
 export function getGroupV2(groupId: Id) {
 	return GROUPS_CACHE.use(`group2/${groupId}`, () =>
-		request<ApiDataList<GroupV2>>(`https://groups.roblox.com/v2/groups?groupIds=${groupId}`).then(({ data: [group] }) => {
+		getGroups([groupId]).then(([group]) => {
 			GROUPS_CACHE.set(`group/${groupId}/name`, group.name, 86400000);
 			GROUPS_CACHE.set(`group/${groupId}/verified`, group.hasVerifiedBadge, 86400000);
 			return group;
@@ -29,6 +29,14 @@ export function getGroupV2(groupId: Id) {
 		600000
 	);
 }
+
+export function getGroups(groupIds: Id[]) {
+	if (!groupIds.length)
+		return Promise.resolve([]);
+	return request<ApiDataList<GroupV2>>(`https://groups.roblox.com/v2/groups?groupIds=${groupIds.join(',')}`)
+		.then(response => response.data);
+}
+
 export function getGroupIcon(groupId: Id): Promise<ImageData | undefined> {
 	return GROUPS_CACHE.use(`group/${groupId}/icon`, () => getGroupIcons([groupId]).then(data => data[0]), 3600000);
 }

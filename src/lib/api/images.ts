@@ -1,11 +1,11 @@
 import Cache from '../cache';
 import { request } from '.';
 import { splitArray } from '$lib/util';
-import type { ImageData, ApiDataList } from './types';
+import type { Id, ImageData, ApiDataList } from './types';
 export const IMAGES_CACHE = new Cache('images');
 export const THUMBNAILS_BASE = 'https://thumbnails.roblox.com/v1';
 
-export async function getImages(assetIds: number[], size: '150x150') {
+export async function getImages(assetIds: Id[], size: '150x150') {
 	const ids2 = assetIds.filter(id => !IMAGES_CACHE.isValid(`image_${id}`));
 	if (ids2.length) {
 		const items: ImageData[] = [];

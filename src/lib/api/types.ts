@@ -632,3 +632,26 @@ export interface GetVoiceChatSettingsResponse {
 	hasEverOptedAvatarVideo: boolean
 	isAvatarVideoOptInDisabled: boolean
 }
+
+export interface OAuthAuthorisation {
+	scopes: {
+		scopeType: 'openid' | 'profile' | 'email' | 'verification' | 'credentials' | 'age' | 'premium' | 'roles'
+		operations: ('read' | 'write')[]
+	}[]
+	createdUtc: string
+	application: {
+		name: string
+		owner: Partial & { type: PartialType.User | PartialType.Group }
+		summary: string
+		imageAssetId: string
+		entryPointUri: string
+		applicationId: string
+	}
+	refreshedUtc: string
+	resourceInfo: unknown[]
+	authorizationId: string
+}
+
+export interface GetAuthorisedAppsResponse {
+	authorizations: OAuthAuthorisation[]
+}

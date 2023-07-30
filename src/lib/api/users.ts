@@ -8,13 +8,13 @@ import { promptPinUnlock } from '$lib/store';
 import { request, fullRequest } from '.';
 import { getThumbnails, THUMBNAILS_BASE } from './images';
 import { UserRole, FriendshipStatus, ChangeUsernameResult, ChangeDisplayNameResult } from './enums';
-import type { User, Friend, ImageData, UserBadge, Friendship, RobloxBadge, ApiDataList, CurrentUser, ProfileAsset, ExperienceV2, UserPresence, ProfileExperience, PartialExperience } from './types';
+import type { Id, User, Friend, ImageData, UserBadge, Friendship, RobloxBadge, ApiDataList, CurrentUser, PartialUser2, ProfileAsset, ExperienceV2, UserPresence, ProfileExperience, PartialExperience } from './types';
 export const USERS_BASE = 'https://users.roblox.com/v1';
 export const FRIENDS_BASE = 'https://friends.roblox.com/v1';
 
 export const USERS_CACHE = new Cache('users');
 
-export function getUser(userId: string | number) {
+export function getUser(userId: Id) {
 	return USERS_CACHE.use(`user_${userId}`, () =>
 		request<User>(`${USERS_BASE}/users/${userId}`)
 			.then(user => {
@@ -25,6 +25,16 @@ export function getUser(userId: string | number) {
 		3600000
 	);
 }
+
+export function getUsers(userIds: Id[]) {
+	if (!userIds.length)
+		return Promise.resolve([]);
+	return request<ApiDataList<PartialUser2>>(`${USERS_BASE}/users`, 'POST', {
+		userIds,
+		excludeBannedUsers: false
+	}).then(response => response.data);
+}
+
 export function getUserIdFromUsername(username: string) {
 	return USERS_CACHE.use(`userid_${username}`, () =>
 		request<ApiDataList<{ id: number }>>(`${USERS_BASE}/usernames/users`, 'POST', {

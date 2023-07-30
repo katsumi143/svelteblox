@@ -36,7 +36,7 @@
 		</SideNavigationItem>
 
 		<p>{$t('settings.integrations')}</p>
-		<SideNavigationItem id="settings.integrations.apps" path="https://www.roblox.com/my/account#!/app-permissions">
+		<SideNavigationItem id="settings.integrations.apps" path="/settings/integrations/applications">
 			<GridFill/>
 		</SideNavigationItem>
 

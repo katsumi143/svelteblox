@@ -1,6 +1,6 @@
 import Cache from '../cache';
 import { request } from '.';
-import type { DiscordInvite, GuildedInvite, GetVoiceChatSettingsResponse } from './types';
+import type { DiscordInvite, GuildedInvite, GetAuthorisedAppsResponse, GetVoiceChatSettingsResponse } from './types';
 export const MISC_CACHE = new Cache('misc');
 
 export function getDiscordInvite(inviteId: string) {
@@ -25,4 +25,13 @@ export function changeVoiceChatOptIn(value: boolean) {
 
 export function getVoiceChatSettings() {
 	return request<GetVoiceChatSettingsResponse>('https://voice.roblox.com/v1/settings');
+}
+
+export function getOAuthAuthorisations() {
+	return request<GetAuthorisedAppsResponse>('https://apis.roblox.com/oauth/v1/authorizations?limit=10&sortOrder=Desc')
+		.then(response => response.authorizations);
+}
+
+export function revokeOAuthAuthorisation(authorisationId: string) {
+	return request(`https://apis.roblox.com/oauth/v1/authorizations/${authorisationId}`, 'DELETE');
 }
