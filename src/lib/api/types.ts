@@ -655,3 +655,30 @@ export interface OAuthAuthorisation {
 export interface GetAuthorisedAppsResponse {
 	authorizations: OAuthAuthorisation[]
 }
+
+export interface GetUserSettingsResponse {
+	themeType: 'Dark'
+	voiceChatOptIn: boolean
+	whoCanMessageMe: 'All'
+	whoCanChatWithMe: 'AllUsers'
+	canUploadContacts: unknown
+	whoCanTradeWithMe: 'Friends'
+	tradeQualityFilter: 'Medium'
+	xboxCrossPlaySetting: {
+		userId: number
+		created: string
+		updated: string
+		isEnabled: boolean
+	} | null
+	whoCanSeeMyInventory: 'AllUsers'
+	whoCanChatWithMeInApp: 'Friends'
+	contentAgeRestriction: 'AllAges' | 'NinePlus' | 'ThirteenPlus'
+	whoCanJoinMeInExperiences: 'All'
+	privateServerInvitePrivacy: 'Allusers'
+	phoneNumberDiscoverability: 'NotDiscoverable'
+	privateServerJoinRestriction: 'Friends'
+}
+
+export interface UpdateUserSettingsPayload {
+	contentAgeRestriction?: GetUserSettingsResponse['contentAgeRestriction']
+}

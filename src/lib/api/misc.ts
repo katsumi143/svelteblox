@@ -1,6 +1,6 @@
 import Cache from '../cache';
 import { request } from '.';
-import type { DiscordInvite, GuildedInvite, GetAuthorisedAppsResponse, GetVoiceChatSettingsResponse } from './types';
+import type { DiscordInvite, GuildedInvite, GetUserSettingsResponse, UpdateUserSettingsPayload, GetAuthorisedAppsResponse, GetVoiceChatSettingsResponse } from './types';
 export const MISC_CACHE = new Cache('misc');
 
 export function getDiscordInvite(inviteId: string) {
@@ -25,6 +25,14 @@ export function changeVoiceChatOptIn(value: boolean) {
 
 export function getVoiceChatSettings() {
 	return request<GetVoiceChatSettingsResponse>('https://voice.roblox.com/v1/settings');
+}
+
+export function getUserSettings() {
+	return request<GetUserSettingsResponse>('https://apis.roblox.com/user-settings-api/v1/user-settings');
+}
+
+export function updateUserSettings(payload: UpdateUserSettingsPayload) {
+	return request('https://apis.roblox.com/user-settings-api/v1/user-settings', 'POST', payload);
 }
 
 export function getOAuthAuthorisations() {

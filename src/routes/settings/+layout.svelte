@@ -28,7 +28,7 @@
 		<SideNavigationItem id="settings.access.billing" path="https://www.roblox.com/my/account#!/billing">
 			<CreditCardFill/>
 		</SideNavigationItem>
-		<SideNavigationItem id="settings.access.parental" path="https://www.roblox.com/my/account#!/parental-controls">
+		<SideNavigationItem id="settings.access.parental" path="/settings/access/parental">
 			<PeopleFill/>
 		</SideNavigationItem>
 		<SideNavigationItem id="settings.access.sessions" path="/settings/access/sessions">
@@ -76,6 +76,13 @@
 			color: var(--color-secondary);
 			margin: 32px 0 8px;
 			font-size: .9em;
+		}
+		:global(.input-summary) {
+			color: var(--color-tertiary);
+			margin: 0 0 16px;
+			font-size: .75em;
+			white-space: pre;
+			line-height: 1.5;
 		}
 		:global(.input-row) {
 			gap: 16px;
