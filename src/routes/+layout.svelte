@@ -16,7 +16,6 @@
 	import { getGroupIcon, getPrimaryGroup, getSelfGroupRoles } from '$lib/api/groups';
 	import { lockPin, pinLocked, startQuickLogin, confirmQuickLogin } from '$lib/api/auth';
 
-	import Logo from '$lib/components/TextLogo.svelte';
 	import Modal from '$lib/components/Modal.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 	import PageLoader from '$lib/components/PageLoader.svelte';
@@ -28,6 +27,7 @@
 	import GearFill from '$lib/icons/GearFill.svelte';
 	import CaretDown from '$lib/icons/CaretDown.svelte';
 	import PhoneFill from '$lib/icons/PhoneFill.svelte';
+	import Svelteblox from '$lib/icons/svelteblox.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	import BoxArrowRight from '$lib/icons/BoxArrowRight.svelte';
 	import RobloxStudio2 from '$lib/icons/RobloxStudio2.svelte';
@@ -119,7 +119,7 @@
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
 	<Header>
-		<a href="/" class="logo"><Logo/></a>
+		<a href="/" class="logo"><Svelteblox size={40}/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
 		<a href={`/group/${groupId}`} class="nav-link">{$t('groups')}</a>
 		<a href="https://create.roblox.com" class="nav-link">{$t('create')}</a>
@@ -193,8 +193,56 @@
 			<slot/>
 		{/if}
 		<footer>
-			svelte svelte svelte blox blox blox
-			<a href="/">placeholder <a href="/test">⠀</a></a>
+			<div class="header">
+				<p class="name">
+					<Svelteblox size={40}/>
+				</p>
+				<p class="oss">
+					{$t('footer.oss')}
+					<a href="https://github.com/katsumi143/svelteblox" target="_blank">
+						{$t('footer.oss.link')}
+					</a>.
+				</p>
+			</div>
+			<div class="links">
+				<p>{$t('footer.roblox')}</p>
+				<a href="https://www.roblox.com" target="_blank">
+					{$t('footer.roblox.website')}
+				</a>
+				<a href="https://en.help.roblox.com/hc/en-us/articles/115004647846-Roblox-Terms-of-Use" target="_blank">
+					{$t('footer.roblox.terms')}
+				</a>
+				<a href="https://en.help.roblox.com/hc/en-us/articles/115004630823-Roblox-Privacy-and-Cookie-Policy" target="_blank">
+					{$t('footer.roblox.privacy')}
+				</a>
+			</div>
+			<div class="links">
+				<p>{$t('footer.creator')}</p>
+				<a href="https://create.roblox.com" target="_blank">
+					{$t('footer.creator.dashboard')}
+				</a>
+				<a href="https://create.roblox.com/docs" target="_blank">
+					{$t('footer.creator.documentation')}
+				</a>
+				<a href="https://create.roblox.com/talent" target="_blank">
+					{$t('footer.creator.talent')}
+				</a>
+			</div>
+			<div class="links">
+				<p>{$t('footer.resources')}</p>
+				<a href="https://setup.rbxcdn.com/RobloxStudioLauncherBeta.exe" target="_blank">
+					{$t('footer.resources.studio')}
+				</a>
+			</div>
+			<div class="links">
+				<p>{$t('footer.svelteblox')}</p>
+				<a href="https://github.com/katsumi143/svelteblox" target="_blank">
+					GitHub
+				</a>
+				<a href="https://discord.com/invite/wYC5BTVJsw" target="_blank">
+					Discord
+				</a>
+			</div>
 		</footer>
 	</main>
 	<div id="captcha"/>
@@ -311,13 +359,18 @@
 
 	:global(header) {
 		display: flex;
+		align-items: center;
 		:global(.container) {
 			margin-left: auto;
 		}
 	}
+	.logo {
+		margin-right: 24px;
+	}
 	.nav-link {
 		color: var(--color-primary);
-		margin: 14px 12px;
+		margin: 14px 16px;
+		font-weight: 500;
 		text-decoration: none;
 	}
 	.user {
@@ -461,17 +514,38 @@
 		margin-bottom: 8px;
 	}
 	footer {
-		gap: 4px;
 		color: var(--color-secondary);
 		display: flex;
-		padding: 40px 24px;
+		padding: 40px 64px;
 		margin-top: auto;
 		background: var(--background-header);
-		flex-direction: column;
-		justify-content: center;
-		a {
-			color: var(--color-tertiary);
-			text-decoration: none;
+		.header {
+			.name {
+				gap: 8px;
+				color: var(--color-primary);
+				margin: 0;
+				display: flex;
+				font-size: 1.25em;
+				font-weight: 500;
+				align-items: center;
+			}
+			.oss {
+				font-size: .9em;
+				margin-top: 8px;
+			}
+		}
+		.links {
+			gap: 4px;
+			display: flex;
+			margin-left: 96px;
+			flex-direction: column;
+			p {
+				margin: 0;
+				font-size: .8em;
+			}
+			a {
+				font-size: .9em;
+			}
 		}
 	}
 </style>

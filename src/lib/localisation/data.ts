@@ -402,7 +402,21 @@ export default {
 		'toast.client_launched': 'The Roblox Player should open in a few seconds.',
 		'toast.studio_edit': 'Starting Edit Session...',
 		'toast.studio_launched': 'Roblox Studio should open in a few seconds.',
-		'toast.quick_login_success': 'You should now be logged-in on your other device.'
+		'toast.quick_login_success': 'You should now be logged-in on your other device.',
+
+		'footer.oss': 'svelteblox is',
+		'footer.oss.link': 'open-source',
+		'footer.roblox': 'Roblox',
+		'footer.roblox.website': 'Website',
+		'footer.roblox.terms': 'Terms of Service',
+		'footer.roblox.privacy': 'Privacy Policy',
+		'footer.creator': 'Creator',
+		'footer.creator.dashboard': 'Dashboard',
+		'footer.creator.documentation': 'Documentation',
+		'footer.creator.talent': 'Talent Hub',
+		'footer.resources': 'Resources',
+		'footer.resources.studio': 'Download Studio',
+		'footer.svelteblox': 'svelteblox'
 	},
 	'ja-JP': {
 		'action.copy_id': 'IDをコピー',
