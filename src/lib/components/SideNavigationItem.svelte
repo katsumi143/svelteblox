@@ -10,7 +10,7 @@
 	$: active = $page.url.pathname === path;
 </script>
 
-<a href={path} class="focusable" target={path.startsWith('/') ? '_self' : '_blank'} class:active class:footer>
+<a href={path} class="focusable" target={path.startsWith('/') ? undefined : '_blank'} class:active class:footer>
 	<slot/>
 	{$t(id)}
 	{#if !path.startsWith('/')}
