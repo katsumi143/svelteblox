@@ -4,7 +4,7 @@
 	import { pwaInfo } from 'virtual:pwa-info';
 	import { SvelteToast } from '@zerodevx/svelte-toast';
 	import { Settings, defaultSettings } from 'svelte-contextmenu';
-	import { Button, Header, TextInput, DropdownMenu } from '@voxelified/voxeliface';
+	import { Button, TextInput, DropdownMenu } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
 	import { theme } from '$lib/settings';
@@ -118,7 +118,7 @@
 </script>
 
 <div class={`app theme-${themeName}`} use:themeHue={themeColour}>
-	<Header>
+	<header>
 		<a href="/" class="logo"><Svelteblox size={40}/></a>
 		<a href="/" class="nav-link">{$t('home')}</a>
 		<a href={`/group/${groupId}`} class="nav-link">{$t('groups')}</a>
@@ -185,7 +185,7 @@
 				</a>
 			</DropdownMenu>
 		{/if}
-	</Header>
+	</header>
 	<main class="app-content">
 		{#if banned}
 			<AccountNotice/>
@@ -357,9 +357,13 @@
 		overflow: hidden auto;
 	}
 
-	:global(header) {
+	header {
+		margin: 8px 8px 0;
 		display: flex;
+		padding: 8px 32px;
+		background: var(--background-header);
 		align-items: center;
+		border-radius: 8px;
 		:global(.container) {
 			margin-left: auto;
 		}
@@ -515,10 +519,12 @@
 	}
 	footer {
 		color: var(--color-secondary);
+		margin: 0 8px 8px;
 		display: flex;
 		padding: 40px 64px;
 		margin-top: auto;
 		background: var(--background-header);
+		border-radius: 8px;
 		.header {
 			.name {
 				gap: 8px;
