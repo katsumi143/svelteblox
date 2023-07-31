@@ -353,6 +353,18 @@
 		--toastBarBackground: var(--color-secondary);
 		--toastContainerBottom: 16px;
 	}
+	:global(.theme-color) {
+		--color-primary: hsl(var(--theme-hue) 60% 98%);
+		--color-secondary: hsl(var(--theme-hue) 25% 75%);
+
+		--background-header: hsl(var(--theme-hue) 20% 15%);
+		--background-primary: hsl(var(--theme-hue) 15% 40%);
+		--background-secondary: hsl(var(--theme-hue) 15% 50%);
+
+		--button-background: hsl(var(--theme-hue) 30% 60%);
+		--button-background-hover: hsl(var(--theme-hue) 30% 55%);
+		--button-background-active: hsl(var(--theme-hue) 30% 50%);
+	}
 	:global(body) {
 		overflow: hidden auto;
 	}

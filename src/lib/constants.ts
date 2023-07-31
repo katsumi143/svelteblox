@@ -11,5 +11,5 @@ export const LOCALE_MAP: Record<string, string> = {
 };
 
 export const COLOUR_THEME_HUES: Record<string, number> = {
-	purple: 280
+	purple: 290
 };
