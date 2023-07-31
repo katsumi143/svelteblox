@@ -352,6 +352,10 @@
 		--toastContainerTop: auto;
 		--toastBarBackground: var(--color-secondary);
 		--toastContainerBottom: 16px;
+
+		--user-status-1: hsl(200, 60%, 60%);
+		--user-status-2: hsl(130, 60%, 60%);
+		--user-status-3: hsl(35, 80%, 60%);
 	}
 	:global(.theme-color) {
 		--color-primary: hsl(var(--theme-hue) 60% 98%);

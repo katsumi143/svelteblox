@@ -82,13 +82,13 @@
 				border-radius: 50%;
 			}
 			&.status-1 {
-				--status-color: hsl(200, 60%, 60%);
+				--status-color: var(--user-status-1);
 			}
 			&.status-2 {
-				--status-color: hsl(130, 60%, 60%);
+				--status-color: var(--user-status-2);
 			}
 			&.status-3 {
-				--status-color: hsl(35, 80%, 60%);
+				--status-color: var(--user-status-3);
 			}
 		}
 	}

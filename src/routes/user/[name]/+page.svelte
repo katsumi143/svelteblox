@@ -173,9 +173,16 @@
 		current.status = newStatus;
 		friendship = Promise.resolve(current);
 	};
+
+	let style = '';
+	let isOnline = false;
+	$: presence.then(presence => {
+		style = `--status-color: var(--user-status-${presence.userPresenceType})`;
+		isOnline = !!presence.userPresenceType;
+	});
 </script>
 
-<div class="main">
+<div class="main" class:isOnline {style}>
 	<div class="card">
 		<div class="header">
 			<Avatar src={avatar.then(i => i?.imageUrl)} hover circle/>
@@ -191,7 +198,12 @@
 						<VerifiedBadge size={32}/>
 					{/if}
 				</h1>
-				<p>@{data.name}</p>
+				<p>
+					@{data.name}
+					{#await presence then presence}
+						 • {$t(`user_status.${presence.userPresenceType}`)}
+					{/await}
+				</p>
 			</div>
 		</div>
 		{#if !editing}
@@ -696,6 +708,20 @@
 			color: #e98686;
 			margin: 0 0 8px;
 			font-size: .9em;
+		}
+		&.isOnline .card {
+			:global(.avatar:before) {
+				right: 8px;
+				width: 16px;
+				bottom: 8px;
+				height: 16px;
+				border: 4px solid var(--background-primary);
+				content: '';
+				display: block;
+				position: absolute;
+				background: var(--status-color);
+				border-radius: 50%;
+			}
 		}
 	}
 </style>
