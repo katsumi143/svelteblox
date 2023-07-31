@@ -270,6 +270,8 @@ export default {
 		'settings.website.appearance': 'Appearance',
 		'settings.website.appearance.locale': 'Language',
 		'settings.website.appearance.locale.category': 'Languages',
+		'settings.website.appearance.theme': 'Colour Theme',
+		'settings.website.appearance.theme.category': 'Colour Themes',
 		'settings.advanced': 'Advanced',
 		'settings.advanced.beta': 'Beta Features',
 		'settings.advanced.beta.summary': 'You can choose to opt-in to beta features that you have been given access to, but be careful as these are unfinished!',

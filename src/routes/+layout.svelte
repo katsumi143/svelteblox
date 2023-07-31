@@ -360,6 +360,7 @@
 		--background-header: hsl(var(--theme-hue) 20% 15%);
 		--background-primary: hsl(var(--theme-hue) 15% 40%);
 		--background-secondary: hsl(var(--theme-hue) 15% 50%);
+		--background-tertiary: hsl(var(--theme-hue) 15% 53%);
 
 		--button-background: hsl(var(--theme-hue) 30% 60%);
 		--button-background-hover: hsl(var(--theme-hue) 30% 55%);

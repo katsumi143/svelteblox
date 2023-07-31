@@ -19,9 +19,9 @@
 		{/each}
 	</Select.Root>
 
-	<p class="input-label">{$t('settings.theme')}</p>
+	<p class="input-label">{$t('settings.website.appearance.theme')}</p>
 	<Select.Root bind:value={$theme}>
-		<p>{$t('settings.theme.label')}</p>
+		<p>{$t('settings.website.appearance.theme.category')}</p>
 		{#each THEMES as item}
 			<Select.Item value={item}>
 				<div class={`theme-thing theme-${item.split('_')[0]}`} style={`--theme-hue: ${COLOUR_THEME_HUES[item.split('_')[1]] || 0}`}/>
