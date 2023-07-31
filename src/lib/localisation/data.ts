@@ -214,6 +214,7 @@ export default {
 		'create': 'Create',
 
 		'creator': 'by {0}',
+		'creator.none': 'no-one!',
 		'created_date': 'Created {0|time_ago}',
 		'updated_date': 'Updated {0|time_ago}',
 

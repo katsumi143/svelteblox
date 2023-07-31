@@ -97,9 +97,13 @@
 			<div class="counter">
 				<Person/>
 				<p>{$t('group.owner')}</p>
-				<CreatorLink id={data.group.owner.userId} type="User" name={data.group.owner.username} displayName={data.group.owner.displayName}/>
-				{#if group.owner.hasVerifiedBadge}
-					<VerifiedBadge/>
+				{#if group.owner}
+					<CreatorLink id={group.owner.userId} type="User" name={group.owner.username} displayName={group.owner.displayName}/>
+					{#if group.owner.hasVerifiedBadge}
+						<VerifiedBadge/>
+					{/if}
+				{:else}
+					<p>{$t('creator.none')}</p>
 				{/if}
 			</div>
 			{#if selfRole.rank > 0}

@@ -14,7 +14,7 @@
 	export let id: number;
 	export let name: string
 	export let icon: Promise<ImageData | undefined> | null = null;
-	export let owner: PartialUser;
+	export let owner: PartialUser | null = null;
 	export let verified: boolean;
 	export let memberCount: number;
 	let contextMenu: ContextMenu;
@@ -29,7 +29,7 @@
 		{/if}
 	</p>
 	<div class="details">
-		<p>{$t('creator', [owner.displayName])}</p>
+		<p>{$t('creator', [owner?.displayName ?? $t('creator.none')])}</p>
 		<p class="members"><People/>{$t('number_small', [memberCount])}</p>
 	</div>
 </a>

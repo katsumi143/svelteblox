@@ -21,7 +21,7 @@
 				<VerifiedBadge size={24}/>
 			{/if}
 		</h1>
-		<p>{$t('creator', [group.owner.displayName])}</p>
+		<p>{$t('creator', [group.owner?.displayName ?? $t('creator.none')])}</p>
 	</div>
 	<div class="details">
 		<p><Eye/>{$t(`group_entry.${group.publicEntryAllowed}`)}</p>

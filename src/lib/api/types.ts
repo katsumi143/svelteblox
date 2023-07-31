@@ -65,7 +65,7 @@ export interface Friendship {
 export interface Group {
 	id: number
 	name: string
-	owner: PartialUser
+	owner: PartialUser | null
 	shout: {
 		body: string
 		poster: PartialUser
@@ -81,7 +81,7 @@ export interface Group {
 export interface GroupV2 {
 	id: number
 	name: string
-	owner: Partial
+	owner: Partial | null
 	created: string
 	description: string
 	hasVerifiedBadge: boolean
