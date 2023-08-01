@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { t } from '$lib/localisation';
 	import type { GetVoiceChatSettingsResponse } from '$lib/api/types';
-	import { getVoiceChatSettings, changeVoiceChatOptIn } from '$lib/api/misc';
+	import { getVoiceChatSettings, changeVoiceChatOptIn, changeFacialAnimationOptIn } from '$lib/api/misc';
 
 	import Radio from '$lib/components/Radio.svelte';
 
@@ -17,6 +17,13 @@
 		await changeVoiceChatOptIn(value);
 		updatingVoice = false, voiceSettings!.isVoiceEnabled = value;
 	};
+
+	let updatingFacial = false;
+	const updateFacialAnimationOptIn = async (value: boolean) => {
+		updatingFacial = true;
+		await changeFacialAnimationOptIn(value);
+		updatingFacial = false, voiceSettings!.isAvatarVideoEnabled = value;
+	};
 </script>
 
 <div class="main">
@@ -31,7 +38,7 @@
 				<p>{$t('beta_feature.voice.summary')}</p>
 			</div>
 			{#if voiceSettings}
-				{#if voiceSettings.isOptInDisabled}
+				{#if voiceSettings.isOptInDisabled || !voiceSettings.isUserEligible}
 					<p class="status">{$t('beta_feature.status.1')}</p>
 				{:else}
 					<p class="radio-label">{$t(`radio.${voiceSettings.isVoiceEnabled}`)}</p>
@@ -47,7 +54,16 @@
 				<h1>{$t('beta_feature.avatar_video')}</h1>
 				<p>{$t('beta_feature.avatar_video.summary')}</p>
 			</div>
-			<p class="status">{$t('beta_feature.status.1')}</p>
+			{#if voiceSettings}
+				{#if voiceSettings.isAvatarVideoOptInDisabled || !voiceSettings.isAvatarVideoEligible}
+					<p class="status">{$t('beta_feature.status.1')}</p>
+				{:else}
+					<p class="radio-label">{$t(`radio.${voiceSettings.isAvatarVideoEnabled}`)}</p>
+					<Radio value={voiceSettings.isAvatarVideoEnabled} on:change={event => updateFacialAnimationOptIn(event.detail)} disabled={updatingFacial}/>
+				{/if}
+			{:else}
+				<p class="status">{$t('beta_feature.status.0')}</p>
+			{/if}
 		</div>
 	</div>
 </div>

@@ -29,6 +29,12 @@ export function changeVoiceChatOptIn(value: boolean) {
 	});
 }
 
+export function changeFacialAnimationOptIn(value: boolean) {
+	return request('https://voice.roblox.com/v1/settings/user-opt-in/avatarvideo', 'POST', `isUserOptIn=${value}`, {
+		'content-type': 'application/x-www-form-urlencoded'
+	});
+}
+
 export function getVoiceChatSettings() {
 	return request<GetVoiceChatSettingsResponse>('https://voice.roblox.com/v1/settings');
 }
