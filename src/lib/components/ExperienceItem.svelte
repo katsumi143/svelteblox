@@ -1,16 +1,19 @@
 <script lang="ts">
+	import { DropdownMenu } from '@voxelified/voxeliface';
+
 	import { t } from '$lib/localisation';
 	import { joinExperience } from '$lib/launch';
-	import ContextMenu, { Item } from 'svelte-contextmenu';
 	import type { ImageData, PartialExperience } from '$lib/api/types';
 	import { getExperienceIcons, getExperienceVotes } from '$lib/api/games';
 
-	import People from '$lib/icons/PeopleFill.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
+
+	import People from '$lib/icons/PeopleFill.svelte';
 	import PlayIcon from '$lib/icons/PlayIcon.svelte';
 	import ThumbsUp from '$lib/icons/ThumbsUp.svelte';
 	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
 	import ClipboardPlus from '$lib/icons/ClipboardPlus.svelte';
+	import BoxArrowUpRight from '$lib/icons/BoxArrowUpRight.svelte';
 
 	export let id: number;
 	export let name: string
@@ -18,47 +21,51 @@
 	export let voting: PartialExperience['votes'] | null = null;
 	export let playing: number | null = null;
 	export let rootPlaceId: number;
-	let contextMenu: ContextMenu;
+
+	let trigger: () => void;
 
 	const voting2 = voting ? Promise.resolve(voting) :
 		getExperienceVotes([id]).then(v => v[0]);
 	const rating = voting2.then(v => Math.round(v[0] / (v[0] + v[1]) * 100));
+
+	$: href = `/experience/${id}`;
 </script>
 
-<a class="experience" href={`/experience/${id}`} title={$t('experience.hover', [name, playing])} on:contextmenu={contextMenu.createHandler()}>
-	<Avatar src={icon ? icon.then(i => i?.imageUrl) : getExperienceIcons([id]).then(i => i[0]?.imageUrl)} size="lg2"/>
-	<p class="name">{name}</p>
-	<div class="details">
-		<p>
-			<ThumbsUp/>
-			{#await rating then rating}
-				{Number.isNaN(rating) ? $t('experience.unrated') : `${rating}%`}
-			{/await}
-		</p>
-		{#if typeof playing === 'number'}
-			<p><People/>{$t('number', [playing])}</p>
-		{/if}
-	</div>
-	<button type="button" class="play" title={$t('experience.play2', [name])} on:click|preventDefault={() => joinExperience(rootPlaceId)}>
-		<PlayIcon size={20}/>
-	</button>
-</a>
-
-<ContextMenu bind:this={contextMenu}>
+<DropdownMenu bind:trigger>
+	<a slot="trigger" class="experience" {href} title={$t('experience.hover', [name, playing])} on:contextmenu|preventDefault={trigger}>
+		<Avatar src={icon ? icon.then(i => i?.imageUrl) : getExperienceIcons([id]).then(i => i[0]?.imageUrl)} size="lg2"/>
+		<p class="name">{name}</p>
+		<div class="details">
+			<p>
+				<ThumbsUp/>
+				{#await rating then rating}
+					{Number.isNaN(rating) ? $t('experience.unrated') : `${rating}%`}
+				{/await}
+			</p>
+			{#if typeof playing === 'number'}
+				<p><People/>{$t('number', [playing])}</p>
+			{/if}
+		</div>
+		<button type="button" class="play" title={$t('experience.play2', [name])} on:click|preventDefault={() => joinExperience(rootPlaceId)}>
+			<PlayIcon size={20}/>
+		</button>
+	</a>
 	<p>{name}</p>
-	<Item href={`https://roblox.com/games/${rootPlaceId}`} target="_blank">
-		<RobloxIcon/>
-		{$t('action.view_roblox')}
-	</Item>
-	<Item on:click={() => navigator.clipboard.writeText(rootPlaceId.toString())}>
-		<ClipboardPlus/>
-		{$t('action.copy_place_id')}
-	</Item>
-	<Item on:click={() => navigator.clipboard.writeText(id.toString())}>
-		<ClipboardPlus/>
-		{$t('action.copy_universe_id')}
-	</Item>
-</ContextMenu>
+	<a {href} target="_blank">
+		<BoxArrowUpRight/>{$t('action.open_new_tab')}
+	</a>
+	<div class="separator"/>
+	<a href={`https://roblox.com/games/${rootPlaceId}`} target="_blank">
+		<RobloxIcon/>{$t('action.view_roblox')}
+	</a>
+	<div class="separator"/>
+	<button type="button" on:click={() => navigator.clipboard.writeText(rootPlaceId.toString())}>
+		<ClipboardPlus/>{$t('action.copy_place_id')}
+	</button>
+	<button type="button" on:click={() => navigator.clipboard.writeText(id.toString())}>
+		<ClipboardPlus/>{$t('action.copy_universe_id')}
+	</button>
+</DropdownMenu>
 
 <style lang="scss">
 	.experience {
