@@ -21,6 +21,7 @@ export default {
 		'action.view_roblox': 'View on Roblox',
 		'action.view_talent': 'View on Talent Hub',
 		'action.view_profile': 'View Profile',
+		'action.open_new_tab': 'Open in new tab',
 		'action.view_creator': 'View on Creator Hub',
 		'action.view_devforum': 'View on DevForum',
 		'action.copy_place_id': 'Copy Place ID',

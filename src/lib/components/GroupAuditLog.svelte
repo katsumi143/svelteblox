@@ -6,6 +6,7 @@
 	import Avatar from './Avatar.svelte';
 	import Loading from './Loading.svelte';
 	import Pagination from './Pagination.svelte';
+	import CreatorLink from './CreatorLink.svelte';
 	export let groupId: number;
 
 	$: data = getGroupAuditLog(groupId, 100, cursor);
@@ -22,7 +23,13 @@
 				<Avatar src={icons.then(i => i.find(i => i.targetId === item.actor.user.userId)?.imageUrl)} size="sm" circle/>
 				<div>
 					<p class="name">
-						<a href={`/user/${item.actor.user.username}`}>{item.actor.user.displayName}</a>
+						<CreatorLink
+							id={item.actor.user.userId}
+							type="User"
+							name={item.actor.user.username}
+							displayName={item.actor.user.displayName}
+							hasVerifiedBadge={item.actor.user.hasVerifiedBadge}
+						/>
 						{$t(`group_audit.action.${item.actionType}`, [item.created, item.description])}
 					</p>
 					<p class="description">{$t('group_audit.summary')}</p>

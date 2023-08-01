@@ -133,7 +133,15 @@
 			<div class="shout">
 				<div class="user">
 					<Avatar src={shouterIcon?.then(i => i?.imageUrl)} size="sm2" hover circle/><p class="name">
-						<a href={`/user/${shouter?.username}`}>{shouter?.displayName}</a>
+						{#if shouter}
+							<CreatorLink
+								id={shouter.userId}
+								type="User"
+								name={shouter.username}
+								displayName={shouter.displayName}
+								hasVerifiedBadge={shouter.hasVerifiedBadge}
+							/>
+						{/if}
 						{$t('group_post.name', [group.shout.updated])}
 					</p>
 				</div>

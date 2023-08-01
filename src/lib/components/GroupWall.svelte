@@ -8,6 +8,7 @@
 	import Avatar from './Avatar.svelte';
 	import Loading from './Loading.svelte';
 	import Pagination from './Pagination.svelte';
+	import CreatorLink from './CreatorLink.svelte';
 	import Description from './Description.svelte';
 
 	import Trash from '../icons/Trash.svelte';
@@ -77,7 +78,13 @@
 					{#if item.poster && item.body !== '[ Content Deleted ]'}
 						<div>
 							<p class="name">
-								<a href={`/user/${item.poster?.user.username}`}>{item.poster?.user.displayName}</a>
+								<CreatorLink
+									id={item.poster.user.userId}
+									type="User"
+									name={item.poster.user.username}
+									displayName={item.poster.user.displayName}
+									hasVerifiedBadge={item.poster.user.hasVerifiedBadge}
+								/>
 								{$t('group_post.name', [item.created])}
 							</p>
 							<Description input={item.body}/>
