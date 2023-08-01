@@ -11,7 +11,6 @@
 	import Description from './Description.svelte';
 
 	import Trash from '../icons/Trash.svelte';
-	import Hourglass from '../icons/Hourglass.svelte';
 	export let groupId: number;
 	export let canView: boolean;
 	export let canPost: boolean;
@@ -48,7 +47,7 @@
 		deleteGroupPost(groupId, id).then(success => {
 			if (success) {
 				GROUPS_CACHE.invalidate(`group_posts_${groupId}_100_${cursor}`);
-				data = getGroupWallPosts(groupId, 100, cursor);
+				data = data.then(data => ({ ...data, data: data.data.filter(i => i.id !== id) }));
 				deleting = deleting.filter(i => i !== id);
 			}
 			// TODO: add failure message thingy indicator yay 👻
