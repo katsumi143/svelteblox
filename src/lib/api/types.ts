@@ -679,6 +679,22 @@ export interface GetUserSettingsResponse {
 	privateServerJoinRestriction: 'Friends'
 }
 
+export type TwoFactorAuthenticationType = 'Authenticator' | 'Email' | 'SecurityKey'
+export interface Get2FAConfigurationResponse {
+	methods: {
+		updated: string
+		enabled: boolean
+		mediaType: TwoFactorAuthenticationType
+	}[]
+	primaryMediaType: TwoFactorAuthenticationType
+}
+
+export interface Get2FASecurityKeysResponse {
+	credentials: {
+		nickname: string
+	}[]
+}
+
 export interface UpdateUserSettingsPayload {
 	contentAgeRestriction?: GetUserSettingsResponse['contentAgeRestriction']
 }

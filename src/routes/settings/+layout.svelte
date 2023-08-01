@@ -13,6 +13,7 @@
 	import BroadcastPin from '$lib/icons/BroadcastPin.svelte';
 	import XDiamondFill from '$lib/icons/XDiamondFill.svelte';
 	import CreditCardFill from '$lib/icons/CreditCardFill.svelte';
+	import ShieldLockFill from '$lib/icons/ShieldLockFill.svelte';
 </script>
 
 <div class="settings">
@@ -31,6 +32,9 @@
 		<p>{$t('settings.access')}</p>
 		<SideNavigationItem id="settings.access.billing" path="https://www.roblox.com/my/account#!/billing">
 			<CreditCardFill/>
+		</SideNavigationItem>
+		<SideNavigationItem id="settings.access.security" path="/settings/access/security">
+			<ShieldLockFill/>
 		</SideNavigationItem>
 		<SideNavigationItem id="settings.access.parental" path="/settings/access/parental">
 			<PeopleFill/>
@@ -92,6 +96,7 @@
 		:global(.input-row) {
 			gap: 16px;
 			display: flex;
+			align-items: center;
 		}
 	}
 </style>

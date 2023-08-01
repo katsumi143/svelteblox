@@ -21,6 +21,7 @@
 	import PageLoader from '$lib/components/PageLoader.svelte';
 	import AccountNotice from '$lib/components/AccountNotice.svelte';
 	import UnlockPinModal from '$lib/components/UnlockPinModal.svelte';
+	import ConfirmPasswordModal from '$lib/components/ConfirmPasswordModal.svelte';
 
 	import X from '$lib/icons/X.svelte';
 	import Check from '$lib/icons/Check.svelte';
@@ -283,6 +284,7 @@
 		{/if}
 	</Modal>
 	<UnlockPinModal/>
+	<ConfirmPasswordModal/>
 	<SvelteToast options={{
 		pausable: true,
 		duration: 5000,

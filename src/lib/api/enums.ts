@@ -44,6 +44,21 @@ export enum ChangeDisplayNameResult {
 	BadLength
 }
 
+export enum ChangePasswordResult {
+	Success,
+	AuthFailure,
+	IncorrectPassword,
+	NewPasswordMismatch,
+	Ratelimited
+}
+
+export enum Update2FAEmailMethodEnabledResult {
+	Success,
+	AuthFailure,
+	IncorrectPassword,
+	Ratelimited
+}
+
 export enum SocialLinkType {
 	Group = 'RobloxGroup',
 	Discord = 'Discord',

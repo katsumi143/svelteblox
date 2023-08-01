@@ -21,7 +21,7 @@
 		"vite-plugin-pwa": "^0.16.4"
 	},
 	"dependencies": {
-		"@voxelified/voxeliface": "^1.4.5",
+		"@voxelified/voxeliface": "^1.5.0",
 		"@zerodevx/svelte-toast": "^0.9.5",
 		"svelte-contextmenu": "^1.0.2",
 		"svelte-time": "^0.8.0",

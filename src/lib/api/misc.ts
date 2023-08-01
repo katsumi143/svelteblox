@@ -1,6 +1,12 @@
+import { get } from 'svelte/store';
+
 import Cache from '../cache';
-import { request } from '.';
-import type { DiscordInvite, GuildedInvite, GetUserSettingsResponse, UpdateUserSettingsPayload, GetAuthorisedAppsResponse, GetVoiceChatSettingsResponse } from './types';
+import { user } from './users';
+import { promptPinUnlock } from '../store';
+import { request, fullRequest } from '.';
+import { pinLocked, getCsrfToken } from './auth';
+import { ChangePasswordResult, Update2FAEmailMethodEnabledResult } from './enums';
+import type { DiscordInvite, GuildedInvite, GetUserSettingsResponse, UpdateUserSettingsPayload, GetAuthorisedAppsResponse, Get2FASecurityKeysResponse, Get2FAConfigurationResponse, GetVoiceChatSettingsResponse } from './types';
 export const MISC_CACHE = new Cache('misc');
 
 export function getDiscordInvite(inviteId: string) {
@@ -42,4 +48,52 @@ export function getOAuthAuthorisations() {
 
 export function revokeOAuthAuthorisation(authorisationId: string) {
 	return request(`https://apis.roblox.com/oauth/v1/authorizations/${authorisationId}`, 'DELETE');
+}
+
+export async function changePassword(oldPassword: string, newPassword: string) {
+	if (get(pinLocked))
+		if (!await promptPinUnlock())
+			throw new Error('cancelled by user');
+	return fullRequest('https://auth.roblox.com/v2/user/passwords/change', 'POST', {
+		newPassword,
+		currentPassword: oldPassword
+	}, {
+		'x-csrf-token': await getCsrfToken()
+	}, undefined, true)
+		.then(({ status }) => {
+			console.log(status);
+			if (status === 429)
+				return ChangePasswordResult.Ratelimited;
+			else if (status === 403 || status === 401)
+				return ChangePasswordResult.AuthFailure;
+			else if (status === 200)
+				return ChangePasswordResult.Success;
+			return ChangePasswordResult.IncorrectPassword;
+		});
+}
+
+export function get2FAConfiguration() {
+	return request<Get2FAConfigurationResponse>(`https://twostepverification.roblox.com/v1/users/${user.id}/configuration`);
+}
+
+export async function get2FASecurityKeys() {
+	return request<Get2FASecurityKeysResponse>(`https://twostepverification.roblox.com/v1/users/${user.id}/configuration/security-key/list`, 'POST', null, {
+		'x-csrf-token': await getCsrfToken()
+	}).then(response => response.credentials);
+}
+
+export async function update2FAEmailMethodEnabled(newValue: boolean, password: string) {
+	return fullRequest(`https://twostepverification.roblox.com/v1/users/${user.id}/configuration/email/${newValue ? 'enable' : 'disable'}`, 'POST', {
+		password
+	}, {
+		'x-csrf-token': await getCsrfToken()
+	}).then(({ status }) => {
+		if (status === 429)
+			return Update2FAEmailMethodEnabledResult.Ratelimited;
+		else if (status === 403 || status === 401)
+			return Update2FAEmailMethodEnabledResult.AuthFailure;
+		else if (status === 200)
+			return Update2FAEmailMethodEnabledResult.Success;
+		return Update2FAEmailMethodEnabledResult.IncorrectPassword;
+	});
 }

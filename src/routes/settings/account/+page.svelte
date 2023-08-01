@@ -2,29 +2,24 @@
 	import { Button, TextInput } from '@voxelified/voxeliface';
 
 	import { t } from '$lib/localisation';
-	import * as toast from '$lib/toast';
+	import { confirmPassword } from '$lib/store';
 	import { ChangeUsernameResult } from '$lib/api/enums';
 	import { user, getUser, getRobux, USERS_CACHE, getUserIcon, changeUsername } from '$lib/api/users';
 
-	import Modal from '$lib/components/Modal.svelte';
 	import Avatar from '$lib/components/Avatar.svelte';
 
-	import X from '$lib/icons/X.svelte';
-	import Check from '$lib/icons/Check.svelte';
 	import RobuxIcon from '$lib/icons/RobuxIcon.svelte';
 	import PersonFill from '$lib/icons/PersonFill.svelte';
 	
 	const icon = getUserIcon(user.id);
 	const user2 = getUser(user.id);
 
-	let password = '';
 	let username = user.name;
 	let changeError: ChangeUsernameResult | null = null;
 	let missingRobux = 0;
 	let changingUsername = false;
 	$: username = username.slice(0, 20);
 
-	let passwordTrigger: () => void;
 	const startUsernameChange = async () => {
 		if (username.length < 3)
 			return changeError = ChangeUsernameResult.TooShort;
@@ -39,15 +34,13 @@
 		if (robux < 1000)
 			return changeError = ChangeUsernameResult.MissingRobux, missingRobux = 1000 - robux;
 
-		changeError = null;
-		passwordTrigger();
-	};
-	const updateUsername = async () => {
 		changingUsername = !(changeError = null);
+
+		const password = await confirmPassword();
 		const result = await changeUsername(username, password);
 		if (result !== ChangeUsernameResult.Success) {
 			changeError = result;
-			changingUsername = !!(password = '');
+			changingUsername = false;
 		} else {
 			USERS_CACHE.invalidate('robux');
 			USERS_CACHE.invalidate('current');
@@ -91,21 +84,6 @@
 		<p class="error">{$t(`change_username.result.${changeError}`, [missingRobux])}</p>
 	{/if}
 </div>
-
-<Modal bind:trigger={passwordTrigger}>
-	<h1>{$t('change_username.password')}</h1>
-	<p>{$t('change_username.password.summary')}</p>
-
-	<TextInput bind:value={password} placeholder={$t('change_username.password')}/>
-	<form method="dialog">
-		<Button on:click={updateUsername} disabled={!password}>
-			<Check/>{$t('action.continue')}
-		</Button>
-		<Button on:click={() => password = ''}>
-			<X/>{$t('action.cancel')}
-		</Button>
-	</form>
-</Modal>
 
 <style lang="scss">
 	.main {
@@ -151,10 +129,5 @@
 			font-size: .9em;
 			margin-top: 8px;
 		}
-	}
-	form {
-		gap: 16px;
-		display: flex;
-		margin-top: 16px;
 	}
 </style>

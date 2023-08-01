@@ -1,6 +1,6 @@
-import { building } from '$app/environment';
-import type { HttpMethod } from '@sveltejs/kit/types/private';
+import type { HttpMethod } from '@sveltejs/kit';
 
+import { building } from '$app/environment';
 export function request<T>(targetUrl: string, method: HttpMethod = 'GET', body?: any, headers?: Record<string, string>, extraOptions?: Record<string, any>): Promise<T> {
 	return fullRequest<T>(targetUrl, method, body, headers, extraOptions).then(response => response.data);
 }
@@ -12,6 +12,7 @@ export function fullRequest<T>(targetUrl: string, method: HttpMethod = 'GET', bo
 }> {
 	if (building || !globalThis.window)
 		return Promise.resolve({ headers: new Headers() }) as any;
+	console.log(`[SEND]: ${method} ${targetUrl}`, body, headers);
 	return new Promise((resolve, reject) => {
 		const listener = (event: MessageEvent<any>) => {
 			if (event.source === window) {
@@ -20,6 +21,8 @@ export function fullRequest<T>(targetUrl: string, method: HttpMethod = 'GET', bo
 					window.removeEventListener('message', listener);
 
 					const { data, status, statusText } = rosvelteData;
+					console.log(`[RECEIVE]: ${status} ${targetUrl}`, data, rosvelteData.headers);
+
 					if (status < 200 || status > 299) {
 						if (status === 403) {
 							const token = rosvelteData.headers['x-csrf-token'];
