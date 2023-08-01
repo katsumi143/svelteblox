@@ -5,23 +5,30 @@
 
 	import Avatar from './Avatar.svelte';
 
-	import RobloxIcon from '$lib/icons/RobloxIcon.svelte';
+	import RobloxIcon from '../icons/RobloxIcon.svelte';
 	import ClipboardPlus from '../icons/ClipboardPlus.svelte';
 	import RobloxStudio2 from '../icons/RobloxStudio2.svelte';
+	import BoxArrowUpRight from '../icons/BoxArrowUpRight.svelte';
 	export let id: number;
 	export let name: string;
 
 	export let icon: Promise<string | null> | string | null = null;
 
 	let trigger: () => void;
+
+	$: href = `/asset/${id}`;
 </script>
 
 <DropdownMenu bind:trigger>
-	<a href={`/asset/${id}`} class="asset" slot="trigger" title={name} on:contextmenu|preventDefault={trigger}>
+	<a {href} class="asset" slot="trigger" title={name} on:contextmenu|preventDefault={trigger}>
 		<Avatar src={icon} size="md"/>
 		<p>{name}</p>
 	</a>
 	<p>{name}</p>
+	<a {href} target="_blank">
+		<BoxArrowUpRight/>{$t('action.open_new_tab')}
+	</a>
+	<div class="separator"/>
 	<a href={`https://www.roblox.com/library/${id}`} target="_blank">
 		<RobloxIcon/>{$t('action.view_roblox')}
 	</a>
