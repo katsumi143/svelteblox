@@ -709,7 +709,7 @@
 			margin: 0 0 8px;
 			font-size: .9em;
 		}
-		&.isOnline .card {
+		&.isOnline .card .header {
 			:global(.avatar:before) {
 				right: 8px;
 				width: 16px;
